@@ -11,6 +11,9 @@ export class Booking {
     @Column({type: 'time'})
     start_time: string;
 
+    @Column({type: 'integer'})
+    rented_hours: number;
+
     @Column({type: 'decimal'})
     amount: number;
 
