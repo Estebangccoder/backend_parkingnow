@@ -1,8 +1,8 @@
-import { Column, DeleteDateColumn, Entity, PrimaryColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn("uuid")
     id: string;
     
     @Column()
@@ -11,7 +11,7 @@ export class User {
     @Column( {unique: true , nullable: false} )
     email: string;
 
-    @Column( {unique: true , nullable: false} )
+    @Column( {nullable: false} )
     password: string;
 
     @Column()
