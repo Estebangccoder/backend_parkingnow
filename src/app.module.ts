@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config'
+import { BookingsModule } from './bookings/bookings.module';
+import { SlotsModule } from './slots/slots.module';
 import { PropertiesModule } from './properties/properties.module';
 
 @Module({
@@ -18,7 +20,7 @@ import { PropertiesModule } from './properties/properties.module';
     database: process.env.DB_NAME,
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize: true,
-  }),UsersModule, PropertiesModule],
+  }),UsersModule, BookingsModule, SlotsModule, PropertiesModule],
   controllers: [AppController],
   providers: [AppService],
 })
