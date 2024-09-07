@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config'
 import { BookingsModule } from './bookings/bookings.module';
 import { SlotsModule } from './slots/slots.module';
+import { PropertiesModule } from './properties/properties.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -19,7 +20,7 @@ import { SlotsModule } from './slots/slots.module';
     database: process.env.DB_NAME,
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize: true,
-  }),UsersModule, BookingsModule, SlotsModule],
+  }),UsersModule, BookingsModule, SlotsModule, PropertiesModule],
   controllers: [AppController],
   providers: [AppService],
 })
