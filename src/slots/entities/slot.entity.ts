@@ -1,4 +1,8 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Booking } from "src/bookings/entities/booking.entity";
+import { VehicleType } from "src/common/entities/vehicle_type.entity";
+import { Property } from "src/properties/entities/property.entity";
+import { User } from "src/users/entities/user.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('slots')
 export class Slot {
@@ -15,7 +19,7 @@ export class Slot {
     @Column({type: 'boolean'})
     is_available: boolean;
 
-    @Column({type: 'decimal'})
+    @Column({type: 'decimal', precision: 10, scale: 2 })
     hour_price: number;
 
     @Column({type: 'boolean'})
@@ -26,5 +30,20 @@ export class Slot {
 
     @UpdateDateColumn({type: 'timestamp'})
     updated_at: Date;
+
+    @OneToMany(() => Booking, booking => booking.slotId)
+    bookings: Booking[];
+
+    @ManyToOne(() => VehicleType, vehicleType => vehicleType.slots)
+    @JoinColumn({name: 'vehicle_type_id'})
+    vehicleType: VehicleType;
+
+    @ManyToOne(() => Property, property => property.slots)
+    @JoinColumn({name: 'property_id'})
+    propertyId: Property;
+
+    @ManyToOne(() => User, user => user.slots)
+    @JoinColumn({name: 'owner_id'})
+    ownerId: User;
 
 }
