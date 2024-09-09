@@ -1,4 +1,7 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BookingState } from "src/common/entities/booking_state.entity";
+import { Slot } from "src/slots/entities/slot.entity";
+import { User } from "src/users/entities/user.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('bookings')
 export class Booking {
@@ -14,7 +17,7 @@ export class Booking {
     @Column({type: 'integer'})
     rented_hours: number;
 
-    @Column({type: 'decimal'})
+    @Column({type: 'decimal', precision: 10, scale: 2 })
     amount: number;
 
     @Column({type: 'date'})
@@ -28,4 +31,20 @@ export class Booking {
 
     @UpdateDateColumn({type: 'timestamp'})
     updatedAt: Date;
+
+    @ManyToOne(() => User, (user) => user.bookingsDriver)
+    @JoinColumn({name: 'driver_id'})
+    driverId: User;
+
+    @ManyToOne(() => User, (user) => user.bookingsOwner)
+    @JoinColumn({name: 'owner_id'})
+    ownerId: User;
+    
+    @ManyToOne(() => Slot, (slot) => slot.bookings)
+    @JoinColumn({name:'slot_id'})
+    slotId: Slot;
+
+    @ManyToOne(() => BookingState, (bookingState) => bookingState.bookings)
+    @JoinColumn({name: 'booking_state_id'})
+    bookingStateId: BookingState;
 }
