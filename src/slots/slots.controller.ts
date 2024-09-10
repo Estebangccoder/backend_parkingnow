@@ -24,7 +24,7 @@ export class SlotsController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateSlotDto: UpdateSlotDto) {
-    return this.slotsService.update(+id, updateSlotDto);
+    return this.slotsService.update(id, updateSlotDto);
   }
 
   @Delete(':id')
