@@ -2,7 +2,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 
-@Entity()
+@Entity('document_types')
 export class DocumentType {
   @PrimaryGeneratedColumn()
   id: number;
