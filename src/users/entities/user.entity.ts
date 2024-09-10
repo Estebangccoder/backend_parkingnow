@@ -1,3 +1,4 @@
+
 import { Booking } from "src/bookings/entities/booking.entity";
 import { DocumentType } from "src/common/entities/document_type.entity";
 import { Role } from "src/common/entities/role.entity";
@@ -17,7 +18,7 @@ export class User {
     @Column({ unique: true , nullable: false, type: 'varchar', length:100})
     email: string;
 
-    @Column({unique: true , nullable: false})
+    @Column( {nullable: false} )
     password: string;
 
     @Column({type: 'varchar', length: 30})

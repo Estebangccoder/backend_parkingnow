@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config'
+import { AuthModule } from './auth/auth.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { SlotsModule } from './slots/slots.module';
 import { PropertiesModule } from './properties/properties.module';
@@ -12,6 +13,7 @@ import { DocumentType } from './common/entities/document_type.entity';
 import { VehicleType } from './common/entities/vehicle_type.entity';
 import { BookingState } from './common/entities/booking_state.entity';
 import { VehicleModule } from './vehicles/vehicles.module';
+
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -25,7 +27,7 @@ import { VehicleModule } from './vehicles/vehicles.module';
     database: process.env.DB_NAME,
     entities: [__dirname + '/**/*.entity{.ts,.js}', Role, DocumentType, VehicleType, BookingState],
     synchronize: true,
-  }),UsersModule, BookingsModule, SlotsModule, PropertiesModule, VehicleModule],
+  }),UsersModule, BookingsModule, SlotsModule, PropertiesModule, VehicleModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
