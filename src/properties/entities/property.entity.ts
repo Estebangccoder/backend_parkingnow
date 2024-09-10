@@ -6,11 +6,17 @@ import { Column, PrimaryGeneratedColumn, Entity, ManyToOne, JoinColumn, OneToMan
 export class Property {
     @PrimaryGeneratedColumn('uuid')
     id: string;
+    
+    @Column({type: 'varchar', length: 255})
+    name: string;
 
     @Column({type: 'varchar', length: 255, nullable: false})
     address: string;
 
-    @Column({type: 'varchar', length: 255})
+    @Column({type: 'varchar', length: 255, nullable: false})
+    comuna: string;
+
+    @Column({type: 'varchar', length: 50})
     image_url: string;
 
     @CreateDateColumn({type: 'timestamp'})
