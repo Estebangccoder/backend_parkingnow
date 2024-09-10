@@ -34,15 +34,12 @@ export class Slot {
   is_covered: boolean;
 
   @CreateDateColumn({
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP"
+    type: "timestamp"
   })
   crearted_at: Date;
 
   @UpdateDateColumn({
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP",
-    onUpdate: "CURRENT_TIMESTAMP",
+    type: "timestamp"
   })
   updated_at: Date;
 

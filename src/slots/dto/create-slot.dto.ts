@@ -3,7 +3,6 @@ import {
     IsBooleanString,
     IsDecimal,
     IsNotEmpty,
-    IsNumberString,
     IsOptional,
     IsString,
     IsUUID,
@@ -22,26 +21,22 @@ export class CreateSlotDto {
 
     @IsNotEmpty()
     @IsDecimal()
-    hourPrice: number;
+    hour_price: number;
 
     @IsNotEmpty()
     @IsBooleanString()
-    isAvailable: boolean;
-
-    @IsNotEmpty()
-    @IsBooleanString()
-    isCovered: boolean;
+    is_covered: boolean;
 
     @IsNotEmpty()
     @IsString()
     vehicle_type_id: number;
 
     @IsNotEmpty()
-    @IsString()
+    @IsUUID()
     property_id: string;
 
     @IsNotEmpty()
-    @IsString()
+    @IsUUID()
     owner_id: string;
 
 }
