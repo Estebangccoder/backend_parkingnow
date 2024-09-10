@@ -52,12 +52,21 @@ export class Slot {
   @ManyToOne(() => VehicleType, (vehicleType) => vehicleType.slots)
   @JoinColumn({ name: "vehicle_type_id" })
   vehicleType: VehicleType;
+  
+  @Column()
+  vehicle_type_id: number;
 
   @ManyToOne(() => Property, (property) => property.slots)
   @JoinColumn({ name: "property_id" })
   propertyId: Property;
 
+  @Column()
+  property_id: string;
+
   @ManyToOne(() => User, (user) => user.slots)
   @JoinColumn({ name: "owner_id" })
   ownerId: User;
+
+  @Column()
+  owner_id: string;
 }

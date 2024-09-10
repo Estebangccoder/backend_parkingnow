@@ -10,7 +10,7 @@ export class SlotsService {
   constructor(@InjectRepository(Slot) private readonly slotRepositoy: Repository<Slot>){}
 
   async create(slot: CreateSlotDto) {
-    return await this.slotRepositoy.create(slot);
+    return this.slotRepositoy.create(slot);
   }
 
   findAll() {

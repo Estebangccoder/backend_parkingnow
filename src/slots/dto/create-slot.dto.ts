@@ -34,14 +34,14 @@ export class CreateSlotDto {
 
     @IsNotEmpty()
     @IsString()
-    vehicleType: string;
+    vehicle_type_id: number;
 
     @IsNotEmpty()
     @IsString()
-    propertyId: string;
+    property_id: string;
 
     @IsNotEmpty()
     @IsString()
-    ownerId: string;
+    owner_id: string;
 
 }
