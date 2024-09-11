@@ -1,3 +1,4 @@
+import { Booking } from 'src/bookings/entities/booking.entity';
 import { VehicleType } from 'src/common/entities/vehicle_type.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -8,6 +9,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
+  DeleteDateColumn,
 } from 'typeorm';
 
 
@@ -40,4 +43,9 @@ export class Vehicle {
   @Column('varchar', {nullable: false})
   driver_id: string;
 
+  @OneToMany(() => Booking, booking => booking.vehiclePlate)
+  bookings: Booking[];
+
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
+    delete_at: Date;
 }
