@@ -19,7 +19,7 @@ export class AuthService {
         if (!user) {
             throw new UnauthorizedException('Invalid credentials')
         }
-        const isPasswordValid = password === user.password 
+        const isPasswordValid = await bcryptjs.compare(password, user.password)
         if (!isPasswordValid) {
             throw new UnauthorizedException('Invalid credentials')
         }
@@ -33,16 +33,31 @@ export class AuthService {
             email
         }
     }
-    async register(registerDto: RegisterDto){
-        const { password } = registerDto
+    async register({
+        fullName, 
+        email, 
+        password, 
+        phone, 
+        address,
+        id_typedoc,
+        num_doc}: RegisterDto){
         
-        const user = await this.userService.findOneByEmail(registerDto.email)
+        
+        const user = await this.userService.findOneByEmail(email)
 
         if (user) {
             throw new BadRequestException('User already exists')
         }
         
-        return await this.userService.create(registerDto)
+        return await this.userService.create({
+            fullName,
+            email,
+            password: await bcryptjs.hash(password,8),
+            phone,
+            address,
+            num_doc,
+            id_typedoc
+        })
     }
     
 }

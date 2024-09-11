@@ -20,8 +20,8 @@ export class User {
     @Column()
     address: string;
 
-    @Column()
-    rol: string; //posible enum con los roles admin, user
+    @Column({default:'user'})
+    role: string; //posible enum con los roles admin, user
 
     @Column()
     id_typedoc: string;
