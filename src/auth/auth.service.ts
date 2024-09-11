@@ -60,6 +60,7 @@ export class AuthService {
             doc_number,
             document_type_id,
             role_id
+
         })
 
     }
