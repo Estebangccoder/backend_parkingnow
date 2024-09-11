@@ -37,4 +37,7 @@ export class Property {
     @JoinColumn({name: 'commune_id'})
     commune: Commune;
     
+    @Column('varchar', {nullable: false})
+    owner_id: string;
+    
 }
