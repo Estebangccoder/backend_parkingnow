@@ -36,13 +36,14 @@ export class AuthService {
     }
 
     async register({
-        fullName, 
+        fullname, 
         email, 
         password, 
-        phone, 
+        phone_number, 
         address,
-        id_typedoc,
-        num_doc}: RegisterDto){
+        document_type_id,
+        doc_number,
+        role_id}: RegisterDto){
      
         const user = await this.userService.findOneByEmail(email)
 
@@ -51,13 +52,14 @@ export class AuthService {
         }
         
         return await this.userService.create({
-            fullName,
+            fullname,
             email,
             password: await bcryptjs.hash(password,8),
-            phone,
+            phone_number,
             address,
-            num_doc,
-            id_typedoc
+            doc_number,
+            document_type_id,
+            role_id
         })
 
     }

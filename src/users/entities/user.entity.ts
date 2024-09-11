@@ -62,7 +62,7 @@ export class User {
     @JoinColumn({name: 'document_type_id'})
     documentType: DocumentType;
 
-    @Column({nullable: false})
+    @Column({nullable: false, default: 1})
     role_id: number;
 
     @Column({nullable: false})

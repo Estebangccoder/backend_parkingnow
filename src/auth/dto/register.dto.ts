@@ -4,7 +4,7 @@ import { IsEmail, IsNumber, IsString, MinLength,  } from "class-validator";
 
 export class RegisterDto {
     @IsString()
-    fullName: string;
+    fullname: string;
  
     @IsEmail()
     email: string;
@@ -15,14 +15,17 @@ export class RegisterDto {
     password: string;
 
     @IsNumber()
-    phone: number;
+    phone_number: number;
 
     @IsString()
     address: string;
-    
+
     @IsString()
-    id_typedoc:string
+    document_type_id:string
 
     @IsNumber()
-    num_doc: number;
+    doc_number: number;
+
+    @IsNumber()
+    role_id: number;
 }
