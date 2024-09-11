@@ -34,4 +34,10 @@ export class Vehicle {
   @JoinColumn({ name: 'vehicle_type_id' })
   vehicleType: VehicleType;
 
+  @Column('int', {nullable: false})
+  vehicle_type_id: number;
+
+  @Column('varchar', {nullable: false})
+  driver_id: string;
+
 }

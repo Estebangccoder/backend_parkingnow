@@ -47,4 +47,17 @@ export class Booking {
     @ManyToOne(() => BookingState, (bookingState) => bookingState.bookings)
     @JoinColumn({name: 'booking_state_id'})
     bookingStateId: BookingState;
+
+    @Column('varchar', {nullable: false})
+    owner_id: string;
+    
+    @Column('varchar', {nullable: false})
+    driver_id: string;
+      
+    @Column('varchar', {nullable: false})
+    slot_id: string;
+
+    @Column({type: 'int', nullable: false})
+    booking_state_id: number;
+
 }
