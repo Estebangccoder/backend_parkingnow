@@ -19,7 +19,7 @@ export class SlotsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.slotsService.findOne(+id);
+    return this.slotsService.findOne(id);
   }
 
   @Patch(':id')
@@ -29,6 +29,6 @@ export class SlotsController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.slotsService.remove(+id);
+    return this.slotsService.remove(id);
   }
 }

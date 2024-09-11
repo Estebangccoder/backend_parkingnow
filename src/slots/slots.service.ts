@@ -14,18 +14,18 @@ export class SlotsService {
   }
 
   findAll() {
-    return `This action returns all slots`;
+    return this.slotRepositoy.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} slot`;
+  findOne(id: string) {
+    return this.slotRepositoy.findOne({where: {id}});
   }
 
   update(id: string, updateSlotDto: UpdateSlotDto) {
-    return `This action updates a #${id} slot`;
+    return this.slotRepositoy.update(id, updateSlotDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} slot`;
+  remove(id: string) {
+    return this.slotRepositoy.delete(id);
   }
 }
