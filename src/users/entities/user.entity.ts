@@ -67,4 +67,8 @@ export class User {
 
     @Column({nullable: false})
     document_type_id: number;
+
+    @DeleteDateColumn({type: 'timestamp', nullable: true})
+    delete_at: Date;
+    
 }
