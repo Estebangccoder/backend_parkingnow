@@ -1,7 +1,7 @@
 import { Commune } from "src/common/entities/commune.entity";
 import { Slot } from "src/slots/entities/slot.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, PrimaryGeneratedColumn, Entity, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import { Column, PrimaryGeneratedColumn, Entity, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn, DeleteDateColumn} from "typeorm";
 
 @Entity('properties')
 export class Property {
@@ -39,5 +39,8 @@ export class Property {
     
     @Column('varchar', {nullable: false})
     owner_id: string;
+
+    @DeleteDateColumn({type: 'timestamp', nullable: true})
+    delete_at: Date;
     
 }

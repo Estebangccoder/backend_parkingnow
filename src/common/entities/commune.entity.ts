@@ -1,5 +1,5 @@
 import { Property } from 'src/properties/entities/property.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
 
 @Entity('communes')
@@ -12,4 +12,7 @@ export class Commune {
 
   @OneToMany(() => Property, (property) => property.commune)
   properties: Property[];
+
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
+  delete_at: Date;
 }
