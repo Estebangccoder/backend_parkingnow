@@ -7,7 +7,7 @@ import { Slot } from "src/slots/entities/slot.entity";
 import { Vehicle } from "src/vehicles/entities/vehicle.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity()
+@Entity('users')
 export class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -62,4 +62,9 @@ export class User {
     @JoinColumn({name: 'document_type_id'})
     documentType: DocumentType;
 
- }
+    @Column({nullable: false})
+    role_id: number;
+
+    @Column({nullable: false})
+    document_type_id: number;
+}

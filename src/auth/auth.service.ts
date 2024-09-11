@@ -20,6 +20,7 @@ export class AuthService {
             throw new UnauthorizedException('Invalid credentials')
         }
         const isPasswordValid = await bcryptjs.compare(password, user.password)
+
         if (!isPasswordValid) {
             throw new UnauthorizedException('Invalid credentials')
         }
@@ -33,6 +34,7 @@ export class AuthService {
             email
         }
     }
+
     async register({
         fullName, 
         email, 
@@ -41,8 +43,7 @@ export class AuthService {
         address,
         id_typedoc,
         num_doc}: RegisterDto){
-        
-        
+     
         const user = await this.userService.findOneByEmail(email)
 
         if (user) {
@@ -58,6 +59,7 @@ export class AuthService {
             num_doc,
             id_typedoc
         })
+
     }
     
 }

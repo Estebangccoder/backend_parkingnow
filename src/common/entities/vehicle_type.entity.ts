@@ -3,7 +3,7 @@ import { Vehicle } from 'src/vehicles/entities/vehicle.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 
-@Entity()
+@Entity('vehicle_types')
 export class VehicleType {
   @PrimaryGeneratedColumn()
   id: number;

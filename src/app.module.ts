@@ -13,6 +13,8 @@ import { DocumentType } from './common/entities/document_type.entity';
 import { VehicleType } from './common/entities/vehicle_type.entity';
 import { BookingState } from './common/entities/booking_state.entity';
 import { VehicleModule } from './vehicles/vehicles.module';
+import { Commune } from './common/entities/commune.entity';
+
 
 
 @Module({
@@ -25,8 +27,8 @@ import { VehicleModule } from './vehicles/vehicles.module';
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    entities: [__dirname + '/**/*.entity{.ts,.js}', Role, DocumentType, VehicleType, BookingState],
-    synchronize: true,
+    entities: [__dirname + '/**/*.entity{.ts,.js}', Role, DocumentType, VehicleType, BookingState, Commune],
+    synchronize: false,
   }),UsersModule, BookingsModule, SlotsModule, PropertiesModule, VehicleModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
