@@ -2,7 +2,7 @@ import { Booking } from 'src/bookings/entities/booking.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 
-@Entity()
+@Entity('booking_states')
 export class BookingState {
   @PrimaryGeneratedColumn()
   id: number;

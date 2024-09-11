@@ -7,7 +7,7 @@ import { Slot } from "src/slots/entities/slot.entity";
 import { Vehicle } from "src/vehicles/entities/vehicle.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity()
+@Entity('users')
 export class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;

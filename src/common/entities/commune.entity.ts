@@ -2,7 +2,7 @@ import { Property } from 'src/properties/entities/property.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 
-@Entity()
+@Entity('communes')
 export class Commune {
   @PrimaryGeneratedColumn()
   id: number;

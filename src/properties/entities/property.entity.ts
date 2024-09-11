@@ -3,7 +3,7 @@ import { Slot } from "src/slots/entities/slot.entity";
 import { User } from "src/users/entities/user.entity";
 import { Column, PrimaryGeneratedColumn, Entity, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn} from "typeorm";
 
-@Entity()
+@Entity('properties')
 export class Property {
     @PrimaryGeneratedColumn('uuid')
     id: string;
