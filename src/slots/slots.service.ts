@@ -1,26 +1,88 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSlotDto } from './dto/create-slot.dto';
-import { UpdateSlotDto } from './dto/update-slot.dto';
+import {
+  BadRequestException,
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
+import { CreateSlotDto } from "./dto/create-slot.dto";
+import { UpdateSlotDto } from "./dto/update-slot.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Slot } from "./entities/slot.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class SlotsService {
-  create(createSlotDto: CreateSlotDto) {
-    return 'This action adds a new slot';
+  constructor(
+    @InjectRepository(Slot) private readonly slotRepository: Repository<Slot>
+  ) {}
+
+  async create(slot: CreateSlotDto) {
+    try {
+      const createdSlot = this.slotRepository.create(slot);
+
+      return await this.slotRepository.save(createdSlot);
+    } catch (error) {
+      throw new HttpException(
+        error.message || "Internal server error",
+        error.status || 500
+      );
+    }
   }
 
-  findAll() {
-    return `This action returns all slots`;
+  async findAll() {
+    try {
+      return await this.slotRepository.find();
+    } catch (error) {
+      throw new HttpException(
+        error.message || "Internal server error",
+        error.status || 500
+      );
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} slot`;
+  async findOne(id: string) {
+    try {
+      const slot = await this.slotRepository.findOne({
+        where: { id },
+        relations: ["owner"],
+      });
+
+      if (!slot) throw new NotFoundException("Slot not found");
+
+      return slot;
+    } catch (error) {
+      throw new HttpException(
+        error.message || "Internal server error",
+        error.status || 500
+      );
+    }
   }
 
-  update(id: number, updateSlotDto: UpdateSlotDto) {
-    return `This action updates a #${id} slot`;
+  async update(id: string, updateSlotDto: UpdateSlotDto) {
+    try {
+      const slot = this.findOne(id);
+
+      if (!slot) throw new NotFoundException("slot not fount");
+
+      return this.slotRepository.save(updateSlotDto);
+    } catch (error) {}
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} slot`;
+  async remove(id: string) {
+    try {
+      const slot = await this.findOne(id);
+
+      if (!slot) throw new NotFoundException("Slot not found");
+
+      return await this.slotRepository.remove(slot);
+
+      return slot;
+    } catch (error) {
+      throw new HttpException(
+        error.message || "Internal server error",
+        error.status || 500
+      );
+    }
   }
 }
