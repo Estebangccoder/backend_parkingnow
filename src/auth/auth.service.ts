@@ -25,7 +25,7 @@ export class AuthService {
             throw new UnauthorizedException('Invalid credentials')
         }
 
-        const payload = {email: user.email, }
+        const payload = {email: user.email, role_id: user.role_id}
 
         const token = await this.jwtService.signAsync(payload)
 
@@ -60,8 +60,11 @@ export class AuthService {
             doc_number,
             document_type_id,
             role_id
-        })
+        })  
 
+    }
+    async profile({email,role_id}: {email: string, role_id: number}){
+        return await this.userService.findOneByEmail(email)
     }
     
 }
