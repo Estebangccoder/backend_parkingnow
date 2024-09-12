@@ -34,7 +34,7 @@ export class PropertiesService {
 
     async findByName(name:string): Promise<Property[]>{
         try{
-            const propertiesNames = await this.propertyRepository.find({where: { name: Like(`%${name.trim()}%`) }});
+            const propertiesNames = await this.propertyRepository.find({where: { name: Like(`%${name.trim()}%`) }}); //Ene l front debe de haber un devounce PILAS!!!!!!!!!!!!!!!!!!!!
 
             if(propertiesNames.length===0){
                 throw new HttpException('Property not found', HttpStatus.NOT_FOUND);
