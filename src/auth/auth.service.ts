@@ -60,7 +60,8 @@ export class AuthService {
             doc_number,
             document_type_id,
             role_id
-        })  
+        })
+
 
     }
     async profile({email,role_id}: {email: string, role_id: number}){

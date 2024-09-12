@@ -19,6 +19,9 @@ export class RegisterDto {
 
     @IsString()
     address: string;
+    
+    @IsString()
+    id_typedoc:string
 
     @IsString()
     document_type_id:string
