@@ -1,5 +1,5 @@
 import { User } from 'src/users/entities/user.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
 
 @Entity('document_types')
@@ -12,4 +12,7 @@ export class DocumentType {
 
   @OneToMany(() => User, (user) => user.documentType)
   users: User[];
+
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
+  delete_at: Date;
 }

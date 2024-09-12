@@ -62,4 +62,13 @@ export class User {
     @JoinColumn({name: 'document_type_id'})
     documentType: DocumentType;
 
- }
+    @Column({nullable: false, default: 1})
+    role_id: number;
+
+    @Column({nullable: false})
+    document_type_id: number;
+
+    @DeleteDateColumn({type: 'timestamp', nullable: true})
+    delete_at: Date;
+    
+}

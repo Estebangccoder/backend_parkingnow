@@ -19,12 +19,13 @@ export class AuthService {
         if (!user) {
             throw new UnauthorizedException('Invalid credentials')
         }
-        const isPasswordValid = password === user.password 
+        const isPasswordValid = await bcryptjs.compare(password, user.password)
+
         if (!isPasswordValid) {
             throw new UnauthorizedException('Invalid credentials')
         }
 
-        const payload = {email: user.email, }
+        const payload = {email: user.email, role_id: user.role_id}
 
         const token = await this.jwtService.signAsync(payload)
 
@@ -33,16 +34,36 @@ export class AuthService {
             email
         }
     }
-    async register(registerDto: RegisterDto){
-        const { password } = registerDto
-        
-        const user = await this.userService.findOneByEmail(registerDto.email)
+
+    async register({
+        fullname, 
+        email, 
+        password, 
+        phone_number, 
+        address,
+        document_type_id,
+        doc_number,
+        role_id}: RegisterDto){
+     
+        const user = await this.userService.findOneByEmail(email)
 
         if (user) {
             throw new BadRequestException('User already exists')
         }
         
-        return await this.userService.create(registerDto)
+        return await this.userService.create({
+            fullname,
+            email,
+            password: await bcryptjs.hash(password,8),
+            phone_number,
+            address,
+            doc_number,
+            document_type_id,
+            role_id
+        })
+    }
+    async profile({email,role_id}: {email: string, role_id: number}){
+        return await this.userService.findOneByEmail(email)
     }
     
 }

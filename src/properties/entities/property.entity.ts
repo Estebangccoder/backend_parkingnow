@@ -1,6 +1,7 @@
+import { Commune } from "src/common/entities/commune.entity";
 import { Slot } from "src/slots/entities/slot.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, PrimaryGeneratedColumn, Entity, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import { Column, PrimaryGeneratedColumn, Entity, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn, DeleteDateColumn} from "typeorm";
 
 @Entity('properties')
 export class Property {
@@ -13,8 +14,8 @@ export class Property {
     @Column({type: 'varchar', length: 255, nullable: false})
     address: string;
 
-    @Column({type: 'varchar', length: 255, nullable: false})
-    comuna: string;
+    @Column({type: 'int', nullable: false})
+    commune_id: number;
 
     @Column({type: 'varchar', length: 50})
     image_url: string;
@@ -32,4 +33,14 @@ export class Property {
     @JoinColumn({name: 'owner_id'})
     ownerId: User;
 
+    @ManyToOne(() => Commune, (commune) => commune.properties)
+    @JoinColumn({name: 'commune_id'})
+    commune: Commune;
+    
+    @Column('varchar', {nullable: false})
+    owner_id: string;
+
+    @DeleteDateColumn({type: 'timestamp', nullable: true})
+    delete_at: Date;
+    
 }
