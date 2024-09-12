@@ -3,6 +3,7 @@ import {
     IsBooleanString,
     IsDecimal,
     IsNotEmpty,
+    IsNumber,
     IsOptional,
     IsString,
     IsUUID,
@@ -20,7 +21,7 @@ export class CreateSlotDto {
     description: string;
 
     @IsNotEmpty()
-    @IsDecimal()
+    @IsNumber()
     hour_price: number;
 
     @IsNotEmpty()
