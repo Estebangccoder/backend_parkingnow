@@ -42,7 +42,7 @@ export class User {
     @OneToMany(() => Property, (property) => property.ownerId)
     properties: Property[];
 
-    @OneToMany(() => Slot, (slot) => slot.ownerId)
+    @OneToMany(() => Slot, (slot) => slot.owner)
     slots: Slot[];
 
     @OneToMany(() => Booking, (booking) => booking.ownerId)

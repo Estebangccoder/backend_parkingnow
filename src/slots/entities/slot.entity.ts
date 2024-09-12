@@ -27,7 +27,7 @@ export class Slot {
   @Column({ type: "boolean", default: true })
   is_available: boolean;
 
-  @Column({ type: "decimal", precision: 10, scale: 2 })
+  @Column({ type: "decimal"})
   hour_price: number;
 
   @Column({ type: "boolean" })
@@ -62,7 +62,7 @@ export class Slot {
 
   @ManyToOne(() => User, (user) => user.slots)
   @JoinColumn({ name: "owner_id" })
-  ownerId: User;
+  owner: User;
 
   @Column()
   owner_id: string;
