@@ -1,9 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { SlotsService } from './slots.service';
-import { CreateSlotDto } from './dto/create-slot.dto';
-import { UpdateSlotDto } from './dto/update-slot.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  ParseBoolPipe,
+} from "@nestjs/common";
+import { SlotsService } from "./slots.service";
+import { CreateSlotDto } from "./dto/create-slot.dto";
+import { UpdateSlotDto } from "./dto/update-slot.dto";
 
-@Controller('slots')
+@Controller("slots")
 export class SlotsController {
   constructor(private readonly slotsService: SlotsService) {}
 
@@ -17,18 +27,18 @@ export class SlotsController {
     return this.slotsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get("findById/:id")
+  findOne(@Param("id") id: string) {
     return this.slotsService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSlotDto: UpdateSlotDto) {
+  @Patch(":id")
+  update(@Param("id") id: string, @Body() updateSlotDto: UpdateSlotDto) {
     return this.slotsService.update(id, updateSlotDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(":id")
+  remove(@Param("id") id: string) {
     return this.slotsService.remove(id);
   }
 }
