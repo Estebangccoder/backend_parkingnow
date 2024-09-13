@@ -8,7 +8,7 @@ export class FilterAvailablesDto {
 
     @IsOptional()
     @IsString()
-    vehicleTypes?: string;
+    vehicleType?: string;
 
     @IsOptional()
     @IsString()
