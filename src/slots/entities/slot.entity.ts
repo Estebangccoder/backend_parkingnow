@@ -55,11 +55,6 @@ export class Slot {
   @JoinColumn({ name: "owner_id" })
   owner: User;
     
-  @Column({nullable: false})
-    vehicle_type_id: number;
-
-  @Column({nullable: false})
-    property_id: string;
   
   @Column({nullable: false})
     owner_id: string;
