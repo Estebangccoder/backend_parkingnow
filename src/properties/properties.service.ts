@@ -2,8 +2,9 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Repository, Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Property } from './entities/property.entity';
-import { CreatePropertyDto } from './dto/create-properties.dto';	
+import { CreatePropertyDto } from './dto/create-properties.dto';
 import { UpdatePropertyDto } from './dto/update-properties.dto';
+
 
 
 @Injectable()
@@ -15,7 +16,8 @@ export class PropertiesService {
 
     async create(createPropertyDto: CreatePropertyDto){
         try{
-            return await this.propertyRepository.save(createPropertyDto);
+            const newProperty = this.propertyRepository.create(createPropertyDto)
+            return await this.propertyRepository.save(newProperty);
    
         }
         catch(error){

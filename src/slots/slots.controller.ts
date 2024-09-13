@@ -12,12 +12,15 @@ import {
 import { SlotsService } from "./slots.service";
 import { CreateSlotDto } from "./dto/create-slot.dto";
 import { UpdateSlotDto } from "./dto/update-slot.dto";
+import { ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { FilterAvailablesDto } from "./dto/filter-availables-slot.dto";
 
+@ApiTags('Slots')
 @Controller("slots")
 export class SlotsController {
   constructor(private readonly slotsService: SlotsService) {}
 
+  @ApiBody({ type: CreateSlotDto })
   @Post()
   create(@Body() createSlotDto: CreateSlotDto) {
     return this.slotsService.create(createSlotDto);
@@ -33,6 +36,7 @@ export class SlotsController {
     return this.slotsService.findOne(id);
   }
 
+  // @ApiQuery({type: FilterAvailablesDto})
   @Get("available")
   async getAvailableSlots(@Query() filterAvailables: FilterAvailablesDto) {
 

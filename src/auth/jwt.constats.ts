@@ -1,5 +1,9 @@
+require('dotenv').config();
+
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
+
 
 export const jwtConstants = {
-    secret: 'recuerdenme cambiar este valor en produccion, esto no es un meme',
+    secret: jwtSecretKey,
   };
   

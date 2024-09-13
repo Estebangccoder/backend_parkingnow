@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { IsArray, IsBoolean, IsIn, IsOptional, IsString } from "class-validator";
 
 export class FilterAvailablesDto {
@@ -6,6 +7,7 @@ export class FilterAvailablesDto {
     @IsBoolean({ each: true }) 
     isCovered?: boolean[];
 
+    @ApiProperty({ type: [String], required: false })
     @IsOptional()
     @IsArray()
     @IsString({ each: true })

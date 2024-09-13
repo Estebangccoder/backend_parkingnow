@@ -1,28 +1,24 @@
-import { IsArray, IsString, MinLength } from "class-validator";
+import { IsArray, IsNumber, isString, IsString, MinLength } from "class-validator";
 
 export class CreatePropertyDto {
+    
+    @IsString()
+    name: string;
 
+    @IsString()
+    address: string;
 
+    @IsString()
+    description: string;
 
-    // @IsString()
-    // @MinLength(4)
-    // name: string;
+    @IsString()
+    image_url: string;
 
-    // @IsString()
-    // @MinLength(10)
-    // address: string;
+    @IsNumber()
+    commune_id: number;
 
-    // @IsString()
-    // commune_id: string;
-
-    // @IsString()
-    // image_url: string;
-
-    // // @IsString({ each: true })
-    // // @IsArray()
-    // // slots: string[];
-  
-
+    @IsString()
+    owner_id: string;
 
 }
 
