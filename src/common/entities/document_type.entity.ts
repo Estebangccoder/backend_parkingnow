@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import { User } from 'src/users/entities/user.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
@@ -10,6 +11,7 @@ export class DocumentType {
   @Column({type: 'varchar', length: 50 })
   name: string;
 
+  @ApiHideProperty()
   @OneToMany(() => User, (user) => user.documentType)
   users: User[];
 

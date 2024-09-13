@@ -5,6 +5,7 @@ import { Role } from "src/common/entities/role.entity";
 import { Property } from "src/properties/entities/property.entity";
 import { Slot } from "src/slots/entities/slot.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ApiHideProperty } from "@nestjs/swagger";
 
 @Entity('users')
 export class User {
@@ -47,22 +48,28 @@ export class User {
     @DeleteDateColumn({type: 'timestamp', nullable: true})
     delete_at: Date;
 
+    @ApiHideProperty()
     @OneToMany(() => Property, (property) => property.ownerId)
     properties: Property[];
     
+    @ApiHideProperty()
     @OneToMany(() => Slot, (slot) => slot.owner)
     slots: Slot[];
     
+    @ApiHideProperty()
     @OneToMany(() => Booking, (booking) => booking.ownerId)
     bookingsOwner: Booking[];
     
+    @ApiHideProperty()
     @OneToMany(() => Booking, (booking) => booking.driverId)
     bookingsDriver: Booking[];
 
+    @ApiHideProperty()
     @ManyToOne(() => Role, (role) => role.users)
     @JoinColumn({name: 'role_id'})
     role: Role;
 
+    @ApiHideProperty()
     @ManyToOne(() => DocumentType, (documentType) => documentType.users)
     @JoinColumn({name: 'document_type_id'})
     documentType: DocumentType;

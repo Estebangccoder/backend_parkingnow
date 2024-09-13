@@ -7,6 +7,7 @@ import { Roles } from './decorators/roles.decorators';
 import { AuthGuard } from './guard/auth.guard';
 import { RolesGuard } from './guard/roles.guard';
 import { Role } from './enums/rol.enum';
+import { ApiTags } from '@nestjs/swagger';
 
 interface RequestWithUser extends Request{
     user: {
@@ -15,6 +16,7 @@ interface RequestWithUser extends Request{
     }
 }
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
 

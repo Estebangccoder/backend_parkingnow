@@ -1,3 +1,4 @@
+import { ApiHideProperty } from "@nestjs/swagger";
 import { BookingState } from "src/common/entities/booking_state.entity";
 import { Slot } from "src/slots/entities/slot.entity";
 import { User } from "src/users/entities/user.entity";
@@ -50,18 +51,22 @@ export class Booking {
     @DeleteDateColumn({type: 'timestamp', nullable: true})
     delete_at: Date;
 
+    @ApiHideProperty()
     @ManyToOne(() => User, (user) => user.bookingsDriver)
     @JoinColumn({name: 'driver_id'})
     driverId: User;
 
+    @ApiHideProperty()
     @ManyToOne(() => User, (user) => user.bookingsOwner)
     @JoinColumn({name: 'owner_id'})
     ownerId: User;
     
+    @ApiHideProperty()
     @ManyToOne(() => Slot, (slot) => slot.bookings)
     @JoinColumn({name:'slot_id'})
     slotId: Slot;
 
+    @ApiHideProperty()
     @ManyToOne(() => BookingState, (bookingState) => bookingState.bookings)
     @JoinColumn({name: 'booking_state_id'})
     bookingStateId: BookingState;
