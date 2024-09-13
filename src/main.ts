@@ -1,12 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.setGlobalPrefix('api');
-
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    transform: true,
+    forbidNonWhitelisted: true
+  }))
+  
   const config = new DocumentBuilder()
     .setTitle('Parking now API')
     .setDescription('This is the documentation for our API, here you will find all our endpoints, how to access them and what responses they will give. ')
