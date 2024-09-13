@@ -15,4 +15,5 @@ export class DocumentType {
 
   @DeleteDateColumn({type: 'timestamp', nullable: true})
   delete_at: Date;
+  
 }
