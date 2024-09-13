@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, UseGuards, Req } from '@nestjs/common';
+import { Body, Controller, Post, Get, UseGuards, Req, Delete, Param } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -46,5 +46,11 @@ export class AuthController {
             email: req.user.email,
             role_id: req.user.role_id 
         })
+    }
+    @Get('profiles')
+    @Roles(Role.ADMIN)
+    @UseGuards(AuthGuard, RolesGuard)
+    findAll(){
+        return this.authService.findAll()
     }
 }

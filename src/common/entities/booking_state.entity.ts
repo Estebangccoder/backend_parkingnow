@@ -10,10 +10,10 @@ export class BookingState {
   @Column({type: 'varchar', length: 50 })
   name: string;
 
-  @OneToMany(() => Booking, (booking) => booking.bookingStateId)
-  bookings: Booking[];
-
   @DeleteDateColumn({type: 'timestamp', nullable: true})
   delete_at: Date;
+
+  @OneToMany(() => Booking, (booking) => booking.bookingStateId)
+  bookings: Booking[];
 
 }

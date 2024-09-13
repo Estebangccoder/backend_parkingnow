@@ -1,5 +1,4 @@
 import { Slot } from 'src/slots/entities/slot.entity';
-import { Vehicle } from 'src/vehicles/entities/vehicle.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
 
@@ -11,12 +10,10 @@ export class VehicleType {
   @Column({type: 'varchar', length: 50 })
   name: string;
 
-  @OneToMany(() => Vehicle, (vehicle) => vehicle.vehicleType)
-  vehicles: Vehicle[];
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
+  delete_at: Date;
 
   @OneToMany(() => Slot, (slot) => slot.vehicleType)
   slots: Slot[];
 
-  @DeleteDateColumn({type: 'timestamp', nullable: true})
-    delete_at: Date;
 }

@@ -4,6 +4,7 @@ import { RegisterDto } from './dto/register.dto';
 import * as bcryptjs from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -65,5 +66,7 @@ export class AuthService {
     async profile({email,role_id}: {email: string, role_id: number}){
         return await this.userService.findOneByEmail(email)
     }
-    
+    async findAll(){
+        return await this.userService.findAll()
+    }   
 }

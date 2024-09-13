@@ -13,9 +13,6 @@ export class Slot {
   @Column({ type: "varchar", length: 100 })
   name: string;
 
-  @Column({ type: "varchar", length: 255 })
-  description: string;
-
   @Column({ type: "boolean", default: true })
   is_available: boolean;
 
@@ -25,17 +22,27 @@ export class Slot {
   @Column({ type: "boolean" })
   is_covered: boolean;
 
-  @CreateDateColumn({
-    type: "timestamp"
-  })
+  @Column({ type: "varchar", length: 255 })
+  description: string;
+
+  @Column({ type: 'int', nullable: false })
+  vehicle_type_id: number;
+
+  @Column({ type: 'varchar', nullable: false })
+  owner_id: string;
+
+  @Column({ type: 'varchar', nullable: false })
+  property_id: string;
+
+  @CreateDateColumn({ type: "timestamp" })
   crearted_at: Date;
 
-  @UpdateDateColumn({
-    type: "timestamp"
-  })
+  @UpdateDateColumn({ type: "timestamp" })
   updated_at: Date;
 
-  @ApiHideProperty()
+  @DeleteDateColumn({ type: 'timestamp', nullable: true })
+  delete_at: Date;
+
   @OneToMany(() => Booking, (booking) => booking.slotId)
   bookings: Booking[];
 
@@ -44,26 +51,12 @@ export class Slot {
   @JoinColumn({ name: "vehicle_type_id" })
   vehicleType: VehicleType;
 
-  @ApiHideProperty()
   @ManyToOne(() => Property, (property) => property.slots)
   @JoinColumn({ name: "property_id" })
   propertyId: Property;
 
-  @ApiHideProperty()
   @ManyToOne(() => User, (user) => user.slots)
   @JoinColumn({ name: "owner_id" })
   owner: User;
-
-  @Column({ nullable: false })
-  vehicle_type_id: number;
-
-  @Column({ nullable: false })
-  property_id: string;
-
-  @Column({ nullable: false })
-  owner_id: string;
-
-  @DeleteDateColumn({ type: 'timestamp', nullable: true })
-  delete_at: Date;
 
 }

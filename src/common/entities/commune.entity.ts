@@ -10,9 +10,10 @@ export class Commune {
   @Column({type: 'varchar', length: 50 })
   name: string;
 
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
+  delete_at: Date;
+
   @OneToMany(() => Property, (property) => property.commune)
   properties: Property[];
 
-  @DeleteDateColumn({type: 'timestamp', nullable: true})
-  delete_at: Date;
 }
