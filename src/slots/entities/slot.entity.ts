@@ -43,6 +43,7 @@ export class Slot {
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   delete_at: Date;
 
+  @ApiHideProperty()
   @OneToMany(() => Booking, (booking) => booking.slotId)
   bookings: Booking[];
 
@@ -51,10 +52,12 @@ export class Slot {
   @JoinColumn({ name: "vehicle_type_id" })
   vehicleType: VehicleType;
 
+  @ApiHideProperty()
   @ManyToOne(() => Property, (property) => property.slots)
   @JoinColumn({ name: "property_id" })
   propertyId: Property;
 
+  @ApiHideProperty()
   @ManyToOne(() => User, (user) => user.slots)
   @JoinColumn({ name: "owner_id" })
   owner: User;

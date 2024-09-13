@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import { Slot } from 'src/slots/entities/slot.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
@@ -13,6 +14,7 @@ export class VehicleType {
   @DeleteDateColumn({type: 'timestamp', nullable: true})
   delete_at: Date;
 
+  @ApiHideProperty()
   @OneToMany(() => Slot, (slot) => slot.vehicleType)
   slots: Slot[];
 
