@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import { Property } from 'src/properties/entities/property.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
@@ -10,9 +11,11 @@ export class Commune {
   @Column({type: 'varchar', length: 50 })
   name: string;
 
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
+  delete_at: Date;
+
+  @ApiHideProperty()
   @OneToMany(() => Property, (property) => property.commune)
   properties: Property[];
 
-  @DeleteDateColumn({type: 'timestamp', nullable: true})
-  delete_at: Date;
 }

@@ -3,8 +3,9 @@ import { PropertiesService } from './properties.service'
 import { CreatePropertyDto } from './dto/create-properties.dto';	
 import { UpdatePropertyDto } from './dto/update-properties.dto';
 import { query } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags('Porperties')
 @Controller('properties')
 export class PropertiesController {
 

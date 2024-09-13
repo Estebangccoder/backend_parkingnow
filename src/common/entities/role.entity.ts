@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import { User } from 'src/users/entities/user.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
@@ -10,10 +11,11 @@ export class Role {
   @Column({type: 'varchar', length: 20 })
   name: string;
 
-  @OneToMany(() => User, (user) => user.role)
-  users: User[];
-
   @DeleteDateColumn({type: 'timestamp', nullable: true})
   delete_at: Date;
+
+  @ApiHideProperty()
+  @OneToMany(() => User, (user) => user.role)
+  users: User[];
 
 }

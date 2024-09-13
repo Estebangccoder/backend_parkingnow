@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import { Booking } from 'src/bookings/entities/booking.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
@@ -10,10 +11,11 @@ export class BookingState {
   @Column({type: 'varchar', length: 50 })
   name: string;
 
-  @OneToMany(() => Booking, (booking) => booking.bookingStateId)
-  bookings: Booking[];
-
   @DeleteDateColumn({type: 'timestamp', nullable: true})
   delete_at: Date;
+
+  @ApiHideProperty()
+  @OneToMany(() => Booking, (booking) => booking.bookingStateId)
+  bookings: Booking[];
 
 }
