@@ -22,13 +22,13 @@ export class User {
     password: string;
 
     @Column({type: 'varchar', length: 30})
-    phone_number: number;
+    phone_number: string;
 
     @Column({type: 'varchar', length: 255})
     address: string;
     
     @Column({type: 'varchar', length: 30})
-    doc_number: number;
+    doc_number: string;
 
     @Column({ default: false })
     isActive: boolean;
@@ -64,6 +64,7 @@ export class User {
     @OneToMany(() => Booking, (booking) => booking.driverId)
     bookingsDriver: Booking[];
 
+    
     @ApiHideProperty()
     @ManyToOne(() => Role, (role) => role.users)
     @JoinColumn({name: 'role_id'})
