@@ -13,6 +13,7 @@ import { SlotsService } from "./slots.service";
 import { CreateSlotDto } from "./dto/create-slot.dto";
 import { UpdateSlotDto } from "./dto/update-slot.dto";
 import { ApiBody } from "@nestjs/swagger";
+import { FilterAvailablesDto } from "./dto/filter-availables-slot.dto";
 
 @Controller("slots")
 export class SlotsController {
@@ -32,6 +33,12 @@ export class SlotsController {
   @Get("findById/:id")
   findOne(@Param("id") id: string) {
     return this.slotsService.findOne(id);
+  }
+
+  @Get("available")
+  async getAvailableSlots(@Query() filterAvailables: FilterAvailablesDto) {
+
+    return this.slotsService.findAvailableSlotsByFilters(filterAvailables);
   }
 
   @Patch(":id")

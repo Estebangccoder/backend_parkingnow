@@ -10,12 +10,13 @@ import { UpdateSlotDto } from "./dto/update-slot.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Slot } from "./entities/slot.entity";
 import { Repository } from "typeorm";
+import { FilterAvailablesDto } from "./dto/filter-availables-slot.dto";
 
 @Injectable()
 export class SlotsService {
   constructor(
     @InjectRepository(Slot) private readonly slotRepository: Repository<Slot>
-  ) {}
+  ) { }
 
   async create(slot: CreateSlotDto) {
     try {
@@ -59,6 +60,44 @@ export class SlotsService {
     }
   }
 
+  async findAvailableSlotsByFilters(filters: FilterAvailablesDto) {
+
+    const { isCovered, comuna, vehicleTypes } = filters
+    try {
+      const query = this.slotRepository
+        .createQueryBuilder("slot")
+        .where("slot.is_available = :isAvailable", { isAvailable: 1 });
+
+      if (filters.comuna) {
+        query
+          .innerJoinAndSelect("slot.property", "property")
+          .andWhere("property.comuna_id = :comuna", { comuna: filters.comuna });
+      }
+
+      if (filters.vehicleTypes && filters.vehicleTypes.length > 0) {
+        query.andWhere("slot.vehicle_type_id IN (:...vehicleTypes)", {
+          vehicleTypes: filters.vehicleTypes,
+        });
+      }
+
+      if (filters.isCovered) {
+        if (!filters.isCovered.includes(true) || !filters.isCovered.includes(false)) {
+          query.andWhere("slot.is_covered IN (:...isCovered)", {
+            isCovered: filters.isCovered,
+          });
+        }
+      }
+
+      return await query.getMany();
+    } catch (error) {
+      throw new HttpException(
+        error.message || "Internal server error",
+        error.status || 500
+      );
+    }
+  }
+
+
   async update(id: string, updateSlotDto: UpdateSlotDto) {
     try {
       const slot = this.findOne(id);
@@ -66,7 +105,7 @@ export class SlotsService {
       if (!slot) throw new NotFoundException("slot not fount");
 
       return this.slotRepository.save(updateSlotDto);
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async remove(id: string) {
