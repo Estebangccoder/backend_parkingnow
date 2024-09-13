@@ -62,7 +62,7 @@ export class SlotsService {
 
   async findAvailableSlotsByFilters(filters: FilterAvailablesDto) {
 
-    const { isCovered, comuna, vehicleTypes } = filters
+    const { isCovered, comuna, vehicleType } = filters
     try {
       const query = this.slotRepository
         .createQueryBuilder("slot")
@@ -74,9 +74,9 @@ export class SlotsService {
           .andWhere("property.comuna_id = :comuna", { comuna: filters.comuna });
       }
 
-      if (filters.vehicleTypes) {
+      if (filters.vehicleType) {
         query.andWhere("slot.vehicle_type_id = :vehicleTypes", {
-          vehicleTypes: filters.vehicleTypes,
+          vehicleTypes: filters.vehicleType,
         });
       }
 
