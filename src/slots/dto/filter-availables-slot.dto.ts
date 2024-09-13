@@ -9,7 +9,7 @@ export class FilterAvailablesDto {
     @IsOptional()
     @IsString()
     vehicleType?: string;
-
+  
     @IsOptional()
     @IsString()
     comuna?: string;
