@@ -4,7 +4,6 @@ import { DocumentType } from "src/common/entities/document_type.entity";
 import { Role } from "src/common/entities/role.entity";
 import { Property } from "src/properties/entities/property.entity";
 import { Slot } from "src/slots/entities/slot.entity";
-import { Vehicle } from "src/vehicles/entities/vehicle.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('users')
@@ -50,9 +49,6 @@ export class User {
 
     @OneToMany(() => Booking, (booking) => booking.driverId)
     bookingsDriver: Booking[];
-
-    @OneToMany(() => Vehicle, (vehicle) => vehicle.driverId)
-    vehicles: Vehicle[];
 
     @ManyToOne(() => Role, (role) => role.users)
     @JoinColumn({name: 'role_id'})

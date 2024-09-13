@@ -1,7 +1,6 @@
 import { BookingState } from "src/common/entities/booking_state.entity";
 import { Slot } from "src/slots/entities/slot.entity";
 import { User } from "src/users/entities/user.entity";
-import { Vehicle } from "src/vehicles/entities/vehicle.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('bookings')
@@ -60,11 +59,7 @@ export class Booking {
 
     @Column({type: 'int', nullable: false})
     booking_state_id: number;
-
-    @ManyToOne(() => Vehicle, vehicle => vehicle.bookings)
-    @JoinColumn({name: 'vehicle_plate', referencedColumnName: 'plate'})
-    vehiclePlate: Vehicle;
-
+    
     @Column({type: 'varchar', length: 10, nullable: false})
     vehicle_plate: string;
 
