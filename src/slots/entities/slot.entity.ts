@@ -1,3 +1,4 @@
+import { ApiHideProperty } from "@nestjs/swagger";
 import { Booking } from "src/bookings/entities/booking.entity";
 import { VehicleType } from "src/common/entities/vehicle_type.entity";
 import { Property } from "src/properties/entities/property.entity";
@@ -18,7 +19,7 @@ export class Slot {
   @Column({ type: "boolean", default: true })
   is_available: boolean;
 
-  @Column({ type: "decimal"})
+  @Column({ type: "decimal" })
   hour_price: number;
 
   @Column({ type: "boolean" })
@@ -34,37 +35,35 @@ export class Slot {
   })
   updated_at: Date;
 
+  @ApiHideProperty()
   @OneToMany(() => Booking, (booking) => booking.slotId)
   bookings: Booking[];
 
+  @ApiHideProperty()
   @ManyToOne(() => VehicleType, (vehicleType) => vehicleType.slots)
   @JoinColumn({ name: "vehicle_type_id" })
   vehicleType: VehicleType;
-  
-  @Column()
-  vehicle_type_id: number;
 
+  @ApiHideProperty()
   @ManyToOne(() => Property, (property) => property.slots)
   @JoinColumn({ name: "property_id" })
   propertyId: Property;
 
-  @Column()
-  property_id: string;
-
+  @ApiHideProperty()
   @ManyToOne(() => User, (user) => user.slots)
   @JoinColumn({ name: "owner_id" })
   owner: User;
-    
-  @Column({nullable: false})
-    vehicle_type_id: number;
 
-  @Column({nullable: false})
-    property_id: string;
-  
-  @Column({nullable: false})
-    owner_id: string;
+  @Column({ nullable: false })
+  vehicle_type_id: number;
 
-  @DeleteDateColumn({type: 'timestamp', nullable: true})
-    delete_at: Date;
+  @Column({ nullable: false })
+  property_id: string;
+
+  @Column({ nullable: false })
+  owner_id: string;
+
+  @DeleteDateColumn({ type: 'timestamp', nullable: true })
+  delete_at: Date;
 
 }
