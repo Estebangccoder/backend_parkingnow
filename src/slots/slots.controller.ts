@@ -12,11 +12,13 @@ import {
 import { SlotsService } from "./slots.service";
 import { CreateSlotDto } from "./dto/create-slot.dto";
 import { UpdateSlotDto } from "./dto/update-slot.dto";
+import { ApiBody } from "@nestjs/swagger";
 
 @Controller("slots")
 export class SlotsController {
   constructor(private readonly slotsService: SlotsService) {}
 
+  @ApiBody({ type: CreateSlotDto })
   @Post()
   create(@Body() createSlotDto: CreateSlotDto) {
     return this.slotsService.create(createSlotDto);
