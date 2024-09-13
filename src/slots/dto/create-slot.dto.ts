@@ -25,11 +25,11 @@ export class CreateSlotDto {
     hour_price: number;
 
     @IsNotEmpty()
-    @IsBoolean()
+    @IsBooleanString()
     is_covered: boolean;
 
     @IsNotEmpty()
-    @IsNumber()
+    @IsString()
     vehicle_type_id: number;
 
     @IsNotEmpty()
