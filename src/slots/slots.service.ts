@@ -62,7 +62,7 @@ export class SlotsService {
 
   async findAvailableSlotsByFilters(filters: FilterAvailablesDto) {
 
-    const { isCovered, comuna, vehicleTypes } = filters
+    const { isCovered, comuna, vehicleType } = filters
     try {
       const query = this.slotRepository
         .createQueryBuilder("slot")
@@ -74,18 +74,16 @@ export class SlotsService {
           .andWhere("property.comuna_id = :comuna", { comuna: filters.comuna });
       }
 
-      if (filters.vehicleTypes && filters.vehicleTypes.length > 0) {
-        query.andWhere("slot.vehicle_type_id IN (:...vehicleTypes)", {
-          vehicleTypes: filters.vehicleTypes,
+      if (filters.vehicleType) {
+        query.andWhere("slot.vehicle_type_id = :vehicleTypes", {
+          vehicleTypes: filters.vehicleType,
         });
       }
 
       if (filters.isCovered) {
-        if (!filters.isCovered.includes(true) || !filters.isCovered.includes(false)) {
-          query.andWhere("slot.is_covered IN (:...isCovered)", {
+          query.andWhere("slot.is_covered = :isCovered", {
             isCovered: filters.isCovered,
-          });
-        }
+        });
       }
 
       return await query.getMany();
