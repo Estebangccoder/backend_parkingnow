@@ -10,9 +10,10 @@ export class VehicleType {
   @Column({type: 'varchar', length: 50 })
   name: string;
 
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
+  delete_at: Date;
+
   @OneToMany(() => Slot, (slot) => slot.vehicleType)
   slots: Slot[];
 
-  @DeleteDateColumn({type: 'timestamp', nullable: true})
-    delete_at: Date;
 }

@@ -17,20 +17,38 @@ export class Booking {
     @Column({type: 'integer'})
     rented_hours: number;
 
-    @Column({type: 'decimal', precision: 10, scale: 2 })
-    amount: number;
-
     @Column({type: 'date'})
     end_date: Date;
 
     @Column({type: 'time'})
     end_time: string;
 
+    @Column({type: 'decimal', precision: 10, scale: 2 })
+    amount: number;
+
+    @Column({type: 'varchar', length: 10, nullable: false})
+    vehicle_plate: string;
+
+    @Column('varchar', {nullable: false})
+    owner_id: string;
+    
+    @Column('varchar', {nullable: false})
+    driver_id: string;
+      
+    @Column('varchar', {nullable: false})
+    slot_id: string;
+
+    @Column({type: 'int', nullable: false})
+    booking_state_id: number;
+
     @CreateDateColumn({type: 'timestamp'})
     creartedAt: Date;
 
     @UpdateDateColumn({type: 'timestamp'})
     updatedAt: Date;
+
+    @DeleteDateColumn({type: 'timestamp', nullable: true})
+    delete_at: Date;
 
     @ManyToOne(() => User, (user) => user.bookingsDriver)
     @JoinColumn({name: 'driver_id'})
@@ -47,23 +65,5 @@ export class Booking {
     @ManyToOne(() => BookingState, (bookingState) => bookingState.bookings)
     @JoinColumn({name: 'booking_state_id'})
     bookingStateId: BookingState;
-
-    @Column('varchar', {nullable: false})
-    owner_id: string;
-    
-    @Column('varchar', {nullable: false})
-    driver_id: string;
-      
-    @Column('varchar', {nullable: false})
-    slot_id: string;
-
-    @Column({type: 'int', nullable: false})
-    booking_state_id: number;
-    
-    @Column({type: 'varchar', length: 10, nullable: false})
-    vehicle_plate: string;
-
-    @DeleteDateColumn({type: 'timestamp', nullable: true})
-    delete_at: Date;
 
 }
