@@ -10,19 +10,13 @@ export class Booking {
     id: string;
 
     @Column({type: 'date'})
-    star_date: Date;
-
-    @Column({type: 'time'})
-    start_time: string;
+    star_date_time: Date;
 
     @Column({type: 'integer'})
     rented_hours: number;
 
     @Column({type: 'date'})
-    end_date: Date;
-
-    @Column({type: 'time'})
-    end_time: string;
+    end_date_time: Date;
 
     @Column({type: 'decimal', precision: 10, scale: 2 })
     amount: number;
