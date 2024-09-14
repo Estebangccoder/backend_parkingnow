@@ -2,20 +2,20 @@ import { ApiHideProperty } from "@nestjs/swagger";
 import { BookingState } from "src/common/entities/booking_state.entity";
 import { Slot } from "src/slots/entities/slot.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Timestamp, UpdateDateColumn } from "typeorm";
 
 @Entity('bookings')
 export class Booking {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({type: 'date'})
+    @Column({type: 'timestamp'})
     star_date_time: Date;
 
     @Column({type: 'integer'})
     rented_hours: number;
 
-    @Column({type: 'date'})
+    @Column({type: 'timestamp'})
     end_date_time: Date;
 
     @Column({type: 'decimal', precision: 10, scale: 2 })
