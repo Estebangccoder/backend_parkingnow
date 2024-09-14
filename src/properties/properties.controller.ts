@@ -3,8 +3,9 @@ import { PropertiesService } from './properties.service'
 import { CreatePropertyDto } from './dto/create-properties.dto';	
 import { UpdatePropertyDto } from './dto/update-properties.dto';
 import { query } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags('Porperties')
 @Controller('properties')
 export class PropertiesController {
 
@@ -20,7 +21,7 @@ export class PropertiesController {
         return this.propertiesService.findAll();
     }
 
-    @Get('search')
+    @Get('searchById')
     async findOne(@Query('id') id: string) {
         if (!id) {
             throw new HttpException('ID query parameter is required', HttpStatus.BAD_REQUEST);
@@ -35,8 +36,10 @@ export class PropertiesController {
         }
     }
 
-    @Get('search') // Usa una ruta fija para la búsqueda, y usa @Query para obtener el nombre.
+    @Get('searchByName') // Usa una ruta fija para la búsqueda, y usa @Query para obtener el nombre.
     async findByName(@Query('name') name: string) {
+      console.log(name);
+      
       if (!name) {
         throw new HttpException('Name query parameter is required', HttpStatus.BAD_REQUEST);
       }

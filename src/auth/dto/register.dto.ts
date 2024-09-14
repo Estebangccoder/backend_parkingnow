@@ -14,20 +14,17 @@ export class RegisterDto {
     @MinLength(6)
     password: string;
 
-    @IsNumber()
-    phone_number: number;
+    @IsString()
+    phone_number: string;
 
     @IsString()
     address: string;
     
-    @IsString()
-    id_typedoc:string
-
-    @IsString()
-    document_type_id:string
-
     @IsNumber()
-    doc_number: number;
+    document_type_id:number
+
+    @IsString()
+    doc_number: string;
 
     @IsNumber()
     role_id: number;

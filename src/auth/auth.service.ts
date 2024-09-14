@@ -52,7 +52,7 @@ export class AuthService {
             throw new BadRequestException('User already exists')
         }
         
-        return await this.userService.create({
+         await this.userService.create({
             fullname,
             email,
             password: await bcryptjs.hash(password,8),
@@ -62,6 +62,7 @@ export class AuthService {
             document_type_id,
             role_id
         })
+        return {fullname, email}
     }
     async profile({email,role_id}: {email: string, role_id: number}){
         return await this.userService.findOneByEmail(email)

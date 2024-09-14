@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBookingDto } from './dto/create-booking.dto';
-import { UpdateBookingDto } from './dto/update-booking.dto';
+import { CreateBookingDto, UpdateBookingDto  } from './dto';
+import { Create, Update, FindById, Delete } from './services';
 
 @Injectable()
 export class BookingsService {
-  create(createBookingDto: CreateBookingDto) {
-    return 'This action adds a new booking';
+  constructor(
+    private readonly createBooking: Create,
+    private readonly updateBooking: Update,
+    private readonly findById: FindById,
+    private readonly softDelete: Delete
+  ){}
+  
+  async create(bookingData: CreateBookingDto) {
+      return await this.createBooking.create(bookingData)
   }
 
   findAll() {
     return `This action returns all bookings`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} booking`;
+  findOne(id: string) {
+    return this.findById.findBooking(id)
   }
 
-  update(id: number, updateBookingDto: UpdateBookingDto) {
-    return `This action updates a #${id} booking`;
+  async update(id: string, updateBookingDto: UpdateBookingDto) {
+    const booking = await this.findById.findBooking(id);
+    console.log("booking",booking);
+     
+    return this.updateBooking.update( booking, updateBookingDto)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} booking`;
+  async delete(id: string) {
+    return await this.softDelete.delete(id)
   }
 }

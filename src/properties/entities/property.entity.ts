@@ -1,3 +1,4 @@
+import { ApiHideProperty } from "@nestjs/swagger";
 import { Commune } from "src/common/entities/commune.entity";
 import { Slot } from "src/slots/entities/slot.entity";
 import { User } from "src/users/entities/user.entity";
@@ -35,16 +36,18 @@ export class Property {
     @DeleteDateColumn({ type: 'timestamp', nullable: true })
     delete_at: Date;
 
+    @ApiHideProperty()
     @OneToMany(() => Slot, (slot) => slot.propertyId)
     slots: Slot[];
 
+    @ApiHideProperty()
     @ManyToOne(() => User, (user) => user.properties)
     @JoinColumn({ name: 'owner_id' })
     ownerId: User;
 
+    @ApiHideProperty()
     @ManyToOne(() => Commune, (commune) => commune.properties)
     @JoinColumn({ name: 'commune_id' })
     commune: Commune;
-
 
 }

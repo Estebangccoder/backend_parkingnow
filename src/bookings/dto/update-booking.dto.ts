@@ -1,4 +1,19 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateBookingDto } from './create-booking.dto';
+import { IsNotEmpty, IsString, IsNumber } from "class-validator";
 
-export class UpdateBookingDto extends PartialType(CreateBookingDto) {}
+export class UpdateBookingDto {
+    @IsNotEmpty()
+    @IsNumber()
+    rented_hours: number;
+
+    @IsNotEmpty()
+    @IsString()
+    end_date: string;
+
+    @IsNotEmpty()
+    @IsString()
+    end_time: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    amount: number;
+}
