@@ -1,9 +1,10 @@
-import { IsNotEmpty, IsISO8601, IsString, IsDateString, isDate, Matches } from 'class-validator';
+import { IsNotEmpty, IsDate, IsString, IsDateString, isDate, Matches } from 'class-validator';
 
 export class CreateBookingDto {
+
     @IsNotEmpty()
-    @IsISO8601()
-    timestamp: string;
+    @IsDate()
+    start_date_time: Date;
     // @Matches(/^\d{4}-\d{2}-\d{2}$/, {
     //     message: 'date must be in the format YYYY-MM-DD',
     //   })

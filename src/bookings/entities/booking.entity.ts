@@ -8,6 +8,7 @@ import { Column,
         Entity, JoinColumn, 
         ManyToOne, 
         PrimaryGeneratedColumn, 
+        Timestamp, 
         UpdateDateColumn } from "typeorm";
 
 @Entity('bookings')
@@ -16,16 +17,13 @@ export class Booking {
     id: string;
 
     @Column({type: 'date'})
-    star_date_time: Date;
+    star_date_time: Timestamp;
 
     @Column({type: 'integer', nullable: true})
     rented_hours: number;
 
     @Column({type: 'date'})
-    end_date: Date;
-
-    @Column({type: 'time'})
-    end_time: string;
+    end_date_time: Timestamp;
 
     @Column({type: 'decimal', nullable: true, precision: 10, scale: 2 })
     amount: number;

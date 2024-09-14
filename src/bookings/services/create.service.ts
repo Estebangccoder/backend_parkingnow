@@ -12,6 +12,10 @@ export class Create{
     ){}
 
     async create(bookingData: CreateBookingDto){
+
+        const newBooking = this.bookingsRepository.create(bookingData);
+        return await this.bookingsRepository.save(newBooking);
+
     //     const {start_date} = bookingData;
     //     console.log(start_date);
         
@@ -21,6 +25,8 @@ export class Create{
     //     newBooking.start_date = new Date(start_date);
 
     //     return await this.bookingsRepository.save(newBooking)
+       
+
     }
     
 }
