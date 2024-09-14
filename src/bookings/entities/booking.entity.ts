@@ -15,19 +15,16 @@ export class Booking {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({type: 'date', nullable: false})
-    start_date: Date;   
-
-    @Column({type: 'time', nullable: false})
-    start_time: string;
+    @Column({type: 'date'})
+    star_date_time: Date;
 
     @Column({type: 'integer', nullable: true})
     rented_hours: number;
 
-    @Column({type: 'date', nullable: true})
+    @Column({type: 'date'})
     end_date: Date;
 
-    @Column({type: 'time', nullable: true})
+    @Column({type: 'time'})
     end_time: string;
 
     @Column({type: 'decimal', nullable: true, precision: 10, scale: 2 })

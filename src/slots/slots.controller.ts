@@ -36,7 +36,6 @@ export class SlotsController {
     return this.slotsService.findOne(id);
   }
 
-  // @ApiQuery({type: FilterAvailablesDto})
   @Get("available")
   async getAvailableSlots(@Query() filterAvailables: FilterAvailablesDto) {
 
