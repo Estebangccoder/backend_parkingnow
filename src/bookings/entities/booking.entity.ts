@@ -18,7 +18,10 @@ export class Booking {
     @Column({type: 'timestamp'})
     end_date_time: Date;
 
-    @Column({type: 'decimal', precision: 10, scale: 2 })
+    @Column({ type: 'decimal', precision: 10, scale: 2, transformer: { 
+        to: (value: number) => value, 
+        from: (value: string) => parseFloat(value) 
+    }})
     amount: number;
 
     @Column({type: 'varchar', length: 10, nullable: false})
