@@ -15,11 +15,6 @@ export class CreateSlotDto {
     @Length(0, 100)
     name: string;
 
-    @IsOptional()
-    @IsString()
-    @Length(0, 255)
-    description: string;
-
     @IsNotEmpty()
     @IsNumber()
     hour_price: number;
