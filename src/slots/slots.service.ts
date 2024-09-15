@@ -15,30 +15,27 @@ import { FilterAvailablesDto } from "./dto/filter-availables-slot.dto";
 @Injectable()
 export class SlotsService {
   constructor(
-    @InjectRepository(Slot) private readonly slotRepository: Repository<Slot>
-  ) { }
+    @InjectRepository(Slot) private readonly slotRepository: Repository<Slot>,
+  ) {}
 
   async create(slot: CreateSlotDto) {
     try {
       const createdSlot = this.slotRepository.create(slot);
-
       return await this.slotRepository.save(createdSlot);
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      throw new InternalServerErrorException('Failed to create slot');
     }
   }
 
   async findAll() {
     try {
-      return await this.slotRepository.find();
+      const slots = await this.slotRepository.find();
+      if (!slots.length) {
+        throw new NotFoundException('No slots available');
+      }
+      return slots;
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      throw new InternalServerErrorException('Error retrieving slots');
     }
   }
 
@@ -46,80 +43,72 @@ export class SlotsService {
     try {
       const slot = await this.slotRepository.findOne({
         where: { id },
-        relations: ["owner"],
+        relations: ['owner'],
       });
-
-      if (!slot) throw new NotFoundException("Slot not found");
-
+      if (!slot) throw new NotFoundException('Slot not found');
       return slot;
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Error retrieving slot');
     }
   }
 
   async findAvailableSlotsByFilters(filters: FilterAvailablesDto) {
-
-    const { isCovered, comuna, vehicleType } = filters
+    const { isCovered, comuna, vehicleType } = filters;
     try {
       const query = this.slotRepository
-        .createQueryBuilder("slot")
-        .where("slot.is_available = :isAvailable", { isAvailable: 1 });
+        .createQueryBuilder('slot')
+        .where('slot.is_available = :isAvailable', { isAvailable: true });
 
-      if (filters.comuna) {
+      if (comuna) {
         query
-          .innerJoinAndSelect("slot.property", "property")
-          .andWhere("property.comuna_id = :comuna", { comuna: filters.comuna });
+          .innerJoinAndSelect('slot.property', 'property')
+          .andWhere('property.comuna_id = :comuna', { comuna });
       }
 
-      if (filters.vehicleType) {
-        query.andWhere("slot.vehicle_type_id = :vehicleTypes", {
-          vehicleTypes: filters.vehicleType,
-        });
+      if (vehicleType) {
+        query.andWhere('slot.vehicle_type_id = :vehicleType', { vehicleType });
       }
 
-      if (filters.isCovered) {
-          query.andWhere("slot.is_covered = :isCovered", {
-            isCovered: filters.isCovered,
-        });
+      if (isCovered !== undefined) {
+        query.andWhere('slot.is_covered = :isCovered', { isCovered });
       }
 
-      return await query.getMany();
+      const slots = await query.getMany();
+      if (!slots.length) {
+        throw new NotFoundException('No available slots matching the filters');
+      }
+
+      return slots;
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      throw new InternalServerErrorException('Error fetching available slots');
     }
   }
 
-
   async update(id: string, updateSlotDto: UpdateSlotDto) {
     try {
-      const slot = this.findOne(id);
-
-      if (!slot) throw new NotFoundException("slot not fount");
-
-      return this.slotRepository.save(updateSlotDto);
-    } catch (error) { }
+      const slot = await this.findOne(id);
+      Object.assign(slot, updateSlotDto);
+      return await this.slotRepository.save(slot);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Slot not found for update');
+      }
+      throw new InternalServerErrorException('Failed to update slot');
+    }
   }
 
   async remove(id: string) {
     try {
       const slot = await this.findOne(id);
-
-      if (!slot) throw new NotFoundException("Slot not found");
-
-      return await this.slotRepository.remove(slot);
-
-      return slot;
+      return await this.slotRepository.softRemove(slot);
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Slot not found for deletion');
+      }
+      throw new InternalServerErrorException('Failed to delete slot');
     }
   }
 }

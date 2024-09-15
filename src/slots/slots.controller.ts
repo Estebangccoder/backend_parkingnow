@@ -8,14 +8,20 @@ import {
   Delete,
   Query,
   ParseBoolPipe,
+  UseGuards,
 } from "@nestjs/common";
 import { SlotsService } from "./slots.service";
 import { CreateSlotDto } from "./dto/create-slot.dto";
 import { UpdateSlotDto } from "./dto/update-slot.dto";
-import { ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { FilterAvailablesDto } from "./dto/filter-availables-slot.dto";
+import { Roles } from "src/auth/decorators/roles.decorators";
+import { AuthGuard } from "src/auth/guard/auth.guard";
+import { RolesGuard } from "src/auth/guard/roles.guard";
+import { Role } from "src/auth/enums/rol.enum";
 
 @ApiTags('Slots')
+@ApiBearerAuth()
 @Controller("slots")
 export class SlotsController {
   constructor(private readonly slotsService: SlotsService) {}
@@ -26,6 +32,8 @@ export class SlotsController {
     return this.slotsService.create(createSlotDto);
   }
 
+  // @Roles(Role.USER)
+  // @UseGuards(AuthGuard, RolesGuard)
   @Get()
   findAll() {
     return this.slotsService.findAll();
