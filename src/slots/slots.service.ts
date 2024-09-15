@@ -61,31 +61,30 @@ export class SlotsService {
   }
 
   async findAvailableSlotsByFilters(filters: FilterAvailablesDto) {
-
-    const { isCovered, comuna, vehicleType } = filters
+    const { isCovered, commune, vehicleType } = filters;
     try {
       const query = this.slotRepository
         .createQueryBuilder("slot")
+        .innerJoinAndSelect("slot.property", "property") // Relación con propiedad
+        .innerJoinAndSelect("property.commune", "commune") // Relación con comuna
         .where("slot.is_available = :isAvailable", { isAvailable: 1 });
-
-      if (filters.comuna) {
-        query
-          .innerJoinAndSelect("slot.property", "property")
-          .andWhere("property.comuna_id = :comuna", { comuna: filters.comuna });
+  
+      if (filters.commune) {
+        query.andWhere("commune.id = :comunaId", { comunaId: filters.commune });
       }
-
+  
       if (filters.vehicleType) {
-        query.andWhere("slot.vehicle_type_id = :vehicleTypes", {
-          vehicleTypes: filters.vehicleType,
+        query.andWhere("slot.vehicle_type_id = :vehicleType", {
+          vehicleType: filters.vehicleType,
         });
       }
-
+  
       if (filters.isCovered) {
-          query.andWhere("slot.is_covered = :isCovered", {
-            isCovered: filters.isCovered,
+        query.andWhere("slot.is_covered = :isCovered", {
+          isCovered: filters.isCovered,
         });
       }
-
+  
       return await query.getMany();
     } catch (error) {
       throw new HttpException(
@@ -94,7 +93,7 @@ export class SlotsService {
       );
     }
   }
-
+  
 
   async update(id: string, updateSlotDto: UpdateSlotDto) {
     try {

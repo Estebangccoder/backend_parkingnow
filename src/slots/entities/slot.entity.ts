@@ -57,7 +57,7 @@ export class Slot {
   @ApiHideProperty()
   @ManyToOne(() => Property, (property) => property.slots)
   @JoinColumn({ name: "property_id" })
-  propertyId: Property;
+  property: Property;
 
   @ApiHideProperty()
   @ManyToOne(() => User, (user) => user.slots)
