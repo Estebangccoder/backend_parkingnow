@@ -2,9 +2,10 @@ import { Injectable } from "@nestjs/common";
 
 
 @Injectable()
-export class TransformDate{
+export class TransformStringToDate{
 
-    tranforDate(timestamp: String){
-        
+    transformToDate(timestamp: string){
+        const newDate = new Date(timestamp)
+        return newDate;
     }
 }

@@ -12,15 +12,15 @@ export class Update{
     ){}
 
     async update(booking: Booking, updateBookingData : UpdateBookingDto){
-        const {end_date, end_time, amount, rented_hours} = updateBookingData;
+        // const {end_date, end_time, amount, rented_hours} = updateBookingData;
 
-        const newEndDate = new Date(end_date);
-        booking.end_date = newEndDate;
-        booking.end_time = end_time;
-        booking.amount = amount;
-        booking.rented_hours = rented_hours;
-        booking.booking_state_id = 2;
+        // const newEndDate = new Date(end_date);
+        // booking.end_date = newEndDate;
+        // booking.end_time = end_time;
+        // booking.amount = amount;
+        // booking.rented_hours = rented_hours;
+        // booking.booking_state_id = 2;
     
-        return await this.bookingsRepository.save(booking)
+        // return await this.bookingsRepository.save(booking)
     }
 }

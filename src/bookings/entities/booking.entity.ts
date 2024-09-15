@@ -16,16 +16,22 @@ export class Booking {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({type: 'date'})
-    star_date_time: Timestamp;
+    @Column({type: 'timestamp'})
+    start_date_time: Date;
 
-    @Column({type: 'integer', nullable: true})
+    @Column({ type: 'decimal', precision: 10, scale: 2, transformer: { 
+        to: (value: number) => value, 
+        from: (value: string) => parseFloat(value) 
+    }})
     rented_hours: number;
 
-    @Column({type: 'date'})
-    end_date_time: Timestamp;
+    @Column({type: 'timestamp', nullable: true})
+    end_date_time: Date;
 
-    @Column({type: 'decimal', nullable: true, precision: 10, scale: 2 })
+    @Column({ type: 'decimal', precision: 10, scale: 2, transformer: { 
+        to: (value: number) => value, 
+        from: (value: string) => parseFloat(value) 
+    }})
     amount: number;
 
     @Column({type: 'varchar', length: 10, nullable: false})

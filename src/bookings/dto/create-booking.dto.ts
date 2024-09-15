@@ -1,19 +1,11 @@
 import { IsNotEmpty, IsDate, IsString, IsDateString, isDate, Matches } from 'class-validator';
+import { Booking } from '../entities/booking.entity';
 
 export class CreateBookingDto {
 
     @IsNotEmpty()
     @IsDate()
     start_date_time: Date;
-    // @Matches(/^\d{4}-\d{2}-\d{2}$/, {
-    //     message: 'date must be in the format YYYY-MM-DD',
-    //   })
-    // @IsNotEmpty()
-    // @IsString()
-    // @Matches(/^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, {
-    //     message: 'time must be in the format HH:MM:SS',
-    //   })
-    // start_time: string;
 
     @IsNotEmpty()
     @IsString()
@@ -30,4 +22,18 @@ export class CreateBookingDto {
     @IsNotEmpty()
     @IsString()
     slot_id: string;
+
+    constructor(
+        start_date_time: Date, 
+        vehicle_plate: string, 
+        owner_id: string, 
+        driver_id: string,
+        slot_id: string
+     ){
+        this.start_date_time = start_date_time;
+        this.vehicle_plate = vehicle_plate;
+        this.owner_id = owner_id;
+        this.driver_id = driver_id;
+        this.slot_id = slot_id;
+    }
 }
