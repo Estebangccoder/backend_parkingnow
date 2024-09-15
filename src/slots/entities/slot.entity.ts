@@ -16,14 +16,16 @@ export class Slot {
   @Column({ type: "boolean", default: true })
   is_available: boolean;
 
-  @Column({ type: "decimal" })
+  @Column({
+    type: 'decimal', precision: 10, scale: 2, transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value)
+    }
+  })
   hour_price: number;
 
   @Column({ type: "boolean" })
   is_covered: boolean;
-
-  @Column({ type: "varchar", length: 255 })
-  description: string;
 
   @Column({ type: 'int', nullable: false })
   vehicle_type_id: number;
@@ -55,7 +57,7 @@ export class Slot {
   @ApiHideProperty()
   @ManyToOne(() => Property, (property) => property.slots)
   @JoinColumn({ name: "property_id" })
-  propertyId: Property;
+  property: Property;
 
   @ApiHideProperty()
   @ManyToOne(() => User, (user) => user.slots)

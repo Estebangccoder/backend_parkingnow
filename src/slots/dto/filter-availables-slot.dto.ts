@@ -12,5 +12,5 @@ export class FilterAvailablesDto {
   
     @IsOptional()
     @IsString()
-    comuna?: string;
+    commune?: string;
 }

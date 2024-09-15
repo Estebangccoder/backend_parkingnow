@@ -37,7 +37,7 @@ export class Property {
     delete_at: Date;
 
     @ApiHideProperty()
-    @OneToMany(() => Slot, (slot) => slot.propertyId)
+    @OneToMany(() => Slot, (slot) => slot.property)
     slots: Slot[];
 
     @ApiHideProperty()
