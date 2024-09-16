@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBookingDto, UpdateBookingDto, ReceiveBookingDataDto  } from './dto';
-import { Create, Update, FindById, Delete, TransformStringToDate } from './services';
+import { CreateBookingDto, UpdateBookingDto, ReceiveBookingDataDto, EndDateDataDto  } from './dto';
+import { Create, Update, FindById, Delete, TransformStringToDate, CalculateAmount } from './services';
+import { SlotsService } from 'src/slots/slots.service';
 
 @Injectable()
 export class BookingsService {
@@ -9,7 +10,9 @@ export class BookingsService {
     private readonly updateBooking: Update,
     private readonly findById: FindById,
     private readonly softDelete: Delete,
-    private readonly transform: TransformStringToDate// transformar datos de 'string' a 'Date'
+    private readonly transform: TransformStringToDate,// transformar datos de 'string' a 'Date'
+    private readonly slotsService: SlotsService,
+    private readonly calculateAmount: CalculateAmount
   ){}
   
   async create(receivedBookingData: ReceiveBookingDataDto) {
@@ -21,6 +24,17 @@ export class BookingsService {
     const createBookingData: CreateBookingDto = new CreateBookingDto(new_start_date_time, vehicle_plate, owner_id, driver_id, slot_id);
 
     return await this.createBooking.create(createBookingData);
+  }
+
+  async returnAmount(data: EndDateDataDto){
+    const {end_date_time, booking_id} = data;
+    const bookingFound = await this.findById.findBooking(booking_id);
+    console.log('bookingFound', bookingFound);
+    
+    const slotId = bookingFound.slot_id;
+    const slotPrice = (await this.slotsService.findOne(slotId)).hour_price;
+    const amount = this.calculateAmount.calculate(5, slotPrice);
+    return `el monto total es ${amount}`;
   }
 
   findAll() {

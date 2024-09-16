@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
-import { UpdateBookingDto, ReceiveBookingDataDto } from './dto';
+import { EndDateDataDto, ReceiveBookingDataDto, UpdateBookingDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
 
 
@@ -14,6 +14,12 @@ export class BookingsController {
   create(@Body() bookingData: ReceiveBookingDataDto) {
     //ReceivedBookingData: DTO para definir la estructura que llegara por el cuerpo de la solicitud.
     return this.bookingsService.create(bookingData)
+  }
+
+  @Post('end-booking')
+  returnAmount(@Body() data: EndDateDataDto){
+   this.bookingsService.returnAmount(data);
+
   }
 
   @Get()
