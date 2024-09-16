@@ -21,6 +21,7 @@ async function bootstrap() {
     .setTitle('Parking now API')
     .setDescription('This is the documentation for our API, here you will find all our endpoints, how to access them and what responses they will give. ')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
