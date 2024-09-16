@@ -1,27 +1,38 @@
-import { Controller,  Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Query } from '@nestjs/common';
+import { Controller,  Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Query, UseGuards } from '@nestjs/common';
 import { PropertiesService } from './properties.service'
 import { CreatePropertyDto } from './dto/create-properties.dto';	
 import { UpdatePropertyDto } from './dto/update-properties.dto';
-import { query } from 'express';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { Role } from 'src/auth/enums/rol.enum';
+import { Roles } from 'src/auth/decorators/roles.decorators';
+
 
 @ApiTags('Porperties')
+@ApiBearerAuth()
+@UseGuards(AuthGuard, RolesGuard)
+@Roles(Role.USER)
 @Controller('properties')
 export class PropertiesController {
 
     constructor(private readonly propertiesService: PropertiesService){}
 
     @Post()
+    @ApiOperation({ summary: 'Create a new property' })
     create(@Body() createPropertyDto: CreatePropertyDto) {
         return this.propertiesService.create(createPropertyDto);
     }
     
     @Get()
+    @ApiOperation({ summary: 'Get all properties' })
     findAll() {
         return this.propertiesService.findAll();
     }
 
     @Get('searchById')
+    @ApiOperation({ summary: 'Get a property by ID' })
+    @ApiQuery({ name: 'ID', description: 'ID of the property to search for' })
     async findOne(@Query('id') id: string) {
         if (!id) {
             throw new HttpException('ID query parameter is required', HttpStatus.BAD_REQUEST);
@@ -36,7 +47,10 @@ export class PropertiesController {
         }
     }
 
+   
     @Get('searchByName') // Usa una ruta fija para la búsqueda, y usa @Query para obtener el nombre.
+    @ApiOperation({ summary: 'Get a property by name' })
+    @ApiQuery({ name: 'name', description: 'Name of the property to search for' })
     async findByName(@Query('name') name: string) {
       console.log(name);
       
@@ -55,11 +69,15 @@ export class PropertiesController {
     }
 
     @Patch(':id')
+    @ApiOperation({ summary: 'Update a property by ID' })
+    @ApiQuery({ name: 'ID', description: 'ID of the property to search for' })
     update(@Param('id') id: string, @Body() updatePropertyDto: UpdatePropertyDto) {
         return this.propertiesService.update(id, updatePropertyDto);
     }
 
     @Delete(':id')
+    @ApiOperation({ summary: 'Delete a property by ID' })
+    @ApiQuery({ name: 'ID', description: 'ID of the property to search for' })
     remove(@Param('id') id: string) {
         return this.propertiesService.remove(id);
     }
