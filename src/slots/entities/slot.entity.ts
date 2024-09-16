@@ -37,8 +37,7 @@ export class Slot {
     type: 'decimal', precision: 10, scale: 2, transformer: {
       to: (value: number) => value,
       from: (value: string) => parseFloat(value) 
-    }
-  })
+    }})
   hour_price: number;
 
   @ApiProperty({
@@ -52,6 +51,7 @@ export class Slot {
     description: 'ID of the vehicle type that can use this slot',
     example: 1,
   })
+
   @Column({ type: 'int', nullable: false })
   vehicle_type_id: number;
 
