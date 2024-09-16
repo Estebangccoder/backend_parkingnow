@@ -9,10 +9,11 @@ import { ApiTags } from '@nestjs/swagger';
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
+
   @Post() 
   create(@Body() bookingData: ReceiveBookingDataDto) {
     //ReceivedBookingData: DTO para definir la estructura que llegara por el cuerpo de la solicitud.
-    return this.bookingsService.create(bookingData);
+    return this.bookingsService.create(bookingData)
   }
 
   @Get()

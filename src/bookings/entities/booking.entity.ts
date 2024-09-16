@@ -7,8 +7,7 @@ import { Column,
         DeleteDateColumn, 
         Entity, JoinColumn, 
         ManyToOne, 
-        PrimaryGeneratedColumn, 
-        Timestamp, 
+        PrimaryGeneratedColumn,
         UpdateDateColumn } from "typeorm";
 
 @Entity('bookings')

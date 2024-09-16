@@ -1,8 +1,5 @@
 import { IsNotEmpty, IsDate, IsString, IsDateString, isDate, Matches } from 'class-validator';
-import { Booking } from '../entities/booking.entity';
-
 export class CreateBookingDto {
-
     @IsNotEmpty()
     @IsDate()
     start_date_time: Date;
