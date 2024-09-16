@@ -8,7 +8,6 @@ export class CreateSlotDto {
   @Length(0, 100)
   name: string;
 
-
   @ApiProperty({ description: 'Price per hour', example: 5000.00 })
   @IsNotEmpty()
   @IsNumber()
