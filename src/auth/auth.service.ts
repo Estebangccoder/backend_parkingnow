@@ -39,7 +39,8 @@ export class AuthService {
                 email,
                 userId
             }
-        } catch (error) {
+            
+        } catch (error) { 
             throw new HttpException(error, 500)
         }
       

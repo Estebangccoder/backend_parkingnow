@@ -18,6 +18,7 @@ import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { Role } from 'src/auth/enums/rol.enum';
 import { Roles } from 'src/auth/decorators/roles.decorators';
+
 @ApiTags('Slots')
 @ApiBearerAuth()
 @UseGuards(AuthGuard, RolesGuard)
@@ -34,9 +35,15 @@ export class SlotsController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all properties' })
+  @ApiOperation({ summary: 'Get all slots' })
   findAll() {
     return this.slotsService.findAll();
+  }
+
+  @Get("withProperty")
+  @ApiOperation({ summary: 'Get all slots with the property info' })
+  findAllWithPropertyInfo(){
+    return this.slotsService.findAllWithProperty();
   }
 
   @Get("findById/:id")
