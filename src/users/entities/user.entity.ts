@@ -78,12 +78,13 @@ export class User {
     })
     document_type_id: number;
 
+
     @CreateDateColumn({ type: 'timestamp' })
     @ApiProperty({
         description: 'Date when the user was created',
         example: '2024-09-15T12:00:00Z',
-    })
-    created_at: Date;
+       })
+      created_at: Date;
 
     @UpdateDateColumn({ type: 'timestamp' })
     @ApiProperty({

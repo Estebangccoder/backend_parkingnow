@@ -18,6 +18,7 @@ import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { Role } from 'src/auth/enums/rol.enum';
 import { Roles } from 'src/auth/decorators/roles.decorators';
+
 @ApiTags('Slots')
 @ApiBearerAuth()
 @UseGuards(AuthGuard, RolesGuard)

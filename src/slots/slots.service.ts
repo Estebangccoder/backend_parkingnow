@@ -1,15 +1,14 @@
 import {
   BadRequestException,
-  HttpException,
   Injectable,
   InternalServerErrorException,
-  NotFoundException,
+  NotFoundException
 } from "@nestjs/common";
 import { CreateSlotDto } from "./dto/create-slot.dto";
 import { UpdateSlotDto } from "./dto/update-slot.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Slot } from "./entities/slot.entity";
-import { Repository } from "typeorm";
+import { QueryFailedError, Repository } from "typeorm";
 import { FilterAvailablesDto } from "./dto/filter-availables-slot.dto";
 
 @Injectable()
@@ -21,13 +20,12 @@ export class SlotsService {
   async create(slot: CreateSlotDto) {
     try {
       const createdSlot = this.slotRepository.create(slot);
-
       return await this.slotRepository.save(createdSlot);
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      if (error instanceof QueryFailedError) {
+        throw new BadRequestException()
+      }
+      throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
 
@@ -35,39 +33,31 @@ export class SlotsService {
     try {
       return await this.slotRepository.find();
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
 
   async findOne(id: string) {
     try {
       const slot = await this.slotRepository.findOne({
-        where: { id },
-        relations: ["owner"],
+        where: { id }
       });
 
       if (!slot) throw new NotFoundException("Slot not found");
 
       return slot;
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
 
   async findAllWithProperty() {
+
     try {
-      return await this.slotRepository.find({relations: ["property", "property.commune"]})
+      return await this.slotRepository.find({ relations: ["property", "property.commune"] });
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      throw new InternalServerErrorException(error.message || "Internal server error");
+
     }
   }
 
@@ -79,7 +69,7 @@ export class SlotsService {
         .innerJoinAndSelect("slot.property", "property")
         .innerJoinAndSelect("property.commune", "commune")
         .where("slot.is_available = :isAvailable", { isAvailable: 1 });
-  
+
       if (filters.commune) {
         query.andWhere("commune.id = :comunaId", { comunaId: filters.commune });
       }
@@ -98,24 +88,26 @@ export class SlotsService {
   
       return await query.getMany();
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      if (error instanceof QueryFailedError) {
+        throw new BadRequestException("Invalid query");
+      }
+      throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
-  
+
 
   async update(id: string, updateSlotDto: UpdateSlotDto) {
     try {
       const slot = await this.findOne(id);
-      if (!slot) throw new NotFoundException("slot not fount");
+
+      if (!slot) throw new NotFoundException("Slot not found");
 
       const slotUpgraded = Object.assign(slot, updateSlotDto);
-      console.log(slotUpgraded);
-      
       return this.slotRepository.save(slotUpgraded);
-    } catch (error) { }
+    } catch (error) {
+      throw new InternalServerErrorException(error.message || "Internal server error");
+    }
+
   }
 
   async remove(id: string) {
@@ -123,12 +115,11 @@ export class SlotsService {
       const slot = await this.findOne(id);
       if (!slot) throw new NotFoundException("Slot not found");
 
-      return await this.slotRepository.remove(slot);
+
+      return await this.slotRepository.softRemove(slot);
+
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
 }
