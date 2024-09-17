@@ -29,7 +29,7 @@ export class BookingsController {
   @ApiOperation({ summary: 'Request amount and total hours' })
   @ApiBody({ type: EndDateDataDto })
   returnAmount(@Body() data: EndDateDataDto){
-   return this.bookingsService.returnAmount(data);
+   return this.bookingsService.returnAmountAndHours(data);
 
   }
 

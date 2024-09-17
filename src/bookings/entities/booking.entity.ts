@@ -32,7 +32,7 @@ export class Booking {
         description: 'Total rented hours for the booking',
         example: '5',
       })
-    @Column({ type: 'decimal', precision: 10, scale: 2, transformer: { 
+    @Column({ type: 'decimal', default: 1, precision: 10, scale: 2,  transformer: { 
         to: (value: number) => value, 
         from: (value: string) => parseFloat(value) 
     }})
@@ -49,7 +49,7 @@ export class Booking {
         description: 'Total Cost',
         example: '10000.5',
       })
-    @Column({ type: 'decimal', precision: 10, scale: 2, transformer: { 
+    @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, transformer: { 
         to: (value: number) => value, 
         from: (value: string) => parseFloat(value) 
     }})
@@ -59,28 +59,28 @@ export class Booking {
         description: 'vehicle plate',
         example: 'JWT666',
       })
-    @Column({type: 'varchar', length: 10, nullable: false})
+    @Column({type: 'varchar', length: 10})
     vehicle_plate: string;
 
     @ApiProperty({
         description: "ID of the slot's owner",
         example: '3f33ba0b-c4fe-4640-b655-7c5a99cbec10',
       })
-    @Column('varchar', {nullable: false})
+    @Column('varchar')
     owner_id: string;
     
     @ApiProperty({
         description: "ID of the vehicle's driver",
         example: '0a34aa48-7e96-4601-8357-f7418127d54c',
       })
-    @Column('varchar', {nullable: false})
+    @Column('varchar')
     driver_id: string;
     
     @ApiProperty({
         description: "ID of the slot rented",
         example: 'b11b9cd7-c707-4ef8-b0c5-9f74f3f8a9c5',
       })
-    @Column('varchar', {nullable: false})
+    @Column('varchar')
     slot_id: string;
     
     @ApiProperty({
