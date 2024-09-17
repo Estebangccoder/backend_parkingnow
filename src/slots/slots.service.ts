@@ -52,10 +52,12 @@ export class SlotsService {
   }
 
   async findAllWithProperty() {
+
     try {
       return await this.slotRepository.find({ relations: ["property", "property.commune"] });
     } catch (error) {
       throw new InternalServerErrorException(error.message || "Internal server error");
+
     }
   }
 
@@ -71,19 +73,19 @@ export class SlotsService {
       if (filters.commune) {
         query.andWhere("commune.id = :comunaId", { comunaId: filters.commune });
       }
-
+  
       if (filters.vehicleType) {
         query.andWhere("slot.vehicle_type_id = :vehicleType", {
           vehicleType: filters.vehicleType,
         });
       }
-
+  
       if (filters.isCovered) {
         query.andWhere("slot.is_covered = :isCovered", {
           isCovered: filters.isCovered,
         });
       }
-
+  
       return await query.getMany();
     } catch (error) {
       if (error instanceof QueryFailedError) {
@@ -93,9 +95,11 @@ export class SlotsService {
     }
   }
 
+
   async update(id: string, updateSlotDto: UpdateSlotDto) {
     try {
       const slot = await this.findOne(id);
+
       if (!slot) throw new NotFoundException("Slot not found");
 
       const slotUpgraded = Object.assign(slot, updateSlotDto);
@@ -103,6 +107,7 @@ export class SlotsService {
     } catch (error) {
       throw new InternalServerErrorException(error.message || "Internal server error");
     }
+
   }
 
   async remove(id: string) {
@@ -110,7 +115,9 @@ export class SlotsService {
       const slot = await this.findOne(id);
       if (!slot) throw new NotFoundException("Slot not found");
 
+
       return await this.slotRepository.softRemove(slot);
+
     } catch (error) {
       throw new InternalServerErrorException(error.message || "Internal server error");
     }
