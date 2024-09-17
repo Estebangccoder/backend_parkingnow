@@ -17,7 +17,7 @@ export class AuthService {
     async login({email, password}: LoginDto){
 
         try {
-            const user = await this.userService.findOneByEmail(email)
+            const user:User = await this.userService.findOneByEmail(email)
 
             if (!user) {
                 throw new UnauthorizedException('Invalid credentials')
@@ -31,10 +31,13 @@ export class AuthService {
             const payload = {email: user.email, role_id: user.role_id}
     
             const token = await this.jwtService.signAsync(payload)
+
+            const userId = user.id
     
             return {
                 token,
-                email
+                email,
+                userId
             }
         } catch (error) {
             throw new HttpException(error, 500)

@@ -79,12 +79,17 @@ export class User {
     document_type_id: number;
 
     @Column({
-        type: 'uuid', unique: true, name: 'reset_password_token', nullable: true,})
+        type: 'uuid', 
+        unique: true, 
+        name: 'reset_password_token', 
+        nullable: true
+    })
     @ApiProperty({
         description: 'Reset password token',
         example: "123e4567-e89b-12d3-a456-426614174055",
     })
       resetPasswordToken: string;
+      
 
     @CreateDateColumn({ type: 'timestamp' })
     @ApiProperty({

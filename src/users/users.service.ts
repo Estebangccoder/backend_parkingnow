@@ -84,7 +84,7 @@ export class UsersService {
   async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {
     const { resetPasswordToken, password } = resetPasswordDto;
     const user: User = await this.findOneByResetPasswordToken(
-      resetPasswordToken,
+    resetPasswordToken,
     );
 
     user.password = await bcryptjs.hash(password,8)

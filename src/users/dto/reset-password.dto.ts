@@ -3,7 +3,6 @@ import { IsNotEmpty, IsString, IsUUID, MinLength } from "class-validator";
 
 
 export class ResetPasswordDto {
-  @IsNotEmpty()
   @IsUUID('4')
   resetPasswordToken: string;
 
