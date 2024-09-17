@@ -79,7 +79,6 @@ export class User {
     document_type_id: number;
 
 
-
     @Column({
         type: 'varchar', 
         unique: true, 
@@ -92,6 +91,8 @@ export class User {
     })
       resetPasswordToken: string;
       
+
+
     @CreateDateColumn({ type: 'timestamp' })
     @ApiProperty({
         description: 'Date when the user was created',
