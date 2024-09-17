@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateBookingDto, UpdateBookingDto, ReceiveBookingDataDto, EndDateDataDto  } from './dto';
 import { Create, Update, FindById, Delete, TransformStringToDate, CalculateAmount } from './services';
 import { SlotsService } from 'src/slots/slots.service';
+import { FindAll } from './services/find-all.service';
 
 @Injectable()
 export class BookingsService {
   constructor(
     private readonly createBooking: Create,
     private readonly updateBooking: Update,
+    private readonly findAllBookings: FindAll,
     private readonly findById: FindById,
     private readonly softDelete: Delete,
     private readonly transform: TransformStringToDate,// transformar datos de 'string' a 'Date'
@@ -28,17 +30,22 @@ export class BookingsService {
 
   async returnAmount(data: EndDateDataDto){
     const {end_date_time, booking_id} = data;
+
     const bookingFound = await this.findById.findBooking(booking_id);
     console.log('bookingFound', bookingFound);
     
     const slotId = bookingFound.slot_id;
+    console.log(slotId);
+    
     const slotPrice = (await this.slotsService.findOne(slotId)).hour_price;
+    console.log("slotPrice",slotPrice);
+    
     const amount = this.calculateAmount.calculate(5, slotPrice);
     return `el monto total es ${amount}`;
   }
 
-  findAll() {
-    return `This action returns all bookings`;
+  async findAll() {
+    return await this.findAllBookings.findAll();
   }
 
   findOne(id: string) {

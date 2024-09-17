@@ -18,7 +18,7 @@ export class BookingsController {
 
   @Post('end-booking')
   returnAmount(@Body() data: EndDateDataDto){
-   this.bookingsService.returnAmount(data);
+   return this.bookingsService.returnAmount(data);
 
   }
 
