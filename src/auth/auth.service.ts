@@ -17,7 +17,7 @@ export class AuthService {
     async login({email, password}: LoginDto){
 
         try {
-            const user = await this.userService.findOneByEmail(email)
+            const user:User = await this.userService.findOneByEmail(email)
 
             if (!user) {
                 throw new UnauthorizedException('Invalid credentials')
@@ -31,12 +31,16 @@ export class AuthService {
             const payload = {email: user.email, role_id: user.role_id}
     
             const token = await this.jwtService.signAsync(payload)
+
+            const userId = user.id
     
             return {
                 token,
-                email
+                email,
+                userId
             }
-        } catch (error) {
+            
+        } catch (error) { 
             throw new HttpException(error, 500)
         }
       
@@ -51,8 +55,8 @@ export class AuthService {
         document_type_id,
         doc_number
     }: RegisterDto){
-     
-        const user = await this.userService.findOneByEmail(email)
+        try{
+            const user = await this.userService.findOneByEmail(email)
 
         if (user) {
             throw new BadRequestException('User already exists')
@@ -67,7 +71,16 @@ export class AuthService {
             doc_number,
             document_type_id
         })
+        
         return {fullname, email}
+        
+    }catch(error){
+            console.log(error)
+            
+        }
+     
+        
+        
     }
     async profile({email,role_id}: {email: string, role_id: number}){
         return await this.userService.findOneByEmail(email)

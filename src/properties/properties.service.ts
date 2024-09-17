@@ -1,23 +1,20 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { Repository, Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Property } from './entities/property.entity';
 import { CreatePropertyDto } from './dto/create-properties.dto';
 import { UpdatePropertyDto } from './dto/update-properties.dto';
 
-
-
 @Injectable()
 export class PropertiesService {
-    constructor(
-        @InjectRepository(Property)
-        private readonly propertyRepository: Repository<Property>,
-    ) {}
+  constructor(
+    @InjectRepository(Property)
+    private readonly propertyRepository: Repository<Property>,
+  ) {}
 
-    async create(createPropertyDto: CreatePropertyDto){
+ async create(createPropertyDto: CreatePropertyDto){
         try{
-            const newProperty = this.propertyRepository.create(createPropertyDto)
-            return await this.propertyRepository.save(newProperty);
+            return await this.propertyRepository.save(createPropertyDto);
    
         }
         catch(error){
