@@ -31,12 +31,12 @@ export class AuthService {
             const payload = {email: user.email, role_id: user.role_id}
     
             const token = await this.jwtService.signAsync(payload)
-    
+            
             return {
                 token,
                 email
             }
-        } catch (error) {
+        } catch (error) { 
             throw new HttpException(error, 500)
         }
       
