@@ -7,16 +7,18 @@ import { Roles } from 'src/auth/decorators/roles.decorators';
 import { Role } from 'src/auth/enums/rol.enum';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import { RequestResetPasswordDto } from './dto/request-reset-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, RolesGuard)
-@Roles(Role.ADMIN)
+//@UseGuards(AuthGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'List of all users' })
   findAll() {
@@ -24,6 +26,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Get a user by ID' })
   @ApiResponse({ status: 200, description: 'User details', type: User })
   @ApiResponse({ status: 404, description: 'User not found' })
@@ -32,6 +35,7 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Update a user by ID' })
   @ApiResponse({ status: 200, description: 'User updated successfully', type: User })
   @ApiResponse({ status: 400, description: 'No changes were made' })
@@ -41,10 +45,23 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Delete a user by ID' })
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
   remove(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.usersService.remove(id);
+  }
+
+  @Patch('/request-reset-password')
+  requestResetPassword(
+    @Body() requestResetPasswordDto: RequestResetPasswordDto,
+  ): Promise<void> {
+    return this.usersService.requestResetPassword(requestResetPasswordDto);
+  }
+
+  @Patch('/reset-password')
+  resetPassword(@Body() resetPasswordDto: ResetPasswordDto): Promise<void> {
+    return this.usersService.resetPassword(resetPasswordDto);
   }
 }

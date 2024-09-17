@@ -1,9 +1,13 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { RegisterDto } from "../auth/dto/register.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./entities/user.entity";
 import { Repository } from "typeorm";
+import { RequestResetPasswordDto } from "./dto/request-reset-password.dto";
+import { v4 } from 'uuid';
+import { ResetPasswordDto } from "./dto/reset-password.dto";
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
@@ -56,4 +60,36 @@ export class UsersService {
     await this.userRepository.softRemove(userFound);
     return "User deleted successfully";
   }
+
+  async requestResetPassword(
+    requestResetPasswordDto: RequestResetPasswordDto,
+  ){
+    const { email } = requestResetPasswordDto;
+    const user: User = await this.userRepository.findOneBy({ email });
+    user.resetPasswordToken = v4();
+    this.userRepository.save(user);
+    // Send email (e.g. Dispatch an event so MailerModule can send the email)
+  }
+
+  async findOneByResetPasswordToken(resetPasswordToken: string): Promise<User>{
+    const user: User = await this.userRepository.findOne({where:{resetPasswordToken} });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {
+    const { resetPasswordToken, password } = resetPasswordDto;
+    const user: User = await this.findOneByResetPasswordToken(
+    resetPasswordToken,
+    );
+
+    user.password = await bcryptjs.hash(password,8)
+    user.resetPasswordToken = null;
+    this.userRepository.save(user);
+  }
+  
 }

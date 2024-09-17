@@ -50,7 +50,7 @@ export class User {
     })
     address: string;
     
-    @Column({ type: 'varchar', length: 30 })
+    @Column({ type: 'varchar', length: 30, unique: true })
     @ApiProperty({
         description: 'Document number of the user',
         example: '12345678910',
@@ -77,6 +77,20 @@ export class User {
         example: 1,
     })
     document_type_id: number;
+
+
+    @Column({
+        type: 'varchar', 
+        unique: true, 
+        name: 'reset_password_token', 
+        nullable: true
+    })
+    @ApiProperty({
+        description: 'Reset password token',
+        example: "123e4567-e89b-12d3-a456-426614174055",
+    })
+      resetPasswordToken: string;
+      
 
 
     @CreateDateColumn({ type: 'timestamp' })
