@@ -34,7 +34,7 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('/update/:id')
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Update a user by ID' })
   @ApiResponse({ status: 200, description: 'User updated successfully', type: User })
@@ -53,12 +53,13 @@ export class UsersController {
     return this.usersService.remove(id);
   }
 
-  @Patch('/request-reset-password')
+  @Patch('/request-password')
   requestResetPassword(
     @Body() requestResetPasswordDto: RequestResetPasswordDto,
   ): Promise<void> {
     return this.usersService.requestResetPassword(requestResetPasswordDto);
   }
+
 
   @Patch('/reset-password')
   resetPassword(@Body() resetPasswordDto: ResetPasswordDto): Promise<void> {
