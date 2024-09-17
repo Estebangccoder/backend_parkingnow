@@ -65,7 +65,7 @@ export class UsersService {
     requestResetPasswordDto: RequestResetPasswordDto,
   ){
     const { email } = requestResetPasswordDto;
-  
+
     const user: User = await this.userRepository.findOneBy({ email });
     user.resetPasswordToken = v4();
     this.userRepository.save(user);
