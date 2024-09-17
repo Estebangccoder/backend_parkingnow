@@ -52,7 +52,6 @@ export class BookingsService {
 
   async update(id: string, updateBookingDto: UpdateBookingDto) {
     const booking = await this.findById.findBooking(id);
-    console.log("booking",booking);
      
     return this.updateBooking.update( booking, updateBookingDto)
   }
