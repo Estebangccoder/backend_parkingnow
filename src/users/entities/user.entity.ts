@@ -40,7 +40,7 @@ export class User {
     document_type_id: number;
 
     @CreateDateColumn({type: 'timestamp'})
-    crearted_at: Date;
+    created_at: Date;
 
     @UpdateDateColumn({type: 'timestamp'})
     updated_at: Date;

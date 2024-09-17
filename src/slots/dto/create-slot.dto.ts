@@ -28,11 +28,11 @@ export class CreateSlotDto {
     vehicle_type_id: number;
 
     @IsNotEmpty()
-    @IsString()
+    @IsUUID()
     property_id: string;
 
     @IsNotEmpty()
-    @IsString()
+    @IsUUID()
     owner_id: string;
 
 }
