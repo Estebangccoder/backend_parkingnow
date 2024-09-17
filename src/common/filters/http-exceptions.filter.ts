@@ -1,10 +1,10 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, NotFoundException, BadRequestException, UnauthorizedException, ForbiddenException } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { QueryFailedError, EntityNotFoundError } from 'typeorm';
+import { QueryFailedError } from 'typeorm';
 
-@Catch()
+@Catch(HttpException, QueryFailedError)
 export class HttpErrorFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: HttpException | NotFoundException | BadRequestException | UnauthorizedException | ForbiddenException | QueryFailedError | unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
@@ -36,10 +36,6 @@ export class HttpErrorFilter implements ExceptionFilter {
         status = HttpStatus.BAD_REQUEST;
         message = 'Database query failed';
       }
-
-    } else if (exception instanceof NotFoundException) {
-      status = HttpStatus.NOT_FOUND;
-      message = 'Entity not found';
 
     } else {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
