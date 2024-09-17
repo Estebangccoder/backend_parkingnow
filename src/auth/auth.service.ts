@@ -32,14 +32,16 @@ export class AuthService {
     
             const token = await this.jwtService.signAsync(payload)
 
+
             const userId = user.id
     
+
             return {
                 token,
                 email,
                 userId
             }
-        } catch (error) {
+        } catch (error) { 
             throw new HttpException(error, 500)
         }
       
