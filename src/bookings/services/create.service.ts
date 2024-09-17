@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Booking } from "../entities/booking.entity";
 import { Repository } from "typeorm";
@@ -12,8 +12,14 @@ export class Create{
     ){}
 
     async create(bookingData: CreateBookingDto){
-
-        const newBooking = this.bookingsRepository.create(bookingData);
-        return await this.bookingsRepository.save(newBooking);
+        try {
+            const newBooking = this.bookingsRepository.create(bookingData);
+            return await this.bookingsRepository.save(newBooking);
+        } catch (error) {
+            throw new HttpException(
+                error.message || "Internal server error",
+                error.status || 500
+              );
+        }
     }
 }

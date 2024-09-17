@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Booking } from "../entities/booking.entity";
 import { Repository } from "typeorm";
@@ -11,6 +11,15 @@ export class FindById{
     ){}
 
     async findBooking(id : string) {
-        return this.bookingsRepository.findOne({where: {id}})
+        try {
+            const booking: Booking = await this.bookingsRepository.findOne({where: {id}});
+            if (!booking) throw new NotFoundException("Booking not found");
+            return booking;
+        } catch (error) {
+            throw new HttpException(
+                error.message || "Internal server error",
+                error.status || 500
+              );
+        }
     }
 }

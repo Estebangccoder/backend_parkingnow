@@ -32,16 +32,14 @@ export class BookingsService {
     const {end_date_time, booking_id} = data;
 
     const bookingFound = await this.findById.findBooking(booking_id);
-    console.log('bookingFound', bookingFound);
     
     const slotId = bookingFound.slot_id;
-    console.log(slotId);
+
     
     const slotPrice = (await this.slotsService.findOne(slotId)).hour_price;
-    console.log("slotPrice",slotPrice);
     
-    const amount = this.calculateAmount.calculate(5, slotPrice);
-    return `el monto total es ${amount}`;
+    const amount: number = this.calculateAmount.calculate(5, slotPrice);
+    return {amount};
   }
 
   async findAll() {
