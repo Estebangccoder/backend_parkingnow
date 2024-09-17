@@ -34,7 +34,7 @@ export class Property {
     })
     description: string;
 
-    @Column({ type: 'varchar', length: 50, nullable: false })
+    @Column({ type: 'text', nullable: false })
     @ApiProperty({
         description: 'Image URL of the property',
         example: 'https://example.com/images/property.jpg',

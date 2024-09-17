@@ -55,8 +55,8 @@ export class AuthService {
         document_type_id,
         doc_number
     }: RegisterDto){
-     
-        const user = await this.userService.findOneByEmail(email)
+        try{
+            const user = await this.userService.findOneByEmail(email)
 
         if (user) {
             throw new BadRequestException('User already exists')
@@ -71,7 +71,16 @@ export class AuthService {
             doc_number,
             document_type_id
         })
+        
         return {fullname, email}
+        
+    }catch(error){
+            console.log(error)
+            
+        }
+     
+        
+        
     }
     async profile({email,role_id}: {email: string, role_id: number}){
         return await this.userService.findOneByEmail(email)
