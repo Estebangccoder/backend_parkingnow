@@ -27,7 +27,7 @@ import { Commune } from './common/entities/commune.entity';
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     entities: [__dirname + '/**/*.entity{.ts,.js}', Role, DocumentType, VehicleType, BookingState, Commune],
-    synchronize: true,
+    synchronize: false,
   }),UsersModule, BookingsModule, SlotsModule, PropertiesModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],

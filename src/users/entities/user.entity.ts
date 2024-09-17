@@ -79,7 +79,7 @@ export class User {
     document_type_id: number;
 
     @Column({
-        type: 'uuid', 
+        type: 'varchar', 
         unique: true, 
         name: 'reset_password_token', 
         nullable: true
