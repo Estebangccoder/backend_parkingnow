@@ -34,9 +34,15 @@ export class SlotsController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all properties' })
+  @ApiOperation({ summary: 'Get all slots' })
   findAll() {
     return this.slotsService.findAll();
+  }
+
+  @Get("withProperty")
+  @ApiOperation({ summary: 'Get all slots with the property info' })
+  findAllWithPropertyInfo(){
+    return this.slotsService.findAllWithProperty();
   }
 
   @Get("findById/:id")
