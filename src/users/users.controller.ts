@@ -56,7 +56,7 @@ export class UsersController {
   @Patch('/request-password')
   requestResetPassword(
     @Body() requestResetPasswordDto: RequestResetPasswordDto,
-  ): Promise<void> {
+  ) {
     return this.usersService.requestResetPassword(requestResetPasswordDto);
   }
 

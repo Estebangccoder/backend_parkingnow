@@ -69,7 +69,10 @@ export class UsersService {
     const user: User = await this.userRepository.findOneBy({ email });
     user.resetPasswordToken = v4();
     this.userRepository.save(user);
-    // Send email (e.g. Dispatch an event so MailerModule can send the email)
+    const userResetPasswordToken = user.resetPasswordToken
+    const userFullName = user.fullname
+    
+    return {email,userFullName,userResetPasswordToken }
   }
 
   async findOneByResetPasswordToken(resetPasswordToken: string): Promise<User>{
