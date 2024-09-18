@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { EndDateDataDto, ReceiveBookingDataDto, UpdateBookingDto } from './dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
@@ -6,6 +6,7 @@ import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { Role } from 'src/auth/enums/rol.enum';
 import { Roles } from 'src/auth/decorators/roles.decorators';
+import { RequestWithUser } from "src/common/interfaces/request-with-user.interface";
 
 
 @ApiTags('Bookings')
@@ -20,9 +21,9 @@ export class BookingsController {
   @Post() 
   @ApiOperation({ summary: 'Create a new booking' })
   @ApiBody({ type: ReceiveBookingDataDto })
-  create(@Body() bookingData: ReceiveBookingDataDto) {
+  create(@Body() bookingData: ReceiveBookingDataDto, @Req() req: RequestWithUser) {
     //ReceivedBookingData: DTO para definir la estructura que llegara por el cuerpo de la solicitud.
-    return this.bookingsService.create(bookingData)
+    return this.bookingsService.create(bookingData, req.user.email)
   }
 
   @Post('end-booking')

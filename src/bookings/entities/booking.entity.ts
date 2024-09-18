@@ -16,7 +16,7 @@ export class Booking {
 
     @ApiProperty({
         description: 'ID of the bookings',
-        example: 'f5a88e1a-5b8f-4c92-85ff-3c4c0f7af3b9',
+        example: 'bb926c5a-dc35-4c3e-95fa-f25540a51b7f',
       })
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -64,7 +64,7 @@ export class Booking {
 
     @ApiProperty({
         description: "ID of the slot's owner",
-        example: '3f33ba0b-c4fe-4640-b655-7c5a99cbec10',
+        example: '75127070-8380-4721-b2f5-677162a38a43',
       })
     @Column('varchar')
     owner_id: string;
@@ -78,7 +78,7 @@ export class Booking {
     
     @ApiProperty({
         description: "ID of the slot rented",
-        example: 'b11b9cd7-c707-4ef8-b0c5-9f74f3f8a9c5',
+        example: '911c8821-f2d4-4648-9c01-79472d8f0a6e',
       })
     @Column('varchar')
     slot_id: string;

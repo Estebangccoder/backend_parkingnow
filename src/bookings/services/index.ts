@@ -6,3 +6,5 @@ export * from './transform-date.service';
 export * from './calculate-amount.service';
 export * from './find-all.service';
 export * from './calculate-rented-hours.service';
+export * from './get-userid-by-email.service';
+export * from './get-owner-id.service';

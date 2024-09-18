@@ -8,7 +8,10 @@ import { Create,
   Delete, 
   TransformStringToDate, 
   CalculateAmount,
-  CalculateRentedHours } from './services';
+  CalculateRentedHours,
+  GetUserIdByEmail,
+  GetOwnerId } from './services';
+import { log } from 'console';
 
 @Injectable()
 export class BookingsService {
@@ -21,17 +24,27 @@ export class BookingsService {
     private readonly transform: TransformStringToDate,// transformar datos de 'string' a 'Date'
     private readonly slotsService: SlotsService,
     private readonly calculateAmount: CalculateAmount,
-    private readonly calculateHours: CalculateRentedHours
+    private readonly calculateHours: CalculateRentedHours,
+    private readonly getUserId: GetUserIdByEmail,
+    private readonly getOwnerId: GetOwnerId
   ){}
   
-  async create(receivedBookingData: ReceiveBookingDataDto) {
+  async create(receivedBookingData: ReceiveBookingDataDto, userEmail: string ) {
 
-    const {start_date_time, vehicle_plate, driver_id, owner_id, slot_id } = receivedBookingData;
+    const {start_date_time, vehicle_plate, slot_id } = receivedBookingData;
 
     const new_start_date_time : Date = this.transform.transformToDate(start_date_time);
 
+    const driverId: string = await this.getUserId.getUserId(userEmail);
+    console.log('driverId',driverId);
+
+    const ownerId: string = await this.getOwnerId.getOwnerId(slot_id);
+    console.log('ownerId',ownerId);
+    
+    
+
     //CreateBookingDto: define la estructura del objeto a guardar en la DB.
-    const createBookingData: CreateBookingDto = new CreateBookingDto(new_start_date_time, vehicle_plate, owner_id, driver_id, slot_id);
+    const createBookingData: CreateBookingDto = new CreateBookingDto(new_start_date_time, vehicle_plate, ownerId, driverId, slot_id);
 
     return await this.createBooking.create(createBookingData);
   }
@@ -49,9 +62,14 @@ export class BookingsService {
     const startDateTime = bookingFound.start_date_time;
     
     const slotPrice: number = (await this.slotsService.findOne(slotId)).hour_price;
-    const TotalHours: number = this.calculateHours.calculate(startDateTime, endDateTime)
-    const amount: number = this.calculateAmount.calculate(TotalHours, slotPrice);
-    return {amount, TotalHours};
+
+    let totalHours: number = this.calculateHours.calculate(startDateTime, endDateTime);
+    totalHours = parseFloat(totalHours.toFixed(1)); 
+    let amount: number = this.calculateAmount.calculate(totalHours, slotPrice);
+    amount = Math.floor(amount);
+
+
+    return {amount, totalHours};
   }
 
   async findAll() {

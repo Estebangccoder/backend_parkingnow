@@ -13,7 +13,7 @@ export class EndDateDataDto{
 
     @ApiProperty({
         description: 'Booking ID',
-        example: 'f5a88e1a-5b8f-4c92-85ff-3c4c0f7af3b9',
+        example: 'bb926c5a-dc35-4c3e-95fa-f25540a51b7f',
     })
     @IsNotEmpty()
     @IsString()

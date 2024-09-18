@@ -11,11 +11,14 @@ import {  Create,
           TransformStringToDate,
           CalculateAmount,
           FindAll,
-          CalculateRentedHours} from './services';
+          CalculateRentedHours,
+          GetUserIdByEmail,
+          GetOwnerId} from './services';
+import { UsersModule } from 'src/users/users.module';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Booking]), SlotsModule],
+  imports: [TypeOrmModule.forFeature([Booking]), SlotsModule, UsersModule],
   controllers: [BookingsController],
   providers: [  BookingsService,
                 Create, 
@@ -25,7 +28,9 @@ import {  Create,
                 TransformStringToDate,
                 CalculateAmount, 
                 FindAll,
-                CalculateRentedHours],
+                CalculateRentedHours,
+                GetUserIdByEmail,
+                GetOwnerId],
   exports: [BookingsService]
 })
 export class BookingsModule {}
