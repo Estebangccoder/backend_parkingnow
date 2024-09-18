@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsDate, IsString, IsDateString, isDate, Matches, IsISO8601 } from 'class-validator';
+import { IsNotEmpty, IsString, IsISO8601 } from 'class-validator';
 
 export class ReceiveBookingDataDto {
     @ApiProperty({
@@ -19,24 +19,8 @@ export class ReceiveBookingDataDto {
     vehicle_plate: string;
 
     @ApiProperty({
-        description: "Owner ID",
-        example: '3f33ba0b-c4fe-4640-b655-7c5a99cbec10',
-    })
-    @IsNotEmpty()
-    @IsString()
-    owner_id: string;
-
-    @ApiProperty({
-        description: "driver ID",
-        example: '0a34aa48-7e96-4601-8357-f7418127d54c',
-    })
-    @IsNotEmpty()
-    @IsString()
-    driver_id: string;
-
-    @ApiProperty({
         description: "Slot ID",
-        example: 'b11b9cd7-c707-4ef8-b0c5-9f74f3f8a9c5',
+        example: 'b0c9a631-d87f-4ce7-a837-fded62ee8450',
     })
     @IsNotEmpty()
     @IsString()
