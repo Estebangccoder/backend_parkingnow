@@ -2,7 +2,8 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
-  NotFoundException
+  NotFoundException,
+  UnauthorizedException
 } from "@nestjs/common";
 import { CreateSlotDto } from "./dto/create-slot.dto";
 import { UpdateSlotDto } from "./dto/update-slot.dto";
@@ -10,15 +11,42 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Slot } from "./entities/slot.entity";
 import { QueryFailedError, Repository } from "typeorm";
 import { FilterAvailablesDto } from "./dto/filter-availables-slot.dto";
+import { UsersService } from "src/users/users.service";
 
 @Injectable()
 export class SlotsService {
   constructor(
-    @InjectRepository(Slot) private readonly slotRepository: Repository<Slot>
+    @InjectRepository(Slot) private readonly slotRepository: Repository<Slot>,
+    private readonly userService: UsersService
   ) { }
 
-  async create(slot: CreateSlotDto) {
+  async createMany(slots: CreateSlotDto[], email: string) {
     try {
+      const user = await this.userService.findOneByEmail(email);
+      if (!user) throw new UnauthorizedException()
+
+      slots.forEach((slot) => {
+      slot.owner_id = user.id
+      })
+      
+      const createdSlots = this.slotRepository.create(slots);
+      return await this.slotRepository.save(createdSlots);
+
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new BadRequestException()
+      }
+      throw new InternalServerErrorException(error.message || "Internal server error");
+    }
+  }
+
+  async create(slot: CreateSlotDto, email: string) {
+    try {
+      const user = await this.userService.findOneByEmail(email);
+
+      if (!user) throw new UnauthorizedException()
+
+      slot.owner_id = user.id
       const createdSlot = this.slotRepository.create(slot);
       return await this.slotRepository.save(createdSlot);
     } catch (error) {
@@ -96,11 +124,15 @@ export class SlotsService {
   }
 
 
-  async update(id: string, updateSlotDto: UpdateSlotDto) {
+  async update(id: string, updateSlotDto: UpdateSlotDto, userEmail: string) {
     try {
-      const slot = await this.findOne(id);
+      const user = await this.userService.findOneByEmail(userEmail);
+      if (!user) throw new UnauthorizedException("You are not allowed to update this slot")
 
+      const slot = await this.findOne(id);
       if (!slot) throw new NotFoundException("Slot not found");
+
+      if (slot.owner_id !== user.id) throw new UnauthorizedException("You are not allowed to update this slot")
 
       const slotUpgraded = Object.assign(slot, updateSlotDto);
       return this.slotRepository.save(slotUpgraded);
@@ -110,11 +142,15 @@ export class SlotsService {
 
   }
 
-  async remove(id: string) {
+  async remove(id: string, userEmail: string) {
     try {
+      const user = await this.userService.findOneByEmail(userEmail);
+      if (!user) throw new UnauthorizedException("You are not allowed to update this slot")
+
       const slot = await this.findOne(id);
       if (!slot) throw new NotFoundException("Slot not found");
 
+      if (slot.owner_id !== user.id) throw new UnauthorizedException("You are not allowed to update this slot")
 
       return await this.slotRepository.softRemove(slot);
 
