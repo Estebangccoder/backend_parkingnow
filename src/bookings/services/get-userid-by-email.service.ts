@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException } from "@nestjs/common";
 import { UsersService } from "src/users/users.service";
 import { User } from "src/users/entities/user.entity";
 
@@ -10,7 +10,14 @@ export class GetUserIdByEmail{
     ){}
 
     async getUserId(email: string): Promise<string> {
-        const user: User = await this.userService.findOneByEmail(email);
-        return user.id;
+        try {
+            const user: User = await this.userService.findOneByEmail(email);
+            return user.id;
+        } catch (error) {
+            throw new HttpException(
+                error.message || "Error finding userId",
+                error.status || 500
+              );
+        }
     }
 }

@@ -13,7 +13,9 @@ import {  Create,
           FindAll,
           CalculateRentedHours,
           GetUserIdByEmail,
-          GetOwnerId} from './services';
+          GetOwnerId,
+          FindBookingInProgress,
+          VerifyPlateWithoutBooking} from './services';
 import { UsersModule } from 'src/users/users.module';
 
 
@@ -30,7 +32,9 @@ import { UsersModule } from 'src/users/users.module';
                 FindAll,
                 CalculateRentedHours,
                 GetUserIdByEmail,
-                GetOwnerId],
+                GetOwnerId,
+                FindBookingInProgress,
+                VerifyPlateWithoutBooking],
   exports: [BookingsService]
 })
 export class BookingsModule {}

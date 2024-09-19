@@ -6,12 +6,12 @@ import { UpdateBookingDto } from "../dto";
 
 
 @Injectable()
-export class Update{
+export class Terminate{
     constructor(
         @InjectRepository(Booking) private readonly bookingsRepository: Repository<Booking>
     ){}
 
-    async update(booking: Booking, updateBookingData : UpdateBookingDto){
+    async terminate(booking: Booking, updateBookingData : UpdateBookingDto){
         // const {end_date, end_time, amount, rented_hours} = updateBookingData;
 
         // const newEndDate = new Date(end_date);
