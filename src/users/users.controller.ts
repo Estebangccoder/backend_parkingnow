@@ -12,7 +12,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, RolesGuard)
+//@UseGuards(AuthGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
