@@ -10,7 +10,7 @@ export class FindById{
         @InjectRepository(Booking) private readonly bookingsRepository: Repository<Booking>
     ){}
 
-    async findBooking(id : string) {
+    async find(id : string) {
         try {
             const booking: Booking = await this.bookingsRepository.findOne({where: {id}});
             if (!booking) throw new NotFoundException("Booking not found");

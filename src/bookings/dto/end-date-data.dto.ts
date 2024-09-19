@@ -1,4 +1,4 @@
-import {IsNotEmpty, IsISO8601, IsString} from 'class-validator';
+import {IsNotEmpty, IsISO8601, IsString, IsBoolean} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class EndDateDataDto{
@@ -9,7 +9,7 @@ export class EndDateDataDto{
     })
     @IsNotEmpty()
     @IsISO8601()
-    end_date_time: string
+    end_date_time?: string
 
     @ApiProperty({
         description: 'Booking ID',
@@ -17,5 +17,5 @@ export class EndDateDataDto{
     })
     @IsNotEmpty()
     @IsString()
-    booking_id: string
+    booking_id?: string
 }

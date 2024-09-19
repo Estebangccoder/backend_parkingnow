@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, ParseBoolPipe } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { EndDateDataDto, ReceiveBookingDataDto, UpdateBookingDto } from './dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags, ApiQuery } from "@nestjs/swagger";
@@ -31,19 +31,24 @@ export class BookingsController {
   @ApiOperation({ summary: "Get the user's booking who is in progress" })
   findInProgressBooking(@Req() req: RequestWithUser) {
     try {
-          //return this.bookingsService.findBookingInProgressByDriver(req.user.email);
+          return this.bookingsService.findBookingInProgressByDriver(req.user.email);
         } catch (error) {
           console.error('Error finding in-progress booking:', error);
           throw error;
         }
   }
 
-  @Post('end-booking/')
+  @Post('end-booking')
   @ApiOperation({ summary: 'Request amount and total hours' })
   @ApiBody({ type: EndDateDataDto })
-  //@ApiQuery({ name: 'action', enum: ['return-amount', 'end-booking']})
-  returnAmount(@Body() data: EndDateDataDto){
-   return this.bookingsService.returnAmountAndHours(data);
+  returnAmount(@Body() data: EndDateDataDto, @Req() req: RequestWithUser){
+      return this.bookingsService.returnAmountAndHours(data, req.user.email);
+  }
+
+  @Patch('/terminate/:id')
+  @ApiOperation({ summary: 'Terminate a booking' })
+  update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto, @Req() req: RequestWithUser) {
+   // return this.bookingsService.terminate(id, updateBookingDto);
   }
 
   @Get()
@@ -59,12 +64,6 @@ export class BookingsController {
   }
 
 
-
-  @Patch('/terminate/:id')
-  @ApiOperation({ summary: 'Terminate a booking' })
-  update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto, @Req() req: RequestWithUser) {
-    //return this.bookingsService.terminate(id, updateBookingDto);
-  }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a booking by ID' })

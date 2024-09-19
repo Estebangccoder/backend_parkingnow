@@ -4,37 +4,38 @@ import { BookingsController } from './bookings.controller';
 import { Booking } from './entities/booking.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SlotsModule } from 'src/slots/slots.module'; 
+import { CacheModule } from '@nestjs/cache-manager';
 import {  Create,
           FindById,
-          Update ,
-          Delete,
-          TransformStringToDate,
           CalculateAmount,
           FindAll,
           CalculateRentedHours,
           GetUserIdByEmail,
           GetOwnerId,
           FindBookingInProgress,
-          VerifyPlateWithoutBooking} from './services';
+          VerifyPlateWithoutBooking,
+          CacheManager,
+          Delete} from './services';
 import { UsersModule } from 'src/users/users.module';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Booking]), SlotsModule, UsersModule],
+  imports: [
+    CacheModule.register(),
+    TypeOrmModule.forFeature([Booking]), SlotsModule, UsersModule],
   controllers: [BookingsController],
   providers: [  BookingsService,
-                Create, 
-                Update, 
-                FindById,
+                Create,
                 Delete, 
-                TransformStringToDate,
+                FindById,
                 CalculateAmount, 
                 FindAll,
                 CalculateRentedHours,
                 GetUserIdByEmail,
                 GetOwnerId,
                 FindBookingInProgress,
-                VerifyPlateWithoutBooking],
+                VerifyPlateWithoutBooking,
+                CacheManager],
   exports: [BookingsService]
 })
 export class BookingsModule {}

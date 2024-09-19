@@ -9,7 +9,7 @@ export class GetOwnerId {
         private readonly slotsService: SlotsService
     ){}
 
-    async getOwnerId(slotId: string): Promise<string> {
+    async get(slotId: string): Promise<string> {
         try {
             const slot: Slot = await this.slotsService.findOne(slotId);
             return slot.owner_id;

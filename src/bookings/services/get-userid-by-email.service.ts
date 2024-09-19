@@ -9,7 +9,7 @@ export class GetUserIdByEmail{
         private readonly userService: UsersService
     ){}
 
-    async getUserId(email: string): Promise<string> {
+    async get(email: string): Promise<string> {
         try {
             const user: User = await this.userService.findOneByEmail(email);
             return user.id;
