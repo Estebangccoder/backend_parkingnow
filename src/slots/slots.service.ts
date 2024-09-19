@@ -94,7 +94,7 @@ export class SlotsService {
   }
 
   async findAvailableSlotsByFilters(filters: FilterAvailablesDto): Promise<Slot[]>  {
-    const { isCovered, commune, vehicleType } = filters;
+
     try {
       const query = this.slotRepository
         .createQueryBuilder("slot")
