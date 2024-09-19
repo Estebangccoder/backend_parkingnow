@@ -13,19 +13,20 @@ import { RequestWithUser } from 'src/common/interfaces/request-with-user.interfa
 @ApiTags('Porperties')
 @ApiBearerAuth()
 @UseGuards(AuthGuard, RolesGuard)
-@Roles(Role.USER)
 @Controller('properties')
 export class PropertiesController {
 
     constructor(private readonly propertiesService: PropertiesService){}
 
     @Post()
+    @Roles(Role.USER)
     @ApiOperation({ summary: 'Create a new property' })
     create(@Body() createPropertyDto: CreatePropertyDto, @Req() req:RequestWithUser){
         return this.propertiesService.create(createPropertyDto, req.user.email);
     }
     
     @Get()
+    @Roles(Role.ADMIN)
     @ApiOperation({ summary: 'Get all properties' })
     findAll() {
         return this.propertiesService.findAll();
