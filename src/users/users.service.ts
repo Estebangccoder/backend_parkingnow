@@ -1,9 +1,9 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { RegisterDto } from "../auth/dto/register.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./entities/user.entity";
-import { Repository } from "typeorm";
+import { QueryFailedError, Repository } from "typeorm";
 import { RequestResetPasswordDto } from "./dto/request-reset-password.dto";
 import { v4 } from 'uuid';
 import { ResetPasswordDto } from "./dto/reset-password.dto";
@@ -79,13 +79,14 @@ export class UsersService {
     const user: User = await this.userRepository.findOne({where:{resetPasswordToken} });
 
     if (!user) {
-      throw new NotFoundException();
+      throw new NotFoundException('User not found or invalid reset token');
     }
 
     return user;
   }
 
   async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {
+   try{
     const { resetPasswordToken, password } = resetPasswordDto;
     const user: User = await this.findOneByResetPasswordToken(
     resetPasswordToken,
@@ -94,6 +95,14 @@ export class UsersService {
     user.password = await bcryptjs.hash(password,8)
     user.resetPasswordToken = null;
     this.userRepository.save(user);
+   }catch(error){
+    if (error instanceof QueryFailedError) {
+      throw new BadRequestException()
+    }
+    throw new InternalServerErrorException(error.message || "Internal server error");
   }
-  
+
+
+   } 
 }
+  
