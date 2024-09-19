@@ -1,19 +1,26 @@
-import { Injectable, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Repository, Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Property } from './entities/property.entity';
 import { CreatePropertyDto } from './dto/create-properties.dto';
 import { UpdatePropertyDto } from './dto/update-properties.dto';
+import { UsersService } from '../users/users.service';
+import { error } from 'console';
 
 @Injectable()
 export class PropertiesService {
   constructor(
     @InjectRepository(Property)
     private readonly propertyRepository: Repository<Property>,
+    private readonly userService: UsersService
   ) {}
 
- async create(createPropertyDto: CreatePropertyDto){
+ async create(createPropertyDto: CreatePropertyDto, email:string){
         try{
+            const user= await this.userService.findOneByEmail(email);
+            if(!user) throw new UnauthorizedException()
+            
+            createPropertyDto.owner_id=user.id;
             return await this.propertyRepository.save(createPropertyDto);
    
         }

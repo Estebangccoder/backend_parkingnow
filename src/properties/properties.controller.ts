@@ -1,4 +1,4 @@
-import { Controller,  Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Query, UseGuards } from '@nestjs/common';
+import { Controller,  Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Query, UseGuards, Req } from '@nestjs/common';
 import { PropertiesService } from './properties.service'
 import { CreatePropertyDto } from './dto/create-properties.dto';	
 import { UpdatePropertyDto } from './dto/update-properties.dto';
@@ -7,6 +7,7 @@ import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { Role } from 'src/auth/enums/rol.enum';
 import { Roles } from 'src/auth/decorators/roles.decorators';
+import { RequestWithUser } from 'src/common/interfaces/request-with-user.interface';
 
 
 @ApiTags('Porperties')
@@ -20,8 +21,8 @@ export class PropertiesController {
 
     @Post()
     @ApiOperation({ summary: 'Create a new property' })
-    create(@Body() createPropertyDto: CreatePropertyDto) {
-        return this.propertiesService.create(createPropertyDto);
+    create(@Body() createPropertyDto: CreatePropertyDto, @Req() req:RequestWithUser){
+        return this.propertiesService.create(createPropertyDto, req.user.email);
     }
     
     @Get()

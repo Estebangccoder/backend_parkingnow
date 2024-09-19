@@ -1,5 +1,5 @@
-import { IsString, IsNumber } from "class-validator";
-import { ApiProperty } from "@nestjs/swagger";
+import { IsString, IsNumber, IsOptional, IsUUID } from "class-validator";
+import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 
 export class CreatePropertyDto {
     @ApiProperty({
@@ -41,6 +41,8 @@ export class CreatePropertyDto {
         description: 'ID of the user who owns the property',
         example: '324f0caf-2501-4fe0-a7be-216afb0c5dff',
     })
-    @IsString()
+    @ApiHideProperty()
+    @IsOptional()
+    @IsUUID()
     owner_id: string;
 }
