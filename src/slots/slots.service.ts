@@ -20,8 +20,7 @@ import { Booking } from "src/bookings/entities/booking.entity";
 export class SlotsService {
   constructor(
     @InjectRepository(Slot) private readonly slotRepository: Repository<Slot>,
-    private readonly userService: UsersService,
-    private readonly bookingsService: BookingsService
+    private readonly userService: UsersService
   ) { }
 
   async createMany(slots: CreateSlotDto[], email: string): Promise<Slot[]>  {
@@ -94,7 +93,6 @@ export class SlotsService {
   }
 
   async findAvailableSlotsByFilters(filters: FilterAvailablesDto): Promise<Slot[]>  {
-    const { isCovered, commune, vehicleType } = filters;
     try {
       const query = this.slotRepository
         .createQueryBuilder("slot")
