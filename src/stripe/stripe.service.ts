@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateStripeDto } from './dto/create-stripe.dto';
 import { UpdateStripeDto } from './dto/update-stripe.dto';
+import Stripe from 'stripe'
 
 @Injectable()
 export class StripeService {
+  private stripe: Stripe
+  constructor(){
+    this.stripe = new Stripe(process.env.STRIPE_API_KEY),
+  }
   create(createStripeDto: CreateStripeDto) {
     return 'This action adds a new stripe';
   }
