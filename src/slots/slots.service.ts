@@ -13,7 +13,7 @@ import { QueryFailedError, Repository } from "typeorm";
 import { FilterAvailablesDto } from "./dto/filter-availables-slot.dto";
 import { UsersService } from "src/users/users.service";
 import { User } from "src/users/entities/user.entity";
-import { BookingsService } from "src/bookings/bookings.service";
+import { BookingsService } from "../bookings/bookings.service";
 import { Booking } from "src/bookings/entities/booking.entity";
 
 @Injectable()
@@ -21,7 +21,7 @@ export class SlotsService {
   constructor(
     @InjectRepository(Slot) private readonly slotRepository: Repository<Slot>,
     private readonly userService: UsersService,
-    private readonly bookingsService: BookingsService
+   // private readonly bookingsService: BookingsService
   ) { }
 
   async createMany(slots: CreateSlotDto[], email: string): Promise<Slot[]>  {
