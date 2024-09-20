@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsNumber, IsOptional } from 'class-validator';
-import { RegisterDto } from 'src/auth/dto/register.dto';
+import { RegisterDto } from '../../auth/dto/register.dto';
 
 export class UpdateUserDto extends PartialType(RegisterDto) {
 

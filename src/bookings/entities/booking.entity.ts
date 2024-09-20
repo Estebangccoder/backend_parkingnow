@@ -1,7 +1,7 @@
 import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
-import { BookingState } from "src/common/entities/booking_state.entity";
-import { Slot } from "src/slots/entities/slot.entity";
-import { User } from "src/users/entities/user.entity";
+import { BookingState } from "../../common/entities/booking_state.entity";
+import { Slot } from "../../slots/entities/slot.entity";
+import { User } from "../../users/entities/user.entity";
 import { Column, 
         CreateDateColumn, 
         DeleteDateColumn, 
