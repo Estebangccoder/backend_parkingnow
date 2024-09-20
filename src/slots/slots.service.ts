@@ -72,7 +72,7 @@ export class SlotsService {
   async findOne(id: string) {
     try {
       const slot: Slot = await this.slotRepository.findOne({
-        where: { id }
+        where: {id} , relations: ["property", "vehicleType", "property.commune"] 
       });
 
       if (!slot) throw new NotFoundException("Slot not found");
