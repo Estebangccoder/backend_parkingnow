@@ -1,5 +1,5 @@
 export * from './create.service';
-//export * from './terminate.service';
+export * from './terminate.service';
 export * from './find-booking-by-id.service';
 export * from './delete.service';
 export * from './calculate-amount.service';
@@ -10,3 +10,4 @@ export * from './get-owner-id.service';
 export * from './find-inprogress.service';
 export * from './check-plate-without-reservation.service';
 export * from './cache-manager.service';
+export * from './terminate.service';

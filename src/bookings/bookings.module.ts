@@ -15,7 +15,8 @@ import {  Create,
           FindBookingInProgress,
           VerifyPlateWithoutBooking,
           CacheManager,
-          Delete} from './services';
+          Delete,
+          Terminate} from './services';
 import { UsersModule } from 'src/users/users.module';
 
 
@@ -35,7 +36,8 @@ import { UsersModule } from 'src/users/users.module';
                 GetOwnerId,
                 FindBookingInProgress,
                 VerifyPlateWithoutBooking,
-                CacheManager],
+                CacheManager,
+                Terminate],
   exports: [BookingsService]
 })
 export class BookingsModule {}

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, ParseBoolPipe } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
-import { EndDateDataDto, ReceiveBookingDataDto, UpdateBookingDto } from './dto';
+import { EndDateDataDto, ReceiveBookingDataDto } from './dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags, ApiQuery } from "@nestjs/swagger";
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
@@ -45,10 +45,10 @@ export class BookingsController {
       return this.bookingsService.returnAmountAndHours(data, req.user.email);
   }
 
-  @Patch('/terminate/:id')
+  @Patch('end-booking/terminate')
   @ApiOperation({ summary: 'Terminate a booking' })
-  update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto, @Req() req: RequestWithUser) {
-   // return this.bookingsService.terminate(id, updateBookingDto);
+  terminate(@Req() req: RequestWithUser) {
+      return this.bookingsService.terminate(req.user.email);
   }
 
   @Get()

@@ -6,7 +6,7 @@ import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 export class CacheManager{
     constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache){}
 
-    async getFromCache(key: string, message: string){
+    async getFromCache(key: string, message: string): Promise<string>{
         try {
             return await this.cacheManager.get(key)
         } catch (error) {

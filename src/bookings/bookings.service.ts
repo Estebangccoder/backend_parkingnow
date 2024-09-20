@@ -1,12 +1,12 @@
 import { Injectable, ForbiddenException, BadRequestException, HttpException, HttpStatus} from'@nestjs/common';
-import { CreateBookingDto, UpdateBookingDto, ReceiveBookingDataDto, EndDateDataDto  } from './dto';
+import { CreateBookingDto, TerminateBookingDto, ReceiveBookingDataDto, EndDateDataDto  } from './dto';
 import { SlotsService } from 'src/slots/slots.service';
 import { FindAll } from './services/find-all.service';
 import { Booking } from './entities/booking.entity';
 import { error, log } from 'console';
 import { Slot } from 'src/slots/entities/slot.entity';
 import { Create, 
-        //Terminate, 
+        Terminate, 
         FindById, 
         Delete, 
         CalculateAmount,
@@ -16,13 +16,14 @@ import { Create,
         FindBookingInProgress,
         VerifyPlateWithoutBooking,
         CacheManager} from './services';
+import { UpdateResult } from 'typeorm';
 
 
 @Injectable()
 export class BookingsService {
   constructor(
     private readonly createBooking: Create,
-    //private readonly terminateBooking: Terminate,
+    private readonly terminateBooking: Terminate,
     private readonly findAllBookings: FindAll,
     private readonly findById: FindById,
     private readonly softDelete: Delete,
@@ -45,8 +46,8 @@ export class BookingsService {
       const {start_date_time, vehicle_plate, slot_id } = receivedBookingData;
 
       //Check if the slot has a booking in progress
-      const reservedSlot = await this.slotsService.findOne(slot_id)
-      if(reservedSlot.is_available === false){
+      const slot = await this.slotsService.findOne(slot_id);
+      if(slot.is_available === false){
         throw new HttpException(
                                 'The slot is not available', 
                                 HttpStatus.BAD_REQUEST)  
@@ -80,8 +81,17 @@ export class BookingsService {
                                                                         ownerId, 
                                                                         driverId, 
                                                                         slot_id);
-      return await this.createBooking.create(createBookingData);
+      const createBookingResponde: Booking = await this.createBooking.create(createBookingData);
+      
+      if(createBookingResponde){
+          const slotUpdateResponse = await this.slotsService.updateSlotAvailability(slot_id, false);   
+  
+          if(slotUpdateResponse === true){
+            return createBookingResponde;
+          }      
+       }
     }
+    
 
     async returnAmountAndHours(data: EndDateDataDto, userEmail: string) {
       
@@ -127,9 +137,11 @@ export class BookingsService {
       amount = Math.floor(amount);
       
       //Set to cache the amount, total hours and end date, with a lifetime of 2 minutes.
-      this.cacheManager.setToCache('amount', amount, 120, "Error setting amount to cache");
-      this.cacheManager.setToCache('totalHours', totalHours, 120, "Error setting total hours to cache");
-      this.cacheManager.setToCache('endDateTime', endDateTime, 120, "Error setting end date time to cache");
+      await this.cacheManager.setToCache('amount', amount, 60000, "Error setting amount to cache");
+      await this.cacheManager.setToCache('totalHours', totalHours, 60000, "Error setting total hours to cache");
+      await this.cacheManager.setToCache('endDateTime', endDateTime, 60000, "Error setting end date time to cache");
+      await this.cacheManager.setToCache('bookingId', booking_id, 60000, "Error setting bookingId to cache");
+      await this.cacheManager.setToCache('slotId', slotId, 60000, "Error setting slotId to cache");
       return {amount, totalHours};
     }
 
@@ -146,8 +158,35 @@ export class BookingsService {
       return this.findById.find(id)
     }
 
-    async terminate() {
-      
+    async terminate(userEmail: string) {
+
+      //Get from cache the amount, total hours, end date, bookingId and slotId 
+      const amountStr = await this.cacheManager.getFromCache('amount', "Error getting amount to cache" );
+      const rentedHoursStr = await this.cacheManager.getFromCache('totalHours', "Error getting total hours to cache");
+      const endDateTimeStr: string = await this.cacheManager.getFromCache('endDateTime', "Error getting end date time from cache");
+      const bookingId: string = await this.cacheManager.getFromCache('bookingId', "Error getting bookingId to cache");
+      const slotId: string = await this.cacheManager.getFromCache('slotId', "Error getting slotId to cache");
+
+      //transform data before saving to DB.
+      const end_date_time: Date = new Date(endDateTimeStr);
+      const rented_hours: number = Number(rentedHoursStr);
+      const amount: number = Number(amountStr);
+      const booking_state_id = 2;
+
+      const data: TerminateBookingDto = new TerminateBookingDto(end_date_time,
+                                                                rented_hours,
+                                                                amount,
+                                                                booking_state_id);
+    
+       const updateResult = await this.terminateBooking.terminate(bookingId, data);
+
+       if(updateResult){
+          const slotUpdateResponse = await this.slotsService.updateSlotAvailability(slotId, true);   
+  
+          if(slotUpdateResponse === true){
+            return updateResult;
+          }      
+       }    
     }
 
     async delete(id: string) {
