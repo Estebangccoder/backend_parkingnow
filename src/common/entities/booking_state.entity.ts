@@ -1,5 +1,5 @@
 import { ApiHideProperty } from '@nestjs/swagger';
-import { Booking } from 'src/bookings/entities/booking.entity';
+import { Booking } from '../../bookings/entities/booking.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
 
