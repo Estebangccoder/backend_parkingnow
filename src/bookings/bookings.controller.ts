@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, ParseBoolPipe } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
-import { EndDateDataDto, ReceiveBookingDataDto, UpdateBookingDto } from './dto';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { EndDateDataDto, ReceiveBookingDataDto } from './dto';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags, ApiQuery } from "@nestjs/swagger";
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { Role } from 'src/auth/enums/rol.enum';
@@ -22,16 +22,33 @@ export class BookingsController {
   @ApiOperation({ summary: 'Create a new booking' })
   @ApiBody({ type: ReceiveBookingDataDto })
   create(@Body() bookingData: ReceiveBookingDataDto, @Req() req: RequestWithUser) {
+    
     //ReceivedBookingData: DTO para definir la estructura que llegara por el cuerpo de la solicitud.
     return this.bookingsService.create(bookingData, req.user.email)
+  }
+
+  @Get('in-progress')
+  @ApiOperation({ summary: "Get the user's booking who is in progress" })
+  findInProgressBooking(@Req() req: RequestWithUser) {
+    try {
+          return this.bookingsService.findBookingInProgressByDriver(req.user.email);
+        } catch (error) {
+          console.error('Error finding in-progress booking:', error);
+          throw error;
+        }
   }
 
   @Post('end-booking')
   @ApiOperation({ summary: 'Request amount and total hours' })
   @ApiBody({ type: EndDateDataDto })
-  returnAmount(@Body() data: EndDateDataDto){
-   return this.bookingsService.returnAmountAndHours(data);
+  returnAmount(@Body() data: EndDateDataDto, @Req() req: RequestWithUser){
+      return this.bookingsService.returnAmountAndHours(data, req.user.email);
+  }
 
+  @Patch('end-booking/terminate')
+  @ApiOperation({ summary: 'Terminate a booking' })
+  terminate(@Req() req: RequestWithUser) {
+      return this.bookingsService.terminate(req.user.email);
   }
 
   @Get()
@@ -46,11 +63,7 @@ export class BookingsController {
     return this.bookingsService.findOne(id);
   }
 
-  @Patch(':id')
-  @ApiOperation({ summary: 'Update a booking by ID' })
-  update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto) {
-    return this.bookingsService.update(id, updateBookingDto);
-  }
+
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a booking by ID' })

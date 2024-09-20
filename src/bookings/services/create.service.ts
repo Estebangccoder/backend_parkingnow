@@ -11,13 +11,13 @@ export class Create{
         @InjectRepository(Booking) private readonly bookingsRepository: Repository<Booking>
     ){}
 
-    async create(bookingData: CreateBookingDto){
+    async create(bookingData: CreateBookingDto): Promise<Booking>{
         try {
-            const newBooking = this.bookingsRepository.create(bookingData);
+            const newBooking: Booking = this.bookingsRepository.create(bookingData);
             return await this.bookingsRepository.save(newBooking);
         } catch (error) {
             throw new HttpException(
-                error.message || "Internal server error",
+                error.message || "Error saving booking in DB ",
                 error.status || 500
               );
         }

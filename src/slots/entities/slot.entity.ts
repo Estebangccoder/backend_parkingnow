@@ -1,8 +1,8 @@
 import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
-import { Booking } from "src/bookings/entities/booking.entity";
-import { VehicleType } from "src/common/entities/vehicle_type.entity";
-import { Property } from "src/properties/entities/property.entity";
-import { User } from "src/users/entities/user.entity";
+import { Booking } from "../../bookings/entities/booking.entity";
+import { VehicleType } from "../../common/entities/vehicle_type.entity";
+import { Property } from "../../properties/entities/property.entity";
+import { User } from "../../users/entities/user.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity("slots")
