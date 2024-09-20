@@ -1,20 +1,19 @@
-import { Injectable, HttpException, NotFoundException } from "@nestjs/common";
+import { Injectable, HttpException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Booking } from "../entities/booking.entity";
-import { Repository } from "typeorm";
+import { Repository, UpdateResult } from "typeorm";
+import { TerminateBookingDto } from "../dto";
 
 
 @Injectable()
-export class FindById{
+export class Terminate{
     constructor(
         @InjectRepository(Booking) private readonly bookingsRepository: Repository<Booking>
     ){}
 
-    async find(id : string) {
+    async terminate(bookingId: string, data : TerminateBookingDto): Promise<UpdateResult>{
         try {
-            const booking: Booking = await this.bookingsRepository.findOne({where: {id}});
-            if (!booking) throw new NotFoundException("Booking not found");
-            return booking;
+            return await this.bookingsRepository.update(bookingId, data);
         } catch (error) {
             throw new HttpException(
                 error.message || "Internal server error",
