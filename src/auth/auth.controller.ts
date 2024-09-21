@@ -8,13 +8,7 @@ import { AuthGuard } from './guard/auth.guard';
 import { RolesGuard } from './guard/roles.guard';
 import { Role } from './enums/rol.enum';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-
-interface RequestWithUser extends Request{
-    user: {
-        email:string
-        role_id:number
-    }
-}
+import { RequestWithUser } from 'src/common/interfaces/request-with-user.interface';
 
 @ApiTags('Auth')
 @Controller('auth')
