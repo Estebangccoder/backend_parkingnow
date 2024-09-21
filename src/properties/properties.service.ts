@@ -5,9 +5,6 @@ import { Property } from './entities/property.entity';
 import { CreatePropertyDto } from './dto/create-properties.dto';
 import { UpdatePropertyDto } from './dto/update-properties.dto';
 import { UsersService } from '../users/users.service';
-import { error } from 'console';
-import { Slot } from 'src/slots/entities/slot.entity';
-import { stringify } from 'querystring';
 
 
 @Injectable()
@@ -18,17 +15,17 @@ export class PropertiesService {
     private readonly userService: UsersService
   ) {}
 
- 
+
  async create(createPropertyDto: CreatePropertyDto,email:string){
         try{
-            
-            
+
+
             const user= await this.userService.findOneByEmail(email);
             if(!user) throw new UnauthorizedException()
-            
+
             createPropertyDto.owner_id=user.id;
             return await this.propertyRepository.save(createPropertyDto);
-   
+
         }
         catch(error){
             throw new HttpException(`Error creating property: ${error.message}`, 500);
@@ -37,7 +34,8 @@ export class PropertiesService {
 
     async findAll(ownerId:string){
         try{
-       
+
+
             return await this.propertyRepository.find({where: {owner_id: ownerId}, relations:["slots"]});
         }
         catch(error){
@@ -66,13 +64,13 @@ export class PropertiesService {
 
     async findOne(id: string){
        try{
-       
-        let property: Property[] = await this.propertyRepository.find({where: {id}, relations: ["slots_id"] });
-        
+
+        let property: Property[] = await this.propertyRepository.find({where: {id}, relations: ["slots"] });
+
         if (!property){
             throw new HttpException('Property not found', 404);
         }
-        
+
         return property
 
         }
@@ -81,26 +79,33 @@ export class PropertiesService {
         }
     }
 
-    async update(id: string, updatePropertyDto: UpdatePropertyDto, ownerId: string){
+    async update(id: string, updatePropertyDto: UpdatePropertyDto, owner_id: string){
         try{
-            const user= await this.userService.findOne(ownerId);
-            if(user.id!==ownerId){
-                throw new UnauthorizedException()
+            const propertyfound = await this.propertyRepository.findOneBy({id})
+            if (!propertyfound){
+                throw new NotFoundException('Property not found');
             }
+            const response = await this.userService.ownerIdValidation(propertyfound.owner_id, owner_id)
+            if (!response) throw new UnauthorizedException("You are not allowed to update this property")
+
             const result = await this.propertyRepository.update(id, updatePropertyDto);
-            
-            if (result.affected === 0){
-                throw new HttpException('Property not found', 404);
-            }
-            return updatePropertyDto
+        
         }
         catch(error){
             throw new HttpException(`Error updating property by id: ${error.message}`, 500);
         }
     }
 
-    async remove(id: string, ownerId:string){
-        try{
+    async remove(id: string, owner_id:string){
+        try{ 
+
+            const propertyfound = await this.propertyRepository.findOneBy({id})
+            if (!propertyfound){
+                throw new NotFoundException('Property not found');
+            }
+            const response = await this.userService.ownerIdValidation(propertyfound.owner_id, owner_id)
+            if (!response) throw new UnauthorizedException("You are not allowed to update this property")
+            
         const result = await this.propertyRepository.delete(id);
         if (result.affected===0){
             throw new HttpException('Property not found', 404);
@@ -109,6 +114,6 @@ export class PropertiesService {
     catch(error){
         throw new HttpException(`Error removing property by id: ${error.message}`, 500);
     }
-    
+
     }
 }
