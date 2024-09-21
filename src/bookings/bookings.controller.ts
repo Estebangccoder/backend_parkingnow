@@ -29,7 +29,7 @@ export class BookingsController {
     return this.bookingsService.findOne(id);
   }
 
-  @Get('by-driver')
+  @Get('in-progress-by-driver')
   @ApiOperation({ summary: "Get the user's booking who is in progress" })
   findInProgressByDriver(@Req() req: RequestWithUser) { 
     return this.bookingsService.findBookingInProgressByDriver(req.user.email);  
@@ -49,17 +49,6 @@ export class BookingsController {
     
     //ReceivedBookingData: DTO para definir la estructura que llegara por el cuerpo de la solicitud.
     return this.bookingsService.create(bookingData, req.user.email)
-  }
-
-  @Get('in-progress')
-  @ApiOperation({ summary: "Get the user's booking who is in progress" })
-  findInProgressBooking(@Req() req: RequestWithUser) {
-    try {
-          return this.bookingsService.findBookingInProgressByDriver(req.user.email);
-        } catch (error) {
-          console.error('Error finding in-progress booking:', error);
-          throw error;
-        }
   }
 
   @Post('end-booking')

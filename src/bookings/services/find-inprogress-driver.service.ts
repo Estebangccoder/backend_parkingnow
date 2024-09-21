@@ -10,8 +10,6 @@ export class FindInProgressByDriver{
     ){}
 
     async find(driverId: string){
-        console.log(driverId);
-        
         try {
             return await this.bookingsRepository.findOne({
                 where: {
