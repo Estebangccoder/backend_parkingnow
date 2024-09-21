@@ -1,10 +1,10 @@
 import { Injectable, ForbiddenException, BadRequestException, HttpException, HttpStatus} from'@nestjs/common';
 import { CreateBookingDto, TerminateBookingDto, ReceiveBookingDataDto, EndDateDataDto  } from './dto';
 import { SlotsService } from 'src/slots/slots.service';
-import { FindAll } from './services/find-all-admin.service';
 import { Booking } from './entities/booking.entity';
 import { Slot } from 'src/slots/entities/slot.entity';
 import { Create, 
+        FindAll,
         Terminate, 
         FindById, 
         Delete, 

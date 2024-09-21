@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { RolesGuard } from 'src/auth/guard/roles.guard';
-import { AuthGuard } from 'src/auth/guard/auth.guard';
-import { Roles } from 'src/auth/decorators/roles.decorators';
-import { Role } from 'src/auth/enums/rol.enum';
+import { RolesGuard } from '../auth/guard/roles.guard';
+import { AuthGuard } from '../auth/guard/auth.guard';
+import { Roles } from '../auth/decorators/roles.decorators';
+import { Role } from '../auth/enums/rol.enum';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { RequestResetPasswordDto } from './dto/request-reset-password.dto';
@@ -12,7 +12,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth()
-//@UseGuards(AuthGuard, RolesGuard)
+@UseGuards(AuthGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

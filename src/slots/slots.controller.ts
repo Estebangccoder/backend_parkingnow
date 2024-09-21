@@ -70,7 +70,7 @@ export class SlotsController {
   @Patch(":id")
   @ApiOperation({ summary: 'Update a slot by ID' })
   update(@Param("id") id: string, @Body() updateSlotDto: UpdateSlotDto, @Req() req: RequestWithUser) {
-    return this.slotsService.update(id, updateSlotDto, req.user.email);
+    return this.slotsService.update(id, updateSlotDto, req.user.user_id);
   }
 
   @Delete(":id")

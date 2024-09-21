@@ -10,5 +10,4 @@ export * from './get-owner-id.service';
 export * from './find-inprogress-driver.service';
 export * from './check-plate-without-reservation.service';
 export * from './cache-manager.service';
-export * from './terminate.service';
 export * from './find-inprogress-owner.service';

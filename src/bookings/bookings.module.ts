@@ -5,21 +5,20 @@ import { Booking } from './entities/booking.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SlotsModule } from 'src/slots/slots.module'; 
 import { CacheModule } from '@nestjs/cache-manager';
+import { UsersModule } from 'src/users/users.module';
 import {  Create,
-          FindById,
-          CalculateAmount,
-          FindAll,
-          CalculateRentedHours,
-          GetUserIdByEmail,
-          GetOwnerId,
+          Terminate,
           FindInProgressByDriver,
           FindInProgressByOwnerId,
           VerifyPlateWithoutBooking,
           CacheManager,
+          FindById,
           Delete,
-          Terminate} from './services';
-import { UsersModule } from 'src/users/users.module';
-
+          CalculateAmount,
+          FindAll,
+          CalculateRentedHours,
+          GetUserIdByEmail,
+          GetOwnerId} from './services';
 
 @Module({
   imports: [
@@ -27,6 +26,11 @@ import { UsersModule } from 'src/users/users.module';
     TypeOrmModule.forFeature([Booking]), SlotsModule, UsersModule],
   controllers: [BookingsController],
   providers: [  BookingsService,
+                Terminate,
+                FindInProgressByDriver,
+                FindInProgressByOwnerId,
+                VerifyPlateWithoutBooking,
+                CacheManager,
                 Create,
                 Delete, 
                 FindById,
@@ -34,12 +38,7 @@ import { UsersModule } from 'src/users/users.module';
                 FindAll,
                 CalculateRentedHours,
                 GetUserIdByEmail,
-                GetOwnerId,
-                FindInProgressByDriver,
-                FindInProgressByOwnerId,
-                VerifyPlateWithoutBooking,
-                CacheManager,
-                Terminate],
+                GetOwnerId],
   exports: [BookingsService]
 })
 export class BookingsModule {}

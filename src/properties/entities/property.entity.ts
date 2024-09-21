@@ -1,7 +1,7 @@
 import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
-import { Commune } from "src/common/entities/commune.entity";
-import { Slot } from "src/slots/entities/slot.entity";
-import { User } from "src/users/entities/user.entity";
+import { Commune } from "../../common/entities/commune.entity";
+import { Slot } from "../../slots/entities/slot.entity";
+import { User } from "../../users/entities/user.entity";
 import { Column, PrimaryGeneratedColumn, Entity, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
 
 @Entity('properties')
