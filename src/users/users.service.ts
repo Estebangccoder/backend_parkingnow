@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { BadRequestException, HttpException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { RegisterDto } from "../auth/dto/register.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -102,7 +102,20 @@ export class UsersService {
     throw new InternalServerErrorException(error.message || "Internal server error");
   }
 
-
    } 
+
+   async ownerIdValidation(ownerId: string, tokenId: string): Promise<boolean> {
+    console.log("owner_id:", ownerId, "token_id:", tokenId);
+    
+    const user: User = await this.findOne(tokenId);
+
+    const authorizated = user.id === ownerId ? true : false;
+
+    if (!user || !authorizated) {
+      return false;
+    }
+
+    return true;
+   }
 }
   
