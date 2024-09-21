@@ -128,15 +128,13 @@ export class SlotsService {
   }
 
 
-  async update(id: string, updateSlotDto: UpdateSlotDto, userEmail: string): Promise<Slot>  {
+  async update(id: string, updateSlotDto: UpdateSlotDto, tokenId: string): Promise<Slot>  {
     try {
-      const user = await this.userService.findOneByEmail(userEmail);
-      if (!user) throw new UnauthorizedException("You are not allowed to update this slot")
-
       const slot = await this.findOne(id);
       if (!slot) throw new NotFoundException("Slot not found");
 
-      if (slot.owner_id !== user.id) throw new UnauthorizedException("You are not allowed to update this slot")
+      const response = await this.userService.ownerIdValidation(slot.owner_id, tokenId)
+      if (!response) throw new UnauthorizedException("You are not allowed to update this slot")
 
       const slotUpgraded = Object.assign(slot, updateSlotDto);
       return await this.slotRepository.save(slotUpgraded);
