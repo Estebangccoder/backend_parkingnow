@@ -1,19 +1,20 @@
 import { Injectable, HttpException } from "@nestjs/common";
-import { Repository } from "typeorm";
-import { Booking } from "../entities/booking.entity";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Booking } from "../entities/booking.entity";
+import { Repository } from "typeorm";
+
 
 @Injectable()
-export class FindBookingInProgress{
+export class FindInProgressByOwnerId{
     constructor(
-        @InjectRepository(Booking) private readonly bookingsRepository: Repository<Booking> 
+        @InjectRepository(Booking) private readonly bookingRepository: Repository<Booking>
     ){}
 
-    async find(driverId: string){
+    async find(ownerId: string): Promise<Booking[]> {
         try {
-            return await this.bookingsRepository.findOne({
+            return await this.bookingRepository.find({
                 where: {
-                    driver_id: driverId,
+                    owner_id: ownerId,
                     booking_state_id: 1
                   }
             })
