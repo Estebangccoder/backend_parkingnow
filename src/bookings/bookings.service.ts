@@ -1,11 +1,10 @@
 import { Injectable, ForbiddenException, BadRequestException, HttpException, HttpStatus} from'@nestjs/common';
 import { CreateBookingDto, TerminateBookingDto, ReceiveBookingDataDto, EndDateDataDto  } from './dto';
 import { SlotsService } from 'src/slots/slots.service';
-import { FindAll } from './services/find-all.service';
 import { Booking } from './entities/booking.entity';
-import { error, log } from 'console';
 import { Slot } from 'src/slots/entities/slot.entity';
 import { Create, 
+        FindAll,
         Terminate, 
         FindById, 
         Delete, 
@@ -13,11 +12,10 @@ import { Create,
         CalculateRentedHours,
         GetUserIdByEmail,
         GetOwnerId, 
-        FindBookingInProgress,
+        FindInProgressByDriver,
         VerifyPlateWithoutBooking,
-        CacheManager} from './services';
-import { UpdateResult } from 'typeorm';
-
+        CacheManager,
+        FindInProgressByOwnerId} from './services';
 
 @Injectable()
 export class BookingsService {
@@ -32,9 +30,10 @@ export class BookingsService {
     private readonly calculateHours: CalculateRentedHours,
     private readonly getUserIdByEmail: GetUserIdByEmail,
     private readonly getOwnerId: GetOwnerId,
-    private readonly getInProgress: FindBookingInProgress,
+    private readonly getInProgressByDriver: FindInProgressByDriver,
     private readonly veryfyPlate: VerifyPlateWithoutBooking,
-    private readonly cacheManager: CacheManager
+    private readonly cacheManager: CacheManager,
+    private readonly getInProgressByOwner: FindInProgressByOwnerId
   ){}
   
     async create(receivedBookingData: ReceiveBookingDataDto, userEmail: string ) {
@@ -54,7 +53,7 @@ export class BookingsService {
       }
 
       //Check if the driver has a booking in progress
-      let bookingInProgress = await this.getInProgress.find(driverId);
+      let bookingInProgress = await this.getInProgressByDriver.find(driverId);
       if(bookingInProgress !== null){
         throw new HttpException(
                                 "The driver has already a booking in progress", 
@@ -81,13 +80,13 @@ export class BookingsService {
                                                                         ownerId, 
                                                                         driverId, 
                                                                         slot_id);
-      const createBookingResponde: Booking = await this.createBooking.create(createBookingData);
+      const createBookingResponse: Booking = await this.createBooking.create(createBookingData);
       
-      if(createBookingResponde){
+      if(createBookingResponse){
           const slotUpdateResponse = await this.slotsService.updateSlotAvailability(slot_id, false);   
   
           if(slotUpdateResponse === true){
-            return createBookingResponde;
+            return createBookingResponse;
           }      
        }
     }
@@ -137,20 +136,25 @@ export class BookingsService {
       amount = Math.floor(amount);
       
       //Set to cache the amount, total hours and end date, with a lifetime of 2 minutes.
-      await this.cacheManager.setToCache('amount', amount, 60000, "Error setting amount to cache");
-      await this.cacheManager.setToCache('totalHours', totalHours, 60000, "Error setting total hours to cache");
-      await this.cacheManager.setToCache('endDateTime', endDateTime, 60000, "Error setting end date time to cache");
-      await this.cacheManager.setToCache('bookingId', booking_id, 60000, "Error setting bookingId to cache");
-      await this.cacheManager.setToCache('slotId', slotId, 60000, "Error setting slotId to cache");
+      await this.cacheManager.setToCache('amount', amount, 180000, "Error setting amount to cache");
+      await this.cacheManager.setToCache('totalHours', totalHours, 180000, "Error setting total hours to cache");
+      await this.cacheManager.setToCache('endDateTime', endDateTime, 180000, "Error setting end date time to cache");
+      await this.cacheManager.setToCache('bookingId', booking_id, 180000, "Error setting bookingId to cache");
+      await this.cacheManager.setToCache('slotId', slotId, 180000, "Error setting slotId to cache");
       return {amount, totalHours};
     }
 
     async findBookingInProgressByDriver(userEmail: string): Promise<Booking>{
         const driverId: string = await this.getUserIdByEmail.get(userEmail);
-        return this.getInProgress.find(driverId);
+        return await this.getInProgressByDriver.find(driverId);
+    }
+
+    async findBookingInProgressByOwner(userEmail: string): Promise<Booking[]>{
+      const ownerId: string = await this.getUserIdByEmail.get(userEmail);
+      return await this.getInProgressByOwner.find(ownerId);
     }
     
-    async findAll() {
+    async findAll(){
       return await this.findAllBookings.findAll();
     }
 

@@ -9,7 +9,7 @@ export class FindAll{
         @InjectRepository(Booking) private readonly bookingRepository: Repository<Booking>
     ){}
 
-    async findAll(){
+    async findAll(): Promise<Booking[]>{
         try {
             return await this.bookingRepository.find(); 
         } catch (error) {

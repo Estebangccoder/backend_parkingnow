@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, ParseBoolPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { EndDateDataDto, ReceiveBookingDataDto } from './dto';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags, ApiQuery } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags} from "@nestjs/swagger";
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { Role } from 'src/auth/enums/rol.enum';
@@ -17,6 +17,30 @@ import { RequestWithUser } from "src/common/interfaces/request-with-user.interfa
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
+  @Get()
+  @ApiOperation({ summary: 'Get all bookings' })
+  findAll() {
+    return this.bookingsService.findAll();
+  }
+
+  @Get('get-one/:id')
+  @ApiOperation({ summary: 'Get a booking by ID' })
+  findOne(@Param('id') id: string) {
+    return this.bookingsService.findOne(id);
+  }
+
+  @Get('in-progress-by-driver')
+  @ApiOperation({ summary: "Get the user's booking who is in progress" })
+  findInProgressByDriver(@Req() req: RequestWithUser) { 
+    return this.bookingsService.findBookingInProgressByDriver(req.user.email);  
+  }
+
+  @Get('in-progress-by-owner')
+  @ApiOperation({ summary: "Get the bookings in progress of my slots "})
+  findInProgressByOwner(@Req() req: RequestWithUser) {
+      return this.bookingsService.findBookingInProgressByOwner(req.user.email);
+  }
+
 
   @Post() 
   @ApiOperation({ summary: 'Create a new booking' })
@@ -25,17 +49,6 @@ export class BookingsController {
     
     //ReceivedBookingData: DTO para definir la estructura que llegara por el cuerpo de la solicitud.
     return this.bookingsService.create(bookingData, req.user.email)
-  }
-
-  @Get('in-progress')
-  @ApiOperation({ summary: "Get the user's booking who is in progress" })
-  findInProgressBooking(@Req() req: RequestWithUser) {
-    try {
-          return this.bookingsService.findBookingInProgressByDriver(req.user.email);
-        } catch (error) {
-          console.error('Error finding in-progress booking:', error);
-          throw error;
-        }
   }
 
   @Post('end-booking')
@@ -50,20 +63,6 @@ export class BookingsController {
   terminate(@Req() req: RequestWithUser) {
       return this.bookingsService.terminate(req.user.email);
   }
-
-  @Get()
-  @ApiOperation({ summary: 'Get all bookings' })
-  findAll() {
-    return this.bookingsService.findAll();
-  }
-
-  @Get(':id')
-  @ApiOperation({ summary: 'Get a booking by ID' })
-  findOne(@Param('id') id: string) {
-    return this.bookingsService.findOne(id);
-  }
-
-
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a booking by ID' })
