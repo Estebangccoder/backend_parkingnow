@@ -126,7 +126,13 @@ export class SlotsService {
       if (filters.order) {
         filters.order === "ASC"? query.orderBy("slot.hour_price", "ASC"): query.orderBy("slot.hour_price", "DESC")
       }
-  
+      
+      if (filters.skip){
+        query.skip(parseInt(filters.skip))
+      }
+
+      query.take()
+      
       return await query.getMany();
     } catch (error) {
       if (error instanceof QueryFailedError) {

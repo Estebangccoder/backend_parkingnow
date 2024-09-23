@@ -1,4 +1,4 @@
-import { IsBooleanString, IsIn, IsOptional, IsString } from "class-validator";
+import { IsBooleanString, IsIn, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class FilterAvailablesDto {
     @IsOptional()
@@ -17,4 +17,13 @@ export class FilterAvailablesDto {
     @IsString()
     @IsIn(['ASC','DESC'])
     order?: string;
+
+    @IsOptional()
+    @IsString()
+    skip?: string;
+
+    @IsNotEmpty()
+    @IsString()
+    take: string;
+
 }
