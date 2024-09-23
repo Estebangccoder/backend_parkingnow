@@ -124,7 +124,7 @@ export class Booking {
     @ApiHideProperty()
     @ManyToOne(() => Slot, (slot) => slot.bookings)
     @JoinColumn({name:'slot_id'})
-    slotId: Slot;
+    slot: Slot;
 
     @ApiHideProperty()
     @ManyToOne(() => BookingState, (bookingState) => bookingState.bookings)

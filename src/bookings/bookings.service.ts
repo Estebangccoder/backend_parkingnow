@@ -42,7 +42,7 @@ export class BookingsService {
       const driverId: string = await this.getUserIdByEmail.get(userEmail);
 
       //unstructure data
-      const {start_date_time, vehicle_plate, slot_id } = receivedBookingData;
+      let {start_date_time, vehicle_plate, slot_id } = receivedBookingData;
 
       //Check if the slot has a booking in progress
       const slot = await this.slotsService.findOne(slot_id);
@@ -76,7 +76,7 @@ export class BookingsService {
 
       //CreateBookingDto: defines the structure of the object to be saved in the DB.
       const createBookingData: CreateBookingDto = new CreateBookingDto( startDateTime, 
-                                                                        vehicle_plate, 
+                                                                        vehicle_plate.toUpperCase(), 
                                                                         ownerId, 
                                                                         driverId, 
                                                                         slot_id);
@@ -132,6 +132,10 @@ export class BookingsService {
       let totalHours: number = this.calculateHours.calculate(startDateTime, endDateTime);
       totalHours = parseFloat(totalHours.toFixed(1));
 
+      if(totalHours < 1){
+        totalHours = 1;
+      }
+
       let amount: number = this.calculateAmount.calculate(totalHours, slotPrice);
       amount = Math.floor(amount);
       
@@ -144,9 +148,11 @@ export class BookingsService {
       return {amount, totalHours};
     }
 
-    async findBookingInProgressByDriver(userEmail: string): Promise<Booking>{
-        const driverId: string = await this.getUserIdByEmail.get(userEmail);
-        return await this.getInProgressByDriver.find(driverId);
+    async findBookingInProgressByDriver(driverId: string){
+        const booking: Booking = await this.getInProgressByDriver.find(driverId);
+        const bookingId = booking.id
+        const property = booking.slot.property;
+        return {bookingId , property};
     }
 
     async findBookingInProgressByOwner(userEmail: string): Promise<Booking[]>{
