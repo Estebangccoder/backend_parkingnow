@@ -57,6 +57,9 @@ export class UsersController {
   }
 
   @Patch('/request-password')
+  @ApiOperation({ summary: 'Request a token by user-email' })
+  @ApiResponse({ status: 200, description: 'Token  successfull' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   requestResetPassword(
     @Body() requestResetPasswordDto: RequestResetPasswordDto,
   ) {
@@ -64,6 +67,9 @@ export class UsersController {
   }
 
   @Patch('/reset-password')
+  @ApiOperation({ summary: 'Reset password with password-token' })
+  @ApiResponse({ status: 200, description: 'Password reset successfull' })
+  @ApiResponse({ status: 404, description: 'Invalid Token' })
   @UseGuards(AuthGuard, RolesGuard)
   resetPassword(@Body() resetPasswordDto: ResetPasswordDto): Promise<void> {
     return this.usersService.resetPassword(resetPasswordDto);
