@@ -22,8 +22,8 @@ export class FilterAvailablesDto {
     @IsString()
     skip?: string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
-    take: string;
+    take?: string;
 
 }

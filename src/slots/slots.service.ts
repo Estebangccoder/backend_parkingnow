@@ -124,15 +124,19 @@ export class SlotsService {
       }
 
       if (filters.order) {
-        filters.order === "ASC"? query.orderBy("slot.hour_price", "ASC"): query.orderBy("slot.hour_price", "DESC")
+        filters.order === "ASC"? query.orderBy("slot.hour_price", "ASC"): query.orderBy("slot.hour_price", "DESC");
       }
       
       if (filters.skip){
         query.skip(parseInt(filters.skip))
+        const takeValue = filters.take ? parseInt(filters.take) : 1000; 
+        query.take(takeValue);
       }
 
-      query.take()
-      
+      if (filters.take) {
+        query.take(parseInt(filters.take));
+      }
+     
       return await query.getMany();
     } catch (error) {
       if (error instanceof QueryFailedError) {
