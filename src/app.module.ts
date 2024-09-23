@@ -13,6 +13,7 @@ import { DocumentType } from './common/entities/document_type.entity';
 import { VehicleType } from './common/entities/vehicle_type.entity';
 import { BookingState } from './common/entities/booking_state.entity';
 import { Commune } from './common/entities/commune.entity';
+import { FilesModule } from './files/files.module';
 
 
 
@@ -29,7 +30,7 @@ import { Commune } from './common/entities/commune.entity';
     database: process.env.DB_NAME,
     entities: [__dirname + '/**/*.entity{.ts,.js}', Role, DocumentType, VehicleType, BookingState, Commune],
     synchronize: false,
-  }),UsersModule, BookingsModule, SlotsModule, PropertiesModule, AuthModule],
+  }),UsersModule, BookingsModule, SlotsModule, PropertiesModule, AuthModule, FilesModule],
   controllers: [AppController],
   providers: [AppService],
 })
