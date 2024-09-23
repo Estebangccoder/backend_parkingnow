@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import * as bcryptjs from 'bcryptjs';
@@ -73,7 +73,7 @@ export class AuthService {
         
         }catch(error){
             if (error instanceof QueryFailedError) {
-                throw new BadRequestException()
+                throw new ConflictException()
               }
               throw new InternalServerErrorException(error.message || "Internal server error");
         }
