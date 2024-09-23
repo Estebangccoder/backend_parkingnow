@@ -1,5 +1,5 @@
-import { Injectable, HttpException, HttpStatus, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { Repository, Like } from 'typeorm';
+import { Injectable, HttpException, HttpStatus, NotFoundException, UnauthorizedException, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { Repository, Like, QueryFailedError } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Property } from './entities/property.entity';
 import { CreatePropertyDto } from './dto/create-properties.dto';
@@ -28,7 +28,10 @@ export class PropertiesService {
 
         }
         catch(error){
-            throw new HttpException(`Error creating property: ${error.message}`, 500);
+            if (error instanceof QueryFailedError) {
+                throw new BadRequestException()
+              }
+              throw new InternalServerErrorException(error.message || "Internal server error");
         }
     }
 
@@ -39,7 +42,11 @@ export class PropertiesService {
             return await this.propertyRepository.find({where: {owner_id: ownerId}, relations:["slots"]});
         }
         catch(error){
-            throw new HttpException(`Error finding all properties: ${error.message}`, 500);
+            if (error instanceof QueryFailedError) {
+                throw new BadRequestException()
+              }
+              throw new InternalServerErrorException(error.message || "Internal server error");
+        
         }
     }
 
@@ -58,7 +65,10 @@ export class PropertiesService {
             return propertiesNames;
         }
         catch(error){
-            throw new HttpException(`Error finding all properties: ${error.message}`, 500);
+            if (error instanceof QueryFailedError) {
+                throw new BadRequestException()
+              }
+              throw new InternalServerErrorException(error.message || "Internal server error");
         }
     }
 
@@ -67,15 +77,14 @@ export class PropertiesService {
 
         let property: Property[] = await this.propertyRepository.find({where: {id}, relations: ["slots"] });
 
-        if (!property){
-            throw new HttpException('Property not found', 404);
-        }
-
         return property
 
         }
         catch(error){
-            throw new HttpException(`Error finding property by id: ${error.message}`, 500);
+            if (error instanceof QueryFailedError) {
+                throw new BadRequestException()
+              }
+              throw new InternalServerErrorException(error.message || "Internal server error");
         }
     }
 
@@ -92,7 +101,10 @@ export class PropertiesService {
         
         }
         catch(error){
-            throw new HttpException(`Error updating property by id: ${error.message}`, 500);
+            if (error instanceof QueryFailedError) {
+                throw new BadRequestException()
+              }
+              throw new InternalServerErrorException(error.message || "Internal server error");
         }
     }
 
@@ -106,13 +118,14 @@ export class PropertiesService {
             const response = await this.userService.ownerIdValidation(propertyfound.owner_id, owner_id)
             if (!response) throw new UnauthorizedException("You are not allowed to update this property")
             
-        const result = await this.propertyRepository.delete(id);
-        if (result.affected===0){
-            throw new HttpException('Property not found', 404);
-        }
+        const result = await this.propertyRepository.softRemove(propertyfound);
+        
     }
     catch(error){
-        throw new HttpException(`Error removing property by id: ${error.message}`, 500);
+        if (error instanceof QueryFailedError) {
+            throw new BadRequestException()
+          }
+          throw new InternalServerErrorException(error.message || "Internal server error");
     }
 
     }

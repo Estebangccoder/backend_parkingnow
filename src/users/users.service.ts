@@ -24,7 +24,7 @@ export class UsersService {
   }
 
   findAll() {
-    return this.userRepository.find();
+    return this.userRepository.find({ relations: ['documentType']});
   }
 
   async findOne(id: string) {
@@ -105,8 +105,7 @@ export class UsersService {
    } 
 
    async ownerIdValidation(ownerId: string, tokenId: string): Promise<boolean> {
-    console.log("owner_id:", ownerId, "token_id:", tokenId);
-    
+       
     const user: User = await this.findOne(tokenId);
 
     const authorizated = user.id === ownerId ? true : false;
