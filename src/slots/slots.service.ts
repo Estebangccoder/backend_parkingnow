@@ -134,7 +134,7 @@ export class SlotsService {
       } else if (filters.take) {
         query.take(parseInt(filters.take));
       }
-     
+
       return await query.getMany();
     } catch (error) {
       if (error instanceof QueryFailedError) {

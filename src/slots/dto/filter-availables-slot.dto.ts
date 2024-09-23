@@ -1,4 +1,4 @@
-import { IsBooleanString, IsIn, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsBooleanString, IsIn, IsOptional, IsString } from "class-validator";
 
 export class FilterAvailablesDto {
     @IsOptional()
@@ -25,5 +25,4 @@ export class FilterAvailablesDto {
     @IsOptional()
     @IsString()
     take?: string;
-
 }
