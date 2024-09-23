@@ -1,10 +1,11 @@
-import { BadRequestException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import * as bcryptjs from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/entities/user.entity';
+import { QueryFailedError } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -57,10 +58,6 @@ export class AuthService {
     }: RegisterDto){
         try{
             const user = await this.userService.findOneByEmail(email)
-
-        if (user) {
-            throw new BadRequestException('User already exists')
-        }
         
          await this.userService.create({
             fullname,
@@ -74,9 +71,11 @@ export class AuthService {
         
         return {fullname, email}
         
-    }catch(error){
-            console.log(error)
-            
+        }catch(error){
+            if (error instanceof QueryFailedError) {
+                throw new BadRequestException()
+              }
+              throw new InternalServerErrorException(error.message || "Internal server error");
         }
      
         

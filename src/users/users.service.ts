@@ -105,8 +105,7 @@ export class UsersService {
    } 
 
    async ownerIdValidation(ownerId: string, tokenId: string): Promise<boolean> {
-    console.log("owner_id:", ownerId, "token_id:", tokenId);
-    
+       
     const user: User = await this.findOne(tokenId);
 
     const authorizated = user.id === ownerId ? true : false;
