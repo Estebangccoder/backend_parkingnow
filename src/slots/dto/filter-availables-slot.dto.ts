@@ -17,4 +17,12 @@ export class FilterAvailablesDto {
     @IsString()
     @IsIn(['ASC','DESC'])
     order?: string;
+
+    @IsOptional()
+    @IsString()
+    skip?: string;
+
+    @IsOptional()
+    @IsString()
+    take?: string;
 }
