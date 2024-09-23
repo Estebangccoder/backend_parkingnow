@@ -127,13 +127,11 @@ export class SlotsService {
         filters.order === "ASC"? query.orderBy("slot.hour_price", "ASC"): query.orderBy("slot.hour_price", "DESC");
       }
       
-      if (filters.skip){
-        query.skip(parseInt(filters.skip))
+      if (filters.skip) {
+        const skipValue = parseInt(filters.skip);
         const takeValue = filters.take ? parseInt(filters.take) : 1000; 
-        query.take(takeValue);
-      }
-
-      if (filters.take) {
+        query.skip(skipValue).take(takeValue);
+      } else if (filters.take) {
         query.take(parseInt(filters.take));
       }
      
