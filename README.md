@@ -64,4 +64,8 @@ For the backend deployed version go to
 https://backend-parkingnow-fuyg.onrender.com/api/
 
 
+## Swagger documentation
+
+https://backend-parkingnow-fuyg.onrender.com/docs
+
 
