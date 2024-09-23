@@ -67,10 +67,6 @@ export class PropertiesService {
 
         let property: Property[] = await this.propertyRepository.find({where: {id}, relations: ["slots"] });
 
-        if (!property){
-            throw new HttpException('Property not found', 404);
-        }
-
         return property
 
         }

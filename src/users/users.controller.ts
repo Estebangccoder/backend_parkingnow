@@ -12,12 +12,12 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'List of all users' })
@@ -26,6 +26,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Get a user by ID' })
   @ApiResponse({ status: 200, description: 'User details', type: User })
@@ -35,6 +36,7 @@ export class UsersController {
   }
 
   @Patch('/update/:id')
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Update a user by ID' })
   @ApiResponse({ status: 200, description: 'User updated successfully', type: User })
@@ -45,6 +47,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Delete a user by ID' })
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
@@ -61,6 +64,7 @@ export class UsersController {
   }
 
   @Patch('/reset-password')
+  @UseGuards(AuthGuard, RolesGuard)
   resetPassword(@Body() resetPasswordDto: ResetPasswordDto): Promise<void> {
     return this.usersService.resetPassword(resetPasswordDto);
   }
