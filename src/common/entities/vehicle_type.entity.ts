@@ -15,7 +15,7 @@ export class VehicleType {
   delete_at: Date;
 
   @ApiHideProperty()
-  @OneToMany(() => Slot, (slot) => slot.vehicleType)
+  @OneToMany(() => Slot, (slot) => slot.vehicleType, { onDelete: "CASCADE", cascade: true })
   slots: Slot[];
 
 }

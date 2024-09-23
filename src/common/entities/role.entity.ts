@@ -15,7 +15,7 @@ export class Role {
   delete_at: Date;
 
   @ApiHideProperty()
-  @OneToMany(() => User, (user) => user.role)
+  @OneToMany(() => User, (user) => user.role, { onDelete: "CASCADE", cascade: true })
   users: User[];
 
 }

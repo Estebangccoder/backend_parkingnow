@@ -15,7 +15,7 @@ export class Commune {
   delete_at: Date;
 
   @ApiHideProperty()
-  @OneToMany(() => Property, (property) => property.commune)
+  @OneToMany(() => Property, (property) => property.commune, { onDelete: "CASCADE", cascade: true })
   properties: Property[];
 
 }

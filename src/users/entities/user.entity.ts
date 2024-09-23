@@ -115,19 +115,19 @@ export class User {
     delete_at: Date;
 
     @ApiHideProperty()
-    @OneToMany(() => Property, (property) => property.ownerId)
+    @OneToMany(() => Property, (property) => property.ownerId, { onDelete: "CASCADE", cascade: true })
     properties: Property[];
     
     @ApiHideProperty()
-    @OneToMany(() => Slot, (slot) => slot.owner)
+    @OneToMany(() => Slot, (slot) => slot.owner, { onDelete: "CASCADE", cascade: true })
     slots: Slot[];
     
     @ApiHideProperty()
-    @OneToMany(() => Booking, (booking) => booking.ownerId)
+    @OneToMany(() => Booking, (booking) => booking.ownerId, { onDelete: "CASCADE", cascade: true })
     bookingsOwner: Booking[];
     
     @ApiHideProperty()
-    @OneToMany(() => Booking, (booking) => booking.driverId)
+    @OneToMany(() => Booking, (booking) => booking.driverId, { onDelete: "CASCADE", cascade: true })
     bookingsDriver: Booking[];
 
     @ApiHideProperty()

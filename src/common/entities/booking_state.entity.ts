@@ -15,7 +15,7 @@ export class BookingState {
   delete_at: Date;
 
   @ApiHideProperty()
-  @OneToMany(() => Booking, (booking) => booking.bookingStateId)
+  @OneToMany(() => Booking, (booking) => booking.bookingStateId, { onDelete: "CASCADE", cascade: true })
   bookings: Booking[];
 
 }

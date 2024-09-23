@@ -12,7 +12,7 @@ export class DocumentType {
   name: string;
 
   @ApiHideProperty()
-  @OneToMany(() => User, (user) => user.documentType)
+  @OneToMany(() => User, (user) => user.documentType, { onDelete: "CASCADE", cascade: true })
   users: User[];
 
   @DeleteDateColumn({type: 'timestamp', nullable: true})
