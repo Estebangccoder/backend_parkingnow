@@ -12,16 +12,12 @@ import { Slot } from "./entities/slot.entity";
 import { QueryFailedError, Repository } from "typeorm";
 import { FilterAvailablesDto } from "./dto/filter-availables-slot.dto";
 import { UsersService } from "src/users/users.service";
-import { User } from "src/users/entities/user.entity";
-import { BookingsService } from "../bookings/bookings.service";
-import { Booking } from "src/bookings/entities/booking.entity";
 
 @Injectable()
 export class SlotsService {
   constructor(
     @InjectRepository(Slot) private readonly slotRepository: Repository<Slot>,
     private readonly userService: UsersService,
-   // private readonly bookingsService: BookingsService
   ) { }
 
   async createMany(slots: CreateSlotDto[], email: string): Promise<Slot[]>  {
@@ -65,6 +61,9 @@ export class SlotsService {
     try {
       return await this.slotRepository.find();
     } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new BadRequestException()
+      }
       throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
@@ -79,6 +78,9 @@ export class SlotsService {
 
       return slot;
     } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new BadRequestException()
+      }
       throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
@@ -88,6 +90,9 @@ export class SlotsService {
     try {
       return await this.slotRepository.find({ relations: ["property", "property.commune"] });
     } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new BadRequestException()
+      }
       throw new InternalServerErrorException(error.message || "Internal server error");
 
     }
@@ -117,6 +122,10 @@ export class SlotsService {
           isCovered: filters.isCovered,
         });
       }
+
+      if (filters.order) {
+        filters.order === "ASC"? query.orderBy("slot.hour_price", "ASC"): query.orderBy("slot.hour_price", "DESC")
+      }
   
       return await query.getMany();
     } catch (error) {
@@ -139,6 +148,9 @@ export class SlotsService {
       const slotUpgraded = Object.assign(slot, updateSlotDto);
       return await this.slotRepository.save(slotUpgraded);
     } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new BadRequestException()
+      }
       throw new InternalServerErrorException(error.message || "Internal server error");
     }
 
@@ -168,6 +180,9 @@ export class SlotsService {
       return await this.slotRepository.softRemove(slot);
 
     } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new BadRequestException()
+      }
       throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
