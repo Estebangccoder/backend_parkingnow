@@ -1,4 +1,4 @@
-import { IsBooleanString, IsOptional, IsString } from "class-validator";
+import { IsBooleanString, IsIn, IsOptional, IsString } from "class-validator";
 
 export class FilterAvailablesDto {
     @IsOptional()
@@ -12,4 +12,17 @@ export class FilterAvailablesDto {
     @IsOptional()
     @IsString()
     commune?: string;
+
+    @IsOptional()
+    @IsString()
+    @IsIn(['ASC','DESC'])
+    order?: string;
+
+    @IsOptional()
+    @IsString()
+    skip?: string;
+
+    @IsOptional()
+    @IsString()
+    take?: string;
 }
