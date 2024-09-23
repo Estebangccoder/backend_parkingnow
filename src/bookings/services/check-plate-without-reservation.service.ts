@@ -18,11 +18,6 @@ export class VerifyPlateWithoutBooking{
                 }
             })
             return booking;
-            // if (booking !== null) {
-            //     return booking;
-            //   }else{
-            //     return 0;
-            //   }
         } catch (error) {
             throw new HttpException(
                 error.message || "Internal server error",
