@@ -70,7 +70,6 @@ export class UsersController {
   @ApiOperation({ summary: 'Reset password with password-token' })
   @ApiResponse({ status: 200, description: 'Password reset successfull' })
   @ApiResponse({ status: 404, description: 'Invalid Token' })
-  @UseGuards(AuthGuard, RolesGuard)
   resetPassword(@Body() resetPasswordDto: ResetPasswordDto): Promise<void> {
     return this.usersService.resetPassword(resetPasswordDto);
   }
