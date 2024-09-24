@@ -34,7 +34,7 @@ export class SlotsService {
 
     } catch (error) {
       if (error instanceof QueryFailedError) {
-        throw new BadRequestException()
+        throw new QueryFailedError("Bad request", undefined, error);
       }
       throw new InternalServerErrorException(error.message || "Internal server error");
     }
@@ -51,7 +51,7 @@ export class SlotsService {
       return await this.slotRepository.save(createdSlot);
     } catch (error) {
       if (error instanceof QueryFailedError) {
-        throw new BadRequestException()
+        throw new QueryFailedError("Bad request", undefined, error);
       }
       throw new InternalServerErrorException(error.message || "Internal server error");
     }
@@ -62,7 +62,7 @@ export class SlotsService {
       return await this.slotRepository.find();
     } catch (error) {
       if (error instanceof QueryFailedError) {
-        throw new BadRequestException()
+        throw new QueryFailedError("Bad request", undefined, error);
       }
       throw new InternalServerErrorException(error.message || "Internal server error");
     }
@@ -79,7 +79,7 @@ export class SlotsService {
       return slot;
     } catch (error) {
       if (error instanceof QueryFailedError) {
-        throw new BadRequestException()
+        throw new QueryFailedError("Bad request", undefined, error);
       }
       throw new InternalServerErrorException(error.message || "Internal server error");
     }
@@ -91,7 +91,7 @@ export class SlotsService {
       return await this.slotRepository.find({ relations: ["property", "property.commune"] });
     } catch (error) {
       if (error instanceof QueryFailedError) {
-        throw new BadRequestException()
+        throw new QueryFailedError("Bad request", undefined, error);
       }
       throw new InternalServerErrorException(error.message || "Internal server error");
 
@@ -138,7 +138,7 @@ export class SlotsService {
       return await query.getMany();
     } catch (error) {
       if (error instanceof QueryFailedError) {
-        throw new BadRequestException("Invalid query");
+        throw new QueryFailedError("Bad request", undefined, error);
       }
       throw new InternalServerErrorException(error.message || "Internal server error");
     }
@@ -157,7 +157,7 @@ export class SlotsService {
       return await this.slotRepository.save(slotUpgraded);
     } catch (error) {
       if (error instanceof QueryFailedError) {
-        throw new BadRequestException()
+        throw new QueryFailedError("Bad request", undefined, error);
       }
       throw new InternalServerErrorException(error.message || "Internal server error");
     }
@@ -167,42 +167,31 @@ export class SlotsService {
   async updateSlotAvailability(slotId: string, newState: boolean): Promise<Boolean> {
     const slot = await this.findOne(slotId);
     if (!slot) throw new NotFoundException('Slot not found');
-    
+    if (slot.is_available === newState) throw new BadRequestException(`Could not update slot availability ${slotId}`)
     slot.is_available = newState;
     const slotModified = await this.slotRepository.save(slot);
-    if (!slotModified) throw new BadRequestException(`Could not update slot ${slotId}`);
+    if (!slotModified) throw new BadRequestException(`You can not update the availability status of the slot, it is already in ${newState}`);
 
     return true;
   }
 
-  async remove(id: string, userEmail: string): Promise<Slot> {
+  async remove(id: string, tokenId: string): Promise<Slot> {
     try {
-      const user = await this.userService.findOneByEmail(userEmail);
-      if (!user) throw new UnauthorizedException("You are not allowed to update this slot")
 
       const slot = await this.findOne(id);
       if (!slot) throw new NotFoundException("Slot not found");
 
-      if (slot.owner_id !== user.id) throw new UnauthorizedException("You are not allowed to update this slot")
+      const response = await this.userService.ownerIdValidation(slot.owner_id, tokenId)
+      if (!response) throw new UnauthorizedException("You are not allowed to delete this slot")
 
       return await this.slotRepository.softRemove(slot);
 
     } catch (error) {
       if (error instanceof QueryFailedError) {
-        throw new BadRequestException()
+        throw new QueryFailedError("Bad request", undefined, error);
       }
       throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
 
-  // async  findUserSlot(userId: number) {
-  //   const slot: Slot = await this.slotRepository
-  //     .createQueryBuilder('slot')
-  //     .innerJoinAndSelect('slot.bookings', 'booking')
-  //     .where('booking.owner_id = :userId OR booking.driver_id = :userId', { userId })
-  //     .andWhere('booking.booking_state_id = :status', { status: 1 })
-  //     .getOne();
-  
-  //   return slot;
-  // }
 }

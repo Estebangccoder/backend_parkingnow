@@ -76,6 +76,6 @@ export class SlotsController {
   @Delete(":id")
   @ApiOperation({ summary: 'Delete a slot by ID' })
   remove(@Param("id") id: string,  @Req() req: RequestWithUser) {
-    return this.slotsService.remove(id, req.user.email);
+    return this.slotsService.remove(id, req.user.user_id);
   }
 }
