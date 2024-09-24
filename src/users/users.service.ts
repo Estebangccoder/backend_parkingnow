@@ -8,6 +8,7 @@ import { RequestResetPasswordDto } from "./dto/request-reset-password.dto";
 import { v4 } from 'uuid';
 import { ResetPasswordDto } from "./dto/reset-password.dto";
 import * as bcryptjs from 'bcryptjs';
+import { UserPaginationDto } from "./dto/users-pagination.dto";
 
 @Injectable()
 export class UsersService {
@@ -23,8 +24,19 @@ export class UsersService {
     return this.userRepository.findOneBy({ email });
   }
 
-  findAll() {
-    return this.userRepository.find({ relations: ['documentType']});
+  findAll(userPaginationDto: UserPaginationDto) {
+    const query = this.userRepository.createQueryBuilder("user")
+    .innerJoinAndSelect("user.documentType", "documentType");
+    
+    if (userPaginationDto.skip) {
+      const skipValue = parseInt(userPaginationDto.skip);
+      const takeValue = userPaginationDto.take ? parseInt(userPaginationDto.take) : 1000; 
+      query.skip(skipValue).take(takeValue);
+    } else if (userPaginationDto.take) {
+      query.take(parseInt(userPaginationDto.take));
+    }
+
+    return query.getMany();
   }
 
   async findOne(id: string) {

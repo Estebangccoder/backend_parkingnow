@@ -1,14 +1,15 @@
-import { Body, Controller, Post, Get, UseGuards, Req, Delete, Param } from '@nestjs/common';
+import { Body, Controller, Post, Get, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { Request } from 'express';
 import { Roles } from './decorators/roles.decorators';
 import { AuthGuard } from './guard/auth.guard';
 import { RolesGuard } from './guard/roles.guard';
 import { Role } from './enums/rol.enum';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RequestWithUser } from 'src/common/interfaces/request-with-user.interface';
+import { UserPaginationDto } from 'src/users/dto/users-pagination.dto';
+import { User } from 'src/users/entities/user.entity';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -99,7 +100,7 @@ export class AuthController {
             ]
         }
     })
-    findAll() {
-        return this.authService.findAll();
+    findAll(userPaginationDto: UserPaginationDto): Promise<User[]> {
+        return this.authService.findAll(userPaginationDto);
     }
 }

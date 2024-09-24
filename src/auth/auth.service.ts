@@ -6,6 +6,7 @@ import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/entities/user.entity';
 import { QueryFailedError } from 'typeorm';
+import { UserPaginationDto } from 'src/users/dto/users-pagination.dto';
 
 @Injectable()
 export class AuthService {
@@ -81,7 +82,7 @@ export class AuthService {
     async profile({email,role_id}: {email: string, role_id: number}){
         return await this.userService.findOneByEmail(email)
     }
-    async findAll(){
-        return await this.userService.findAll()
+    async findAll(userPaginationDto: UserPaginationDto){
+        return await this.userService.findAll(userPaginationDto)
     }   
 }
