@@ -16,6 +16,7 @@ import { Create,
         VerifyPlateWithoutBooking,
         CacheManager,
         FindInProgressByOwnerId} from './services';
+import { Property } from 'src/properties/entities/property.entity';
 
 @Injectable()
 export class BookingsService {
@@ -150,9 +151,10 @@ export class BookingsService {
 
     async findBookingInProgressByDriver(driverId: string){
         const booking: Booking = await this.getInProgressByDriver.find(driverId);
-        const bookingId = booking.id
-        const property = booking.slot.property;
-        return {bookingId , property};
+        const bookingId: string = booking.id;
+        const slotId: string = booking.slot_id; 
+        const property: Property = booking.slot.property;
+        return {bookingId, slotId, property};
     }
 
     async findBookingInProgressByOwner(userEmail: string): Promise<Booking[]>{
