@@ -17,6 +17,7 @@ import { Create,
         CacheManager,
         FindInProgressByOwnerId} from './services';
 import { Property } from 'src/properties/entities/property.entity';
+import { Property } from 'src/properties/entities/property.entity';
 
 @Injectable()
 export class BookingsService {
