@@ -1,8 +1,9 @@
-import { Injectable, ForbiddenException, BadRequestException, HttpException, HttpStatus} from'@nestjs/common';
+import { Injectable, HttpException, HttpStatus} from'@nestjs/common';
 import { CreateBookingDto, TerminateBookingDto, ReceiveBookingDataDto, EndDateDataDto  } from './dto';
 import { SlotsService } from 'src/slots/slots.service';
 import { Booking } from './entities/booking.entity';
 import { Slot } from 'src/slots/entities/slot.entity';
+import { Property } from 'src/properties/entities/property.entity';
 import { Create, 
         FindAll,
         Terminate, 
@@ -16,8 +17,6 @@ import { Create,
         VerifyPlateWithoutBooking,
         CacheManager,
         FindInProgressByOwnerId} from './services';
-import { Property } from 'src/properties/entities/property.entity';
-
 
 @Injectable()
 export class BookingsService {
@@ -152,6 +151,9 @@ export class BookingsService {
 
     async findBookingInProgressByDriver(driverId: string){
         const booking: Booking = await this.getInProgressByDriver.find(driverId);
+        if(!booking){
+          throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
         const bookingId: string = booking.id;
         const slotId: string = booking.slot_id; 
         const property: Property = booking.slot.property;
