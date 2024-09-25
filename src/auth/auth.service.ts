@@ -43,7 +43,10 @@ export class AuthService {
             }
             
         } catch (error) { 
-            throw new HttpException(error, 500)
+            if (error instanceof QueryFailedError) {
+                throw new QueryFailedError("Bad request", undefined, error);
+              }
+              throw new InternalServerErrorException(error.message || "Internal server error");
         }
       
     }
