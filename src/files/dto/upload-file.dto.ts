@@ -4,8 +4,7 @@ export class UploadFileDto{
 
     @IsNotEmpty()
     @IsString()
-    @IsBase64()
-    readonly filename: string;
+    readonly fileName: string;
 
     @IsNotEmpty()
     @IsBase64()
