@@ -15,7 +15,7 @@ export class FindInProgressByDriver{
                 where: {
                     driver_id: driverId,
                     booking_state_id: 1
-                  }
+                  }, relations:["slot.property"]
             })
         } catch (error) {
             throw new HttpException(

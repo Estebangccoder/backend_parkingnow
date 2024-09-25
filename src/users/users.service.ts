@@ -8,6 +8,7 @@ import { RequestResetPasswordDto } from "./dto/request-reset-password.dto";
 import { v4 } from 'uuid';
 import { ResetPasswordDto } from "./dto/reset-password.dto";
 import * as bcryptjs from 'bcryptjs';
+import { UserPaginationDto } from "./dto/users-pagination.dto";
 
 @Injectable()
 export class UsersService {
@@ -16,15 +17,44 @@ export class UsersService {
     private readonly userRepository: Repository<User>
   ) {}
   async create(createUserDto: RegisterDto) {
+    try{
     return  await this.userRepository.save(createUserDto);
+  }catch (error) {
+    
+    if (error instanceof QueryFailedError){
+      
+      throw new QueryFailedError("Bad request", undefined,error)
+    } else{
+      throw new InternalServerErrorException(error.message || "Internal server error")
+      }
+    }
   }
 
   findOneByEmail(email: string) {
+    try{
     return this.userRepository.findOneBy({ email });
+    }catch(error) {
+      if (error instanceof QueryFailedError){
+        throw new QueryFailedError("Bad request", undefined,error)
+      } else{
+        throw new InternalServerErrorException(error.message || "Internal server error")
+      }
+    }
   }
 
-  findAll() {
-    return this.userRepository.find({ relations: ['documentType']});
+  findAll(userPaginationDto: UserPaginationDto) {
+    const query = this.userRepository.createQueryBuilder("user")
+    .innerJoinAndSelect("user.documentType", "documentType");
+    
+    if (userPaginationDto.skip) {
+      const skipValue = parseInt(userPaginationDto.skip);
+      const takeValue = userPaginationDto.take ? parseInt(userPaginationDto.take) : 1000; 
+      query.skip(skipValue).take(takeValue);
+    } else if (userPaginationDto.take) {
+      query.take(parseInt(userPaginationDto.take));
+    }
+
+    return query.getMany();
   }
 
   async findOne(id: string) {
@@ -56,14 +86,23 @@ export class UsersService {
   }
 
   async remove(id: string) {
+    try{
     const userFound = await this.findOne(id);
     await this.userRepository.softRemove(userFound);
     return "User deleted successfully";
+    }catch(error){
+      if (error instanceof QueryFailedError){
+        throw new QueryFailedError("Bad request", undefined,error)
+      } else{
+        throw new InternalServerErrorException(error.message || "Internal server error")
+      }
+    }
   }
 
   async requestResetPassword(
     requestResetPasswordDto: RequestResetPasswordDto,
   ){
+    try{
     const { email } = requestResetPasswordDto;
 
     const user: User = await this.userRepository.findOneBy({ email });
@@ -73,6 +112,13 @@ export class UsersService {
     const userFullName = user.fullname
     
     return {email,userFullName,userResetPasswordToken }
+    }catch(error){
+      if (error instanceof QueryFailedError){
+        throw new QueryFailedError("Bad request", undefined,error)
+      } else{
+        throw new InternalServerErrorException(error.message || "Internal server error")
+      }
+    }
   }
 
   async findOneByResetPasswordToken(resetPasswordToken: string): Promise<User>{

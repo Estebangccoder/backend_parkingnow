@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RolesGuard } from '../auth/guard/roles.guard';
@@ -9,6 +9,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 import { User } from './entities/user.entity';
 import { RequestResetPasswordDto } from './dto/request-reset-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { UserPaginationDto } from './dto/users-pagination.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -21,8 +22,8 @@ export class UsersController {
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'List of all users' })
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query() userPaginationDto: UserPaginationDto) {
+    return this.usersService.findAll(userPaginationDto);
   }
 
   @Get(':id')
@@ -57,6 +58,9 @@ export class UsersController {
   }
 
   @Patch('/request-password')
+  @ApiOperation({ summary: 'Request a token by user-email' })
+  @ApiResponse({ status: 200, description: 'Token  successfull' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   requestResetPassword(
     @Body() requestResetPasswordDto: RequestResetPasswordDto,
   ) {
@@ -64,7 +68,9 @@ export class UsersController {
   }
 
   @Patch('/reset-password')
-  @UseGuards(AuthGuard, RolesGuard)
+  @ApiOperation({ summary: 'Reset password with password-token' })
+  @ApiResponse({ status: 200, description: 'Password reset successfull' })
+  @ApiResponse({ status: 404, description: 'Invalid Token' })
   resetPassword(@Body() resetPasswordDto: ResetPasswordDto): Promise<void> {
     return this.usersService.resetPassword(resetPasswordDto);
   }

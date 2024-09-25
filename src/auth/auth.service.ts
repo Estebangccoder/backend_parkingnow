@@ -6,6 +6,7 @@ import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/entities/user.entity';
 import { QueryFailedError } from 'typeorm';
+import { UserPaginationDto } from 'src/users/dto/users-pagination.dto';
 
 @Injectable()
 export class AuthService {
@@ -42,7 +43,10 @@ export class AuthService {
             }
             
         } catch (error) { 
-            throw new HttpException(error, 500)
+            if (error instanceof QueryFailedError) {
+                throw new QueryFailedError("Bad request", undefined, error);
+              }
+              throw new InternalServerErrorException(error.message || "Internal server error");
         }
       
     }
@@ -57,7 +61,6 @@ export class AuthService {
         doc_number
     }: RegisterDto){
         try{
-            const user = await this.userService.findOneByEmail(email)
         
          await this.userService.create({
             fullname,
@@ -73,18 +76,16 @@ export class AuthService {
         
         }catch(error){
             if (error instanceof QueryFailedError) {
-                throw new ConflictException()
+                throw new QueryFailedError("Bad request", undefined, error);
               }
               throw new InternalServerErrorException(error.message || "Internal server error");
         }
-     
-        
         
     }
     async profile({email,role_id}: {email: string, role_id: number}){
         return await this.userService.findOneByEmail(email)
     }
-    async findAll(){
-        return await this.userService.findAll()
+    async findAll(userPaginationDto: UserPaginationDto){
+        return await this.userService.findAll(userPaginationDto)
     }   
 }

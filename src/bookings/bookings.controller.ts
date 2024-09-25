@@ -19,54 +19,54 @@ export class BookingsController {
 
   @Get()
   @ApiOperation({ summary: 'Get all bookings' })
-  findAll() {
-    return this.bookingsService.findAll();
+  async findAll() {
+    return await this.bookingsService.findAll();
   }
 
   @Get('get-one/:id')
   @ApiOperation({ summary: 'Get a booking by ID' })
-  findOne(@Param('id') id: string) {
-    return this.bookingsService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.bookingsService.findOne(id);
   }
 
   @Get('in-progress-by-driver')
   @ApiOperation({ summary: "Get the user's booking who is in progress" })
-  findInProgressByDriver(@Req() req: RequestWithUser) { 
-    return this.bookingsService.findBookingInProgressByDriver(req.user.email);  
+  async findInProgressByDriver(@Req() req: RequestWithUser) { 
+    return await this.bookingsService.findBookingInProgressByDriver(req.user.user_id); 
   }
 
   @Get('in-progress-by-owner')
   @ApiOperation({ summary: "Get the bookings in progress of my slots "})
-  findInProgressByOwner(@Req() req: RequestWithUser) {
-      return this.bookingsService.findBookingInProgressByOwner(req.user.email);
+  async findInProgressByOwner(@Req() req: RequestWithUser) {
+      return await this.bookingsService.findBookingInProgressByOwner(req.user.user_id);
   }
 
 
   @Post() 
   @ApiOperation({ summary: 'Create a new booking' })
   @ApiBody({ type: ReceiveBookingDataDto })
-  create(@Body() bookingData: ReceiveBookingDataDto, @Req() req: RequestWithUser) {
+  async create(@Body() bookingData: ReceiveBookingDataDto, @Req() req: RequestWithUser) {
     
     //ReceivedBookingData: DTO para definir la estructura que llegara por el cuerpo de la solicitud.
-    return this.bookingsService.create(bookingData, req.user.email)
+    return await this.bookingsService.create(bookingData, req.user.email)
   }
 
   @Post('end-booking')
   @ApiOperation({ summary: 'Request amount and total hours' })
   @ApiBody({ type: EndDateDataDto })
-  returnAmount(@Body() data: EndDateDataDto, @Req() req: RequestWithUser){
-      return this.bookingsService.returnAmountAndHours(data, req.user.email);
+  async returnAmount(@Body() data: EndDateDataDto, @Req() req: RequestWithUser){
+      return await this.bookingsService.returnAmountAndHours(data, req.user.email);
   }
 
   @Patch('end-booking/terminate')
   @ApiOperation({ summary: 'Terminate a booking' })
-  terminate(@Req() req: RequestWithUser) {
-      return this.bookingsService.terminate(req.user.email);
+  async terminate(@Req() req: RequestWithUser) {
+      return await this.bookingsService.terminate(req.user.email);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a booking by ID' })
-  softDelete(@Param('id') id: string) {
-    return this.bookingsService.delete(id);
+  async softDelete(@Param('id') id: string) {
+    return await this.bookingsService.delete(id);
   }
 }

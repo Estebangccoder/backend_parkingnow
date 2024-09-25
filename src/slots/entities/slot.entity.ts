@@ -91,7 +91,7 @@ export class Slot {
   delete_at: Date;
 
   @ApiHideProperty()
-  @OneToMany(() => Booking, (booking) => booking.slotId, { onDelete: "CASCADE", cascade: true })
+  @OneToMany(() => Booking, (booking) => booking.slot, { onDelete: "CASCADE", cascade: true })
   bookings: Booking[];
 
   @ApiHideProperty()
