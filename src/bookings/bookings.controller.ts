@@ -18,16 +18,12 @@ export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
   @Get()
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Get all bookings' })
   async findAll() {
     return await this.bookingsService.findAll();
   }
 
   @Get('get-one/:id')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Get a booking by ID' })
   async findOne(@Param('id') id: string) {
     return await this.bookingsService.findOne(id);
@@ -42,7 +38,7 @@ export class BookingsController {
   @Get('in-progress-by-owner')
   @ApiOperation({ summary: "Get the bookings in progress of my slots "})
   async findInProgressByOwner(@Req() req: RequestWithUser) {
-     return await this.bookingsService.findBookingInProgressByOwner(req.user.user_id);
+      return await this.bookingsService.findBookingInProgressByOwner(req.user.user_id);
   }
 
 
@@ -69,8 +65,6 @@ export class BookingsController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Delete a booking by ID' })
   async softDelete(@Param('id') id: string) {
     return await this.bookingsService.delete(id);

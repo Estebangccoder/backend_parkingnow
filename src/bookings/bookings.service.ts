@@ -152,9 +152,6 @@ export class BookingsService {
 
     async findBookingInProgressByDriver(driverId: string){
         const booking: Booking = await this.getInProgressByDriver.find(driverId);
-        if(!booking){
-          throw new HttpException('Booking not found', HttpStatus.NOT_FOUND);
-        }
         const bookingId: string = booking.id;
         const slotId: string = booking.slot_id; 
         const property: Property = booking.slot.property;
