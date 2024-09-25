@@ -19,7 +19,7 @@ export class FindInProgressByDriver{
             })
         } catch (error) {
             throw new HttpException(
-                error.message || "Internal server error ",
+                error.message || "Internal server error",
                 error.status || 500
               );
         }
