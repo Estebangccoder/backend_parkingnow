@@ -68,4 +68,6 @@ https://backend-parkingnow-fuyg.onrender.com/api/
 
 https://backend-parkingnow-fuyg.onrender.com/docs
 
+## Link project documentation PARKING NOW notion
 
+https://gifted-failing-57f.notion.site/Parking-Now-e25e3fee8f6c47ec9eda7a9afb26ee32
