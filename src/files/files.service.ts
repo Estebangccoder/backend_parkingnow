@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as AWS from 'aws-sdk';
-import { v4 as uuid } from 'uuid'; // Para generar nombres únicos
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class UploadService {
@@ -8,16 +8,16 @@ export class UploadService {
 
   constructor() {
     this.s3 = new AWS.S3({
-      accessKeyId: process.env.S3_ACCESS_KEY_ID,
-      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-      region: process.env.S3_REGION, // Asegúrate de tener esta variable en tus env
+      accessKeyId: 'AKIAZVMTVLDPCFCYD4HG',
+      secretAccessKey: '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',
+      region: 'us-east-2', 
     });
   }
 
   async uploadFile(file: Express.Multer.File): Promise<string> {
     const fileName = `${uuid()}-${file.originalname}`;
     const params: AWS.S3.PutObjectRequest = {
-      Bucket: process.env.S3_BUCKET,
+      Bucket: 'imagesparkinnow-2024aws',
       Key: fileName,
       Body: file.buffer,
       ACL: 'public-read',
