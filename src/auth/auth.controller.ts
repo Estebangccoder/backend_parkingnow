@@ -1,20 +1,15 @@
-import { Body, Controller, Post, Get, UseGuards, Req, Delete, Param } from '@nestjs/common';
+import { Body, Controller, Post, Get, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { Request } from 'express';
 import { Roles } from './decorators/roles.decorators';
 import { AuthGuard } from './guard/auth.guard';
 import { RolesGuard } from './guard/roles.guard';
 import { Role } from './enums/rol.enum';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-
-interface RequestWithUser extends Request{
-    user: {
-        email:string
-        role_id:number
-    }
-}
+import { RequestWithUser } from 'src/common/interfaces/request-with-user.interface';
+import { UserPaginationDto } from 'src/users/dto/users-pagination.dto';
+import { User } from 'src/users/entities/user.entity';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -83,29 +78,5 @@ export class AuthController {
         });
     }
 
-    @Get('profiles')
-    @ApiBearerAuth()
-    @Roles(Role.ADMIN)
-    @UseGuards(AuthGuard, RolesGuard)
-    @ApiOperation({ summary: 'Get all profiles' })
-    @ApiResponse({
-        status: 200,
-        description: 'Get all user profiles',
-        schema: {
-            example: [
-                {
-                    fullname: 'Admin de prueba',
-                    email: 'admin@example.com',
-                    phone_number: '3216549870',
-                    address: 'Riwi',
-                    document_type_id: 1,
-                    doc_number: '12345678910',
-                    role_id: 2
-                }
-            ]
-        }
-    })
-    findAll() {
-        return this.authService.findAll();
-    }
+    
 }

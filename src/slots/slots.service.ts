@@ -1,74 +1,112 @@
 import {
   BadRequestException,
-  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException
 } from "@nestjs/common";
 import { CreateSlotDto } from "./dto/create-slot.dto";
 import { UpdateSlotDto } from "./dto/update-slot.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Slot } from "./entities/slot.entity";
-import { Repository } from "typeorm";
+import { QueryFailedError, Repository } from "typeorm";
 import { FilterAvailablesDto } from "./dto/filter-availables-slot.dto";
+import { UsersService } from "src/users/users.service";
 
 @Injectable()
 export class SlotsService {
   constructor(
-    @InjectRepository(Slot) private readonly slotRepository: Repository<Slot>
+    @InjectRepository(Slot) private readonly slotRepository: Repository<Slot>,
+    private readonly userService: UsersService,
   ) { }
 
-  async create(slot: CreateSlotDto) {
+  async createMany(slots: CreateSlotDto[], email: string): Promise<Slot[]>  {
     try {
-      const createdSlot = this.slotRepository.create(slot);
+      const user = await this.userService.findOneByEmail(email);
+      if (!user) throw new UnauthorizedException()
 
-      return await this.slotRepository.save(createdSlot);
+      slots.forEach((slot) => {
+      slot.owner_id = user.id
+      })
+      
+      const createdSlots: Slot[] = this.slotRepository.create(slots);
+      return await this.slotRepository.save(createdSlots);
+
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      if (error instanceof QueryFailedError) {
+        throw new QueryFailedError("Bad request", undefined, error);
+      }
+      throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
 
-  async findAll() {
+  async create(slot: CreateSlotDto, email: string): Promise<Slot>  {
+    try {
+      const user = await this.userService.findOneByEmail(email);
+
+      if (!user) throw new UnauthorizedException()
+
+      slot.owner_id = user.id
+      const createdSlot: Slot = this.slotRepository.create(slot);
+      return await this.slotRepository.save(createdSlot);
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new QueryFailedError("Bad request", undefined, error);
+      }
+      throw new InternalServerErrorException(error.message || "Internal server error");
+    }
+  }
+
+  async findAll(): Promise<Slot[]>  {
     try {
       return await this.slotRepository.find();
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      if (error instanceof QueryFailedError) {
+        throw new QueryFailedError("Bad request", undefined, error);
+      }
+      throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
 
   async findOne(id: string) {
     try {
-      const slot = await this.slotRepository.findOne({
-        where: { id },
-        relations: ["owner"],
+      const slot: Slot = await this.slotRepository.findOne({
+        where: {id} , relations: ["property", "vehicleType", "property.commune"] 
       });
 
       if (!slot) throw new NotFoundException("Slot not found");
 
       return slot;
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      if (error instanceof QueryFailedError) {
+        throw new QueryFailedError("Bad request", undefined, error);
+      }
+      throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
 
-  async findAvailableSlotsByFilters(filters: FilterAvailablesDto) {
-    const { isCovered, commune, vehicleType } = filters;
+  async findAllWithProperty() {
+
+    try {
+      return await this.slotRepository.find({ relations: ["property", "property.commune"] });
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new QueryFailedError("Bad request", undefined, error);
+      }
+      throw new InternalServerErrorException(error.message || "Internal server error");
+
+    }
+  }
+
+  async findAvailableSlotsByFilters(filters: FilterAvailablesDto): Promise<Slot[]>  {
+
     try {
       const query = this.slotRepository
         .createQueryBuilder("slot")
-        .innerJoinAndSelect("slot.property", "property") // Relación con propiedad
-        .innerJoinAndSelect("property.commune", "commune") // Relación con comuna
+        .innerJoinAndSelect("slot.property", "property")
+        .innerJoinAndSelect("property.commune", "commune")
         .where("slot.is_available = :isAvailable", { isAvailable: 1 });
-  
+
       if (filters.commune) {
         query.andWhere("commune.id = :comunaId", { comunaId: filters.commune });
       }
@@ -84,41 +122,76 @@ export class SlotsService {
           isCovered: filters.isCovered,
         });
       }
-  
+
+      if (filters.order) {
+        filters.order === "ASC"? query.orderBy("slot.hour_price", "ASC"): query.orderBy("slot.hour_price", "DESC");
+      }
+      
+      if (filters.skip) {
+        const skipValue = parseInt(filters.skip);
+        const takeValue = filters.take ? parseInt(filters.take) : 1000; 
+        query.skip(skipValue).take(takeValue);
+      } else if (filters.take) {
+        query.take(parseInt(filters.take));
+      }
+
       return await query.getMany();
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      if (error instanceof QueryFailedError) {
+        throw new QueryFailedError("Bad request", undefined, error);
+      }
+      throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
-  
 
-  async update(id: string, updateSlotDto: UpdateSlotDto) {
-    try {
-      const slot = this.findOne(id);
 
-      if (!slot) throw new NotFoundException("slot not fount");
-
-      return this.slotRepository.save(updateSlotDto);
-    } catch (error) { }
-  }
-
-  async remove(id: string) {
+  async update(id: string, updateSlotDto: UpdateSlotDto, tokenId: string): Promise<Slot>  {
     try {
       const slot = await this.findOne(id);
-
       if (!slot) throw new NotFoundException("Slot not found");
 
-      return await this.slotRepository.remove(slot);
+      const response = await this.userService.ownerIdValidation(slot.owner_id, tokenId)
+      if (!response) throw new UnauthorizedException("You are not allowed to update this slot")
 
-      return slot;
+      const slotUpgraded = Object.assign(slot, updateSlotDto);
+      return await this.slotRepository.save(slotUpgraded);
     } catch (error) {
-      throw new HttpException(
-        error.message || "Internal server error",
-        error.status || 500
-      );
+      if (error instanceof QueryFailedError) {
+        throw new QueryFailedError("Bad request", undefined, error);
+      }
+      throw new InternalServerErrorException(error.message || "Internal server error");
+    }
+
+  }
+
+  async updateSlotAvailability(slotId: string, newState: boolean): Promise<Boolean> {
+    const slot = await this.findOne(slotId);
+    if (!slot) throw new NotFoundException('Slot not found');
+    if (slot.is_available === newState) throw new BadRequestException(`Could not update slot availability ${slotId}`)
+    slot.is_available = newState;
+    const slotModified = await this.slotRepository.save(slot);
+    if (!slotModified) throw new BadRequestException(`You can not update the availability status of the slot, it is already in ${newState}`);
+
+    return true;
+  }
+
+  async remove(id: string, tokenId: string): Promise<Slot> {
+    try {
+
+      const slot = await this.findOne(id);
+      if (!slot) throw new NotFoundException("Slot not found");
+
+      const response = await this.userService.ownerIdValidation(slot.owner_id, tokenId)
+      if (!response) throw new UnauthorizedException("You are not allowed to delete this slot")
+
+      return await this.slotRepository.softRemove(slot);
+
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new QueryFailedError("Bad request", undefined, error);
+      }
+      throw new InternalServerErrorException(error.message || "Internal server error");
     }
   }
+
 }

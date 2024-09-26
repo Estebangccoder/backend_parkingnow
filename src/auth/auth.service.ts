@@ -1,10 +1,12 @@
-import { BadRequestException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import * as bcryptjs from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/entities/user.entity';
+import { QueryFailedError } from 'typeorm';
+import { UserPaginationDto } from 'src/users/dto/users-pagination.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +19,7 @@ export class AuthService {
     async login({email, password}: LoginDto){
 
         try {
-            const user = await this.userService.findOneByEmail(email)
+            const user:User = await this.userService.findOneByEmail(email)
 
             if (!user) {
                 throw new UnauthorizedException('Invalid credentials')
@@ -28,16 +30,23 @@ export class AuthService {
                 throw new UnauthorizedException('Invalid credentials')
             }
     
-            const payload = {email: user.email, role_id: user.role_id}
-    
+            const payload = {email: user.email, role_id: user.role_id, user_id: user.id}
+           
             const token = await this.jwtService.signAsync(payload)
+
+            const userId = user.id
     
             return {
                 token,
-                email
+                email,
+                userId
             }
-        } catch (error) {
-            throw new HttpException(error, 500)
+            
+        } catch (error) { 
+            if (error instanceof QueryFailedError) {
+                throw new QueryFailedError("Bad request", undefined, error);
+              }
+              throw new InternalServerErrorException(error.message || "Internal server error");
         }
       
     }
@@ -51,12 +60,7 @@ export class AuthService {
         document_type_id,
         doc_number
     }: RegisterDto){
-     
-        const user = await this.userService.findOneByEmail(email)
-
-        if (user) {
-            throw new BadRequestException('User already exists')
-        }
+        try{
         
          await this.userService.create({
             fullname,
@@ -67,12 +71,21 @@ export class AuthService {
             doc_number,
             document_type_id
         })
+        
         return {fullname, email}
+        
+        }catch(error){
+            if (error instanceof QueryFailedError) {
+                throw new QueryFailedError("Bad request", undefined, error);
+              }
+              throw new InternalServerErrorException(error.message || "Internal server error");
+        }
+        
     }
     async profile({email,role_id}: {email: string, role_id: number}){
         return await this.userService.findOneByEmail(email)
     }
-    async findAll(){
-        return await this.userService.findAll()
+    async findAll(userPaginationDto: UserPaginationDto){
+        return await this.userService.findAll(userPaginationDto)
     }   
 }

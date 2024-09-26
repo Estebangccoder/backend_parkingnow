@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, Length } from 'class-validator';
 
 export class CreateSlotDto {
@@ -23,13 +23,13 @@ export class CreateSlotDto {
   @IsNumber()
   vehicle_type_id: number;
 
-  @ApiProperty({ description: 'ID of the property where the slot is located', example: 'd8ad82a2-0e4f-4b83-89f9-514d9bca8bfa' })
+  @ApiProperty({ description: 'ID of the property where the slot is located', example: '72a54315-27ee-49aa-be8f-aea94b83b5a1' })
   @IsNotEmpty()
   @IsUUID()
   property_id: string;
 
-  @ApiProperty({ description: 'Slot owner ID', example: '3f33ba0b-c4fe-4640-b655-7c5a99cbec10' })
-  @IsNotEmpty()
+  @ApiHideProperty()
+  @IsOptional()
   @IsUUID()
   owner_id: string;
 }

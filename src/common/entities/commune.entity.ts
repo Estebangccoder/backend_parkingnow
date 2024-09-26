@@ -1,5 +1,5 @@
 import { ApiHideProperty } from '@nestjs/swagger';
-import { Property } from 'src/properties/entities/property.entity';
+import { Property } from '../../properties/entities/property.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
 
@@ -15,7 +15,7 @@ export class Commune {
   delete_at: Date;
 
   @ApiHideProperty()
-  @OneToMany(() => Property, (property) => property.commune)
+  @OneToMany(() => Property, (property) => property.commune, { onDelete: "CASCADE", cascade: true })
   properties: Property[];
 
 }

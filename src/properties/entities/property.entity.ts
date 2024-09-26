@@ -1,7 +1,7 @@
 import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
-import { Commune } from "src/common/entities/commune.entity";
-import { Slot } from "src/slots/entities/slot.entity";
-import { User } from "src/users/entities/user.entity";
+import { Commune } from "../../common/entities/commune.entity";
+import { Slot } from "../../slots/entities/slot.entity";
+import { User } from "../../users/entities/user.entity";
 import { Column, PrimaryGeneratedColumn, Entity, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
 
 @Entity('properties')
@@ -34,7 +34,7 @@ export class Property {
     })
     description: string;
 
-    @Column({ type: 'varchar', length: 50, nullable: false })
+    @Column({ type: 'text', nullable: false })
     @ApiProperty({
         description: 'Image URL of the property',
         example: 'https://example.com/images/property.jpg',
@@ -77,7 +77,7 @@ export class Property {
     delete_at: Date;
 
     @ApiHideProperty()
-    @OneToMany(() => Slot, (slot) => slot.property)
+    @OneToMany(() => Slot, (slot) => slot.property, { onDelete: "CASCADE", cascade: true })
     slots: Slot[];
 
     @ApiHideProperty()

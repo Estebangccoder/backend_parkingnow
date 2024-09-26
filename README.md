@@ -1,85 +1,71 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+![LOGO 1](https://github.com/user-attachments/assets/d794de3b-6700-483c-8307-da0dbf841f20)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# PARKING NOW
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Parking Now is a web application developed to facilitate mobility and parking in the city of Medellín, providing a platform for people looking for parking spaces and for those who want to generate income by renting out their parking spots.
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## FAQ
 
-## Project setup
+### Why?
 
-```bash
-$ npm install
-```
+When there’s an important event or when you visit a part of the city that you’re not familiar with, finding a nearby parking space can become a stressful and time-consuming task. The search for a suitable parking space often involves unnecessary circling, which not only increases stress and fuel consumption but can also lead to unsafe situations where the driver is forced to leave their vehicle in an unknown or unreliable area.
 
-## Compile and run the project
+On the other hand, there are many places with parking spaces that are not being used efficiently. Owners of small residences, buildings, or residential units with vacant parking spots could be missing out on opportunities to generate additional income. Meanwhile, owners of formal parking facilities may struggle to maintain consistent occupancy due to a lack of visibility or competition.
 
-```bash
-# development
-$ npm run start
+That’s where we come in! We connect drivers searching for convenient parking spaces with parking owners looking to maximize their assets. Our platform makes it easy for you to find the perfect spot or rent out your unused parking, creating a win-win solution for everyone involved. Join us in transforming the parking experience today!
 
-# watch mode
-$ npm run start:dev
+### What's the goal?
 
-# production mode
-$ npm run start:prod
-```
+We want to enhance the experience for drivers searching for parking, allowing them to quickly and securely find and reserve parking spaces. At the same time, the platform aims to maximize the use of parking spaces, enabling owners to generate additional income and maintain consistent occupancy.
 
-## Run tests
+### For who?
+
+#### For Users: 
+The app allows drivers to quickly and securely find, reserve, and pay for a parking space, using geolocation technology to locate the nearest options. This significantly reduces search time and provides peace of mind by enabling them to park in a safe and reliable place.
+
+#### For Parking Spot Owners: 
+Parking Now offers a platform to maximize the use of their parking spaces. They can easily list their services, maintaining a constant demand and ensuring additional income. Even those with underutilized parking spaces, such as small residences or residential units, can easily rent them out through the platform, generating income securely.
+
+Parking Now not only enhances the parking experience for drivers but also optimizes the use of available parking spaces in the city, benefiting both users and providers.
+
+## Run Locally
+
+Clone the project
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+  git clone https://github.com/Estebangccoder/backend_parkingnow.git
 ```
 
-## Resources
+Go to the project directory
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+  cd backend_parkingnow
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Install dependencies
 
-## Support
+```bash
+  npm install
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Start the server
 
-## Stay in touch
+```bash
+  npm run start:dev
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+## Deployment
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+
+For the backend deployed version go to
+https://backend-parkingnow-fuyg.onrender.com/api/
+
+
+## Swagger documentation
+
+https://backend-parkingnow-fuyg.onrender.com/docs
+
+

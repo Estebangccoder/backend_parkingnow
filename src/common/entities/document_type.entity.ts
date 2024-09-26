@@ -1,5 +1,5 @@
 import { ApiHideProperty } from '@nestjs/swagger';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
 
@@ -12,7 +12,7 @@ export class DocumentType {
   name: string;
 
   @ApiHideProperty()
-  @OneToMany(() => User, (user) => user.documentType)
+  @OneToMany(() => User, (user) => user.documentType, { onDelete: "CASCADE", cascade: true })
   users: User[];
 
   @DeleteDateColumn({type: 'timestamp', nullable: true})

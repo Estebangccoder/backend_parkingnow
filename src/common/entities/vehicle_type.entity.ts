@@ -1,5 +1,5 @@
 import { ApiHideProperty } from '@nestjs/swagger';
-import { Slot } from 'src/slots/entities/slot.entity';
+import { Slot } from '../../slots/entities/slot.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
 
@@ -15,7 +15,7 @@ export class VehicleType {
   delete_at: Date;
 
   @ApiHideProperty()
-  @OneToMany(() => Slot, (slot) => slot.vehicleType)
+  @OneToMany(() => Slot, (slot) => slot.vehicleType, { onDelete: "CASCADE", cascade: true })
   slots: Slot[];
 
 }

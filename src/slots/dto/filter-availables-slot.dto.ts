@@ -1,7 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsBoolean, IsBooleanString, IsIn, IsOptional, IsString } from "class-validator";
+import { IsBooleanString, IsIn, IsOptional, IsString } from "class-validator";
+import { UserPaginationDto } from "src/users/dto/users-pagination.dto";
 
-export class FilterAvailablesDto {
+export class FilterAvailablesDto extends UserPaginationDto {
     @IsOptional()
     @IsBooleanString() 
     isCovered?: boolean;
@@ -13,4 +13,10 @@ export class FilterAvailablesDto {
     @IsOptional()
     @IsString()
     commune?: string;
+
+    @IsOptional()
+    @IsString()
+    @IsIn(['ASC','DESC'])
+    order?: string;
+
 }
