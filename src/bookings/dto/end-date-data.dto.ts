@@ -1,4 +1,4 @@
-import {IsNotEmpty, IsISO8601, IsString, IsBoolean} from 'class-validator';
+import {IsNotEmpty, IsISO8601, IsString} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class EndDateDataDto{

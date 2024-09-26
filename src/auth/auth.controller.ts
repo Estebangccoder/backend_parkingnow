@@ -78,29 +78,5 @@ export class AuthController {
         });
     }
 
-    @Get('profiles')
-    @ApiBearerAuth()
-    @Roles(Role.ADMIN)
-    @UseGuards(AuthGuard, RolesGuard)
-    @ApiOperation({ summary: 'Get all profiles' })
-    @ApiResponse({
-        status: 200,
-        description: 'Get all user profiles',
-        schema: {
-            example: [
-                {
-                    fullname: 'Admin de prueba',
-                    email: 'admin@example.com',
-                    phone_number: '3216549870',
-                    address: 'Riwi',
-                    document_type_id: 1,
-                    doc_number: '12345678910',
-                    role_id: 2
-                }
-            ]
-        }
-    })
-    findAll(userPaginationDto: UserPaginationDto): Promise<User[]> {
-        return this.authService.findAll(userPaginationDto);
-    }
+    
 }
