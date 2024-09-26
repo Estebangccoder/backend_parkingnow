@@ -77,6 +77,7 @@ export class AuthController {
         });
     }
 
+<<<<<<< Updated upstream
     @Get('profiles')
     @ApiBearerAuth()
     @Roles(Role.ADMIN)
@@ -102,4 +103,7 @@ export class AuthController {
     findAll() {
         return this.authService.findAll();
     }
+=======
+   
+>>>>>>> Stashed changes
 }

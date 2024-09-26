@@ -3,7 +3,6 @@ import { SlotsService } from './slots.service';
 import { SlotsController } from './slots.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Slot } from './entities/slot.entity';
-import { User } from 'src/users/entities/user.entity';
 import { VehicleType } from 'src/common/entities/vehicle_type.entity';
 import { UsersModule } from 'src/users/users.module';
 

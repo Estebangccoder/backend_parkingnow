@@ -56,7 +56,7 @@ export class PropertiesService {
             if(user.id!==ownerId){
                 throw new UnauthorizedException()
             }
-            const propertiesNames = await this.propertyRepository.find({where: {name: Like(`%${name.trim()}%`), owner_id: ownerId},  relations:["slots"]  }); //Ene l front debe de haber un devounce PILAS!!!!!!!!!!!!!!!!!!!!
+            const propertiesNames = await this.propertyRepository.find({where: {name: Like(`%${name.trim()}%`), owner_id: ownerId},  relations:["slots"]  });
 
             if(propertiesNames.length===0){
                 throw new HttpException('Property not found', HttpStatus.NOT_FOUND);
